@@ -15,12 +15,13 @@
         android:layout_height="wrap_content"
         android:text="Registrarse"
         android:id="@+id/buttonRegistrar"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:background="#F78A0C"
         android:textColor="@android:color/black"
         android:typeface="normal"
         android:layout_alignBottom="@+id/imageView"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="Registrar"/>
 
     <Button
         android:layout_width="wrap_content"

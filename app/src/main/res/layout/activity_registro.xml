@@ -1,6 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageView"
+        android:background="@drawable/ic_action_name"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Número de celular"
+        android:id="@+id/textNumero"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="50dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/editTextPhoneNumber"
+        android:layout_below="@+id/textNumero"
+        android:layout_alignStart="@+id/textNumero"
+        android:layout_marginTop="35dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registrar"
+        android:id="@+id/buttonRegitrar"
+        android:layout_below="@+id/editTextPhoneNumber"
+        android:layout_alignStart="@+id/editTextPhoneNumber"
+        android:layout_marginTop="35dp"
+        android:background="#F78A0C"
+        android:textSize="15dp"
+        android:onClick="registrar"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextConfirmation"
+        android:layout_below="@+id/buttonRegitrar"
+        android:layout_alignStart="@+id/buttonRegitrar"
+        android:layout_marginTop="40dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirmar"
+        android:id="@+id/buttonConfirmar"
+        android:layout_below="@+id/editTextConfirmation"
+        android:layout_alignStart="@+id/editTextConfirmation"
+        android:layout_marginTop="30dp"
+        android:background="#F78A0C"
+        android:onClick="confirmar"/>
+</RelativeLayout>
