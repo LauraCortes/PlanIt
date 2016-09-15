@@ -1,6 +1,5 @@
 package com.example.laura.planit;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -32,6 +31,8 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        //Lau, habíamos dicho que íbamos a programar en español para no tener revueltos :s
         db.execSQL("CREATE TABLE " + TABLE_USERS + "(PHONE_NUMBER INTEGER PRIMARY KEY,NOMBRE TEXT)");
         db.execSQL("CREATE TABLE " + TABLE_EMERGENCY_CONTACTS + "(PHONE_NUMBER INTEGER PRIMARY KEY,NOMBRE TEXT)");
     }
@@ -66,13 +67,5 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable {
         User contact = new User(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
 
         return contact;
-    }
-
-    /**
-     * Created by Usuario on 15/09/2016.
-     */
-    public static class SitiosActivity extends Activity
-    {
-
     }
 }

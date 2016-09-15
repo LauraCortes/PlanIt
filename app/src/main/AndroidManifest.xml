@@ -19,8 +19,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegistroActivity">
-
         </activity>
+
+        <activity android:name=".SitiosActivity"/>
+        <activity android:name=".AgregarSitioActivity"/>
     </application>
 
 </manifest>
