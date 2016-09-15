@@ -1,4 +1,4 @@
-package com.example.laura.planit.Model;
+package com.example.laura.planit.Logica;
 
 /**
  * Created by Laura on 14/09/2016.

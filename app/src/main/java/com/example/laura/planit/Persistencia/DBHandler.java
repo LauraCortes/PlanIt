@@ -1,4 +1,4 @@
-package com.example.laura.planit;
+package com.example.laura.planit.Persistencia;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.laura.planit.Model.Sitio;
-import com.example.laura.planit.Model.User;
+import com.example.laura.planit.Logica.Sitio;
+import com.example.laura.planit.Logica.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;

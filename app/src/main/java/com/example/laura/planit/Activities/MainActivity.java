@@ -1,4 +1,4 @@
-package com.example.laura.planit;
+package com.example.laura.planit.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,10 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.laura.planit.Model.Sitio;
-
-import java.io.Serializable;
-import java.util.List;
+import com.example.laura.planit.Persistencia.DBHandler;
+import com.example.laura.planit.R;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 

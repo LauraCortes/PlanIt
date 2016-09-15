@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.laura.planit.RegistroActivity">
+    tools:context=".Activities.RegistroActivity">
 
     <ImageView
         android:layout_width="100dp"

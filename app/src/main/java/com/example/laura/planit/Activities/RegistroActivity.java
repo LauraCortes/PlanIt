@@ -1,10 +1,12 @@
-package com.example.laura.planit;
+package com.example.laura.planit.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.EditText;
+
+import com.example.laura.planit.R;
 
 /**
  * Created by Laura on 12/09/2016.

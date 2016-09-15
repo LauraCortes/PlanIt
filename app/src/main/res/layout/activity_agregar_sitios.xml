@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-
+    android:layout_height="match_parent"
+    android:theme="@style/AppTheme"
+    tools:context=".Activities.AgregarSitioActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/txtNombre"
+                android:id="@+id/txtNombreSitioFavorito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/txtBarrio"
+                android:id="@+id/txtBarrioFavorito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
@@ -45,17 +45,19 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/txtDireccion"
+                android:id="@+id/txtDireccionFavorito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
                 android:hint="Dirección" />
         </android.support.design.widget.TextInputLayout>
 
-        <Button android:id="@+id/btnAgregar"
+        <Button
+            android:theme="@style/AppTheme"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Agregar"
+            android:onClick="agregarSitio"
             android:background="@color/colorPrimary"
             android:layout_marginTop="40dp"/>
 
