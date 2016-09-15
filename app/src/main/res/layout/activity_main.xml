@@ -26,14 +26,14 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agregar contactos de emergencia"
+        android:text="Contactos de emergencia"
         android:id="@+id/buttonContactEmergencia"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:background="#F78A0C"
         android:textAlignment="center"
-        android:layout_marginBottom="53dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/buttonRegistrar"
+        android:layout_alignStart="@+id/buttonRegistrar"
+        android:layout_marginTop="40dp" />
 
     <ImageView
         android:layout_width="100dp"
