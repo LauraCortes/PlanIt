@@ -14,7 +14,7 @@ public class MiAplicacion extends Application
     public void onCreate() {
         super.onCreate();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/Roboto-Regular.ttf")
+                .setDefaultFontPath("fonts/DarwinRegular.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );

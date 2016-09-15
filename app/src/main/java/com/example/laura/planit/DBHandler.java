@@ -1,5 +1,6 @@
 package com.example.laura.planit;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -65,5 +66,13 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable {
         User contact = new User(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
 
         return contact;
+    }
+
+    /**
+     * Created by Usuario on 15/09/2016.
+     */
+    public static class SitiosActivity extends Activity
+    {
+
     }
 }
