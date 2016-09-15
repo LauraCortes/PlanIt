@@ -16,9 +16,6 @@ public class AgregarSitioActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_sitios);
         getSupportActionBar().setTitle("Agregar sitio favorito");
-
-
-
     }
 
 

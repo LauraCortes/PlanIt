@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.laura.planit.Model.Sitio;
+
 import java.io.Serializable;
+import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -14,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Base de datos
     private DBHandler db ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
