@@ -7,6 +7,17 @@
     android:theme="@style/AppTheme"
     tools:context=".Activities.AgregarSitioActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/taj_mahal"
+        android:alpha=".50"
+        android:layout_marginTop="@dimen/card_margin"
+        android:layout_gravity="top"
+        app:layout_collapseMode="parallax" />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
@@ -15,6 +26,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="60dp">
+
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -58,7 +70,7 @@
             android:layout_height="wrap_content"
             android:text="Agregar"
             android:onClick="agregarSitio"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:layout_marginTop="40dp"/>
 
     </LinearLayout>

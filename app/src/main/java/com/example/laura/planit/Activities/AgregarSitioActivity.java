@@ -22,7 +22,7 @@ public class AgregarSitioActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_sitios);
-        setSupportActionBar(((Toolbar)findViewById(R.id.toolbarAgregarSitio) ));
+        //setSupportActionBar(((Toolbar)findViewById(R.id.toolbarAgregarSitio) ));
         getSupportActionBar().setTitle("Agregar sitio favorito");
         txtNombre=(EditText)findViewById(R.id.txtNombreSitioFavorito);
         txtBarrio=(EditText)findViewById(R.id.txtBarrioFavorito);
