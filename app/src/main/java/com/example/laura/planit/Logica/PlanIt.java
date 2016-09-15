@@ -28,7 +28,6 @@ public class PlanIt
 
     public void agregarSitio(String nNombre, String nBarrio, String nDireccion)
     {
-        Sitio nuevo = new Sitio(nNombre,nBarrio,nDireccion);
-        sitios.add(nuevo);
+        sitios.add(new Sitio(nNombre,nBarrio,nDireccion));
     }
 }

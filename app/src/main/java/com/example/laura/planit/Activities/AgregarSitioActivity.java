@@ -17,14 +17,12 @@ import com.example.laura.planit.R;
  */
 public class AgregarSitioActivity extends AppCompatActivity{
 
-    Toolbar toolbar;
     EditText txtNombre, txtBarrio, txtDireccion;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_sitios);
+        setSupportActionBar(((Toolbar)findViewById(R.id.toolbarAgregarSitio) ));
         getSupportActionBar().setTitle("Agregar sitio favorito");
         txtNombre=(EditText)findViewById(R.id.txtNombreSitioFavorito);
         txtBarrio=(EditText)findViewById(R.id.txtBarrioFavorito);
