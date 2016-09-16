@@ -20,8 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.RegistroActivity"></activity>
-        <activity android:name=".Activities.SitiosActivity" />
-        <activity android:name=".Activities.AgregarSitioActivity" />
+        <activity android:name=".Activities.Sitios.SitiosActivity" />
+        <activity android:name=".Activities.Sitios.AgregarSitioActivity" />
 
         <service
             android:name=".Services.MyService"

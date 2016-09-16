@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    fontPath="fonts/DarwinLight.ttf"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/cardview_default_elevation">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imagenSitioFavorito"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/card_margin" />
+
+        <TextView
+            android:id="@+id/nombreSitioFavorito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/imagenSitioFavorito"
+            android:textSize="20sp"
+            fontPath="@string/fuenteNegrita"/>
+
+        <TextView
+            android:id="@+id/barrioSitioFavorito"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nombreSitioFavorito"
+            android:layout_toRightOf="@+id/imagenSitioFavorito" />
+
+        <TextView
+            android:id="@+id/direccionSitioFavorito"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/barrioSitioFavorito"
+            android:layout_toRightOf="@+id/imagenSitioFavorito" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

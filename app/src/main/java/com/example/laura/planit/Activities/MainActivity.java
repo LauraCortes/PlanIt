@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.laura.planit.Activities.Sitios.SitiosActivity;
 import com.example.laura.planit.Persistencia.DBHandler;
 import com.example.laura.planit.R;
 

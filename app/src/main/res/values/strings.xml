@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PlanIt</string>
+    <string name="fuenteNormal">fontDarwinRegular.ttf</string>
+    <string name="fuenteNegrita">fonts/DarwinBold.ttf</string>
+    <string name="fuenteLight">fonts/DarwinLight.ttf</string>
+    <string name="err_llenar_campo">Debe llenar este campo</string>
 </resources>

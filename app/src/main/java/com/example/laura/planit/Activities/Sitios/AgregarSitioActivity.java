@@ -1,4 +1,4 @@
-package com.example.laura.planit.Activities;
+package com.example.laura.planit.Activities.Sitios;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -31,9 +31,21 @@ public class AgregarSitioActivity extends AppCompatActivity{
 
     public void agregarSitio(View view)
     {
-        PlanIt.darInstancia().agregarSitio(txtNombre.getText().toString(),txtBarrio.getText().toString(),txtDireccion.getText().toString());
-        Toast.makeText(this, "Tu sitio se agregó", Toast.LENGTH_SHORT).show();
-        finish();
+        String nombre,barrio,direccion;
+        nombre=txtNombre.getText().toString().trim();
+        barrio=txtBarrio.getText().toString().trim();
+        direccion=txtDireccion.getText().toString().trim();
+        if(nombre.isEmpty()||barrio.isEmpty()||direccion.isEmpty())
+        {
+            Toast.makeText(this, "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            PlanIt.darInstancia().agregarSitio(nombre,barrio,direccion);
+            Toast.makeText(this, "Tu sitio se agregó", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
     }
 
 

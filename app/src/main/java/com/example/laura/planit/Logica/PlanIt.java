@@ -30,4 +30,10 @@ public class PlanIt
     {
         sitios.add(new Sitio(nNombre,nBarrio,nDireccion));
     }
+
+    public List<Sitio> darSitios()
+    {
+        return sitios;
+    }
+
 }
