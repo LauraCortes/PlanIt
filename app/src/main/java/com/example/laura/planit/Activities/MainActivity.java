@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void Registrar(View view) {
         Intent i = new Intent(this, RegistroActivity.class);
-        i.putExtra("DBHandler", db);
+        i.putExtra("DB",db);
         startActivity(i);
     }
 
