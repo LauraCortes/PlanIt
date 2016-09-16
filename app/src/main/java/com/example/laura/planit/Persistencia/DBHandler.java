@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Laura on 14/09/2016.
  */
-public class DBHandler extends SQLiteOpenHelper implements Serializable {
+public class DBHandler extends SQLiteOpenHelper implements Serializable{
 
     //Database Version
     private static final int DATABASE_VERSION = 3;
