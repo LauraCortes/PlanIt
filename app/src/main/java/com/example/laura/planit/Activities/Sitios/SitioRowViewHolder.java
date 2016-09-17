@@ -12,13 +12,16 @@ import com.example.laura.planit.R;
  */
 public class SitioRowViewHolder extends RecyclerView.ViewHolder {
 
+
     ImageView imagenView;
     TextView nombreTextView;
     TextView barrioTextView;
     TextView direccionTextView;
+    View vista;
 
     public SitioRowViewHolder(View view) {
         super(view);
+        vista=view;
         this.nombreTextView = (TextView) view.findViewById(R.id.nombreSitioFavorito);
         this.imagenView = (ImageView) view.findViewById(R.id.imagenSitioFavorito);
         this.barrioTextView = (TextView) view.findViewById(R.id.barrioSitioFavorito);

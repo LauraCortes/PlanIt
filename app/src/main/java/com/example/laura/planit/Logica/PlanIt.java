@@ -31,6 +31,11 @@ public class PlanIt
         sitios.add(new Sitio(nNombre,nBarrio,nDireccion));
     }
 
+    public void eliminarSitio(int posicion)
+    {
+        sitios.remove(posicion);
+    }
+
     public List<Sitio> darSitios()
     {
         return sitios;
