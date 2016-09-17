@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.laura.planit.Activities.Sitios.SitiosActivity;
+import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Persistencia.DBHandler;
 import com.example.laura.planit.R;
 
@@ -23,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         db = new DBHandler(this);
+        PlanIt mundo = PlanIt.darInstancia();
+        mundo.setDB(db);
+        mundo.inicializar();
+
+        mundo=null;
+
     }
 
     @Override
@@ -40,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     public void lanzarSitios(View view)
     {
         Intent i = new Intent(this, SitiosActivity.class);
+        i.putExtra("DB",db);
         startActivity(i);
     }
 }

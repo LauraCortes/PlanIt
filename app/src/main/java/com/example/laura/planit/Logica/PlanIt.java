@@ -1,5 +1,7 @@
 package com.example.laura.planit.Logica;
 
+import com.example.laura.planit.Persistencia.DBHandler;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,8 @@ import java.util.List;
 public class PlanIt
 {
     private static PlanIt instancia;
+
+    private DBHandler db;
 
     private List<Sitio> sitios;
 
@@ -21,14 +25,29 @@ public class PlanIt
         return instancia;
     }
 
-    private PlanIt()
+    public void setDB(DBHandler db)
     {
-        sitios = new ArrayList<Sitio>();
+        this.db=db;
     }
 
-    public void agregarSitio(String nNombre, String nBarrio, String nDireccion)
+    public DBHandler getDb() {
+        return db;
+    }
+
+    private PlanIt()
     {
-        sitios.add(new Sitio(nNombre,nBarrio,nDireccion));
+    }
+
+    public void inicializar()
+    {
+        sitios=db.darSitios();
+    }
+
+    public Sitio agregarSitio(String nNombre, String nBarrio, String nDireccion)
+    {
+        Sitio agregado = new Sitio(nNombre,nBarrio,nDireccion);
+        sitios.add(agregado);
+        return agregado;
     }
 
     public void eliminarSitio(int posicion)

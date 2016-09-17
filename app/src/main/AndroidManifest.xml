@@ -24,7 +24,7 @@
         <activity android:name=".Activities.Sitios.AgregarSitioActivity" />
 
         <service
-            android:name=".Services.MyService"
+            android:name=".Services.PersitenciaService"
             android:enabled="true"
             android:exported="true"></service>
     </application>

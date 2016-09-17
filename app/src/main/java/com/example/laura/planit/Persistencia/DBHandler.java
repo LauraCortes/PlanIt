@@ -96,14 +96,17 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         Cursor cursor = db.query(TABLE_SITIOS_FAVORITOS, new String[]{"NOMBRE", "BARRIO", "DIRECCION"}, null, null, null, null, null, null);
         if(cursor!=null)
         {
-            cursor.moveToFirst();
-            do
+            if(cursor.getCount()>0)
             {
-                Sitio actual= new Sitio(cursor.getString(0), cursor.getString(1),  cursor.getString(2));
-                resultado.add(actual);
+                cursor.moveToFirst();
+                do
+                {
+                    Sitio actual= new Sitio(cursor.getString(0), cursor.getString(1),  cursor.getString(2));
+                    resultado.add(actual);
+                }
+                while (cursor.moveToNext());
+                cursor.close();
             }
-            while (cursor.moveToNext());
-            cursor.close();
         }
         db.close();
         return resultado;

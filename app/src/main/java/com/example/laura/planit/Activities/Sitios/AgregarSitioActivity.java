@@ -1,18 +1,17 @@
 package com.example.laura.planit.Activities.Sitios;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
+import com.example.laura.planit.Persistencia.DBHandler;
 import com.example.laura.planit.R;
+import com.example.laura.planit.Services.PersitenciaService;
 
 /**
  * Created by Laura on 12/09/2016.
@@ -57,9 +56,14 @@ public class AgregarSitioActivity extends AppCompatActivity{
         }
         else
         {
-            PlanIt.darInstancia().agregarSitio(nombre,barrio,direccion);
+            Sitio agregado = PlanIt.darInstancia().agregarSitio(nombre,barrio,direccion);
             Toast.makeText(this, "Tu sitio se agregó", Toast.LENGTH_SHORT).show();
             finish();
+            Intent intent = new Intent(this, PersitenciaService.class);
+            intent.putExtra("Requerimiento","AgregarSitio");
+            intent.putExtra("Sitio", agregado);
+            startService(intent);
+            agregado = null;
             Intent i = new Intent(this, SitiosActivity.class);
             startActivity(i);
         }
