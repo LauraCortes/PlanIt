@@ -7,8 +7,7 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.laura.planit.Logica.User;
-import com.example.laura.planit.Persistencia.DBHandler;
+import com.example.laura.planit.Logica.Usuario;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
@@ -17,7 +16,7 @@ import com.example.laura.planit.Services.PersitenciaService;
  */
 public class RegistroActivity extends Activity{
 
-    private User usuario;
+    private Usuario usuario;
 
     private int confirmNumb;
 
@@ -34,7 +33,7 @@ public class RegistroActivity extends Activity{
         EditText mEdit   = (EditText)findViewById(R.id.editTextPhoneNumber);
         EditText mEdit2   = (EditText)findViewById(R.id.editTextName);
         SmsManager smsManager = SmsManager.getDefault();
-        usuario = new User (Integer.parseInt(mEdit.getText().toString()),mEdit2.getText().toString() );
+        usuario = new Usuario(Integer.parseInt(mEdit.getText().toString()),mEdit2.getText().toString() );
         smsManager.sendTextMessage(mEdit.getText().toString(), null, "Número de confirmación: "+confirmNumb, null, null);
     }
 

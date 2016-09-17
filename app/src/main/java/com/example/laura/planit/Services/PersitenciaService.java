@@ -3,15 +3,12 @@ package com.example.laura.planit.Services;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.widget.Toast;
 
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
-import com.example.laura.planit.Logica.User;
+import com.example.laura.planit.Logica.Usuario;
 import com.example.laura.planit.Persistencia.DBHandler;
-
-import static android.content.Intent.getIntent;
 
 public class PersitenciaService extends Service {
     public PersitenciaService() {
@@ -31,7 +28,7 @@ public class PersitenciaService extends Service {
         if(requerimiento.equals("Registrar"))
         {
 
-            User usuario = (User) intent.getExtras().get("Usuario");
+            Usuario usuario = (Usuario) intent.getExtras().get("Usuario");
             db.addUser(usuario);
 
         }

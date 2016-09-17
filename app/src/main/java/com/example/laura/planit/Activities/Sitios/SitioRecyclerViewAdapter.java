@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
@@ -83,6 +84,7 @@ public class SitioRecyclerViewAdapter extends RecyclerView.Adapter<SitioRowViewH
                                     service.putExtra("Nombre",PlanIt.darInstancia().darSitios().get(position).getNombre());
                                     context.startService(service);
                                     PlanIt.darInstancia().eliminarSitio(position);
+                                    Toast.makeText(context, "Sitio eliminado de favoritos", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
