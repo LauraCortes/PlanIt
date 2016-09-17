@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activities.RegistroActivity">
+
 
     <ImageView
         android:layout_width="100dp"
@@ -36,7 +38,7 @@
         android:text="Registrar"
         android:id="@+id/buttonRegitrar"
         android:layout_marginTop="35dp"
-        android:background="#F78A0C"
+        android:background="@color/colorAccent"
         android:textSize="15dp"
         android:onClick="registrar"
         android:layout_below="@+id/editTextPhoneNumber"
@@ -58,7 +60,7 @@
         android:layout_height="wrap_content"
         android:text="Confirmar"
         android:id="@+id/buttonConfirmar"
-        android:background="#F78A0C"
+        android:background="@color/colorAccent"
         android:onClick="confirmar"
         android:layout_below="@+id/editTextConfirmation"
         android:layout_centerHorizontal="true"

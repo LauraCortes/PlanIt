@@ -1,4 +1,4 @@
-package com.example.laura.planit.Activities;
+package com.example.laura.planit.Activities.Contactos;
 
 import android.app.Activity;
 

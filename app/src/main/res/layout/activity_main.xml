@@ -66,7 +66,8 @@
         tools:ignore="MissingPrefix"
         android:layout_below="@+id/linearLayout"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="35dp">
+        android:layout_marginTop="35dp"
+        android:id="@+id/linearLayout2">
 
         <ImageView
             android:layout_width="50px"
@@ -86,6 +87,42 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="Sitios favoritos"
+                android:layout_marginStart="0px"
+                android:textSize="35px"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="50px"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:onClick="lanzarSitios"
+        fontPath="fonts/DarwinBold.ttf"
+        tools:ignore="MissingPrefix"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:layout_width="50px"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5px"
+            android:src="@drawable/home" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10px"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Contactos de emergencia"
                 android:layout_marginStart="0px"
                 android:textSize="35px"/>
         </LinearLayout>
