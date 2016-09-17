@@ -1,6 +1,6 @@
 package com.example.laura.planit.Activities.Eventos;
 
-import android.app.DatePickerDialog;
+
 import android.content.Intent;
 import android.icu.util.ULocale;
 import android.os.Build;
@@ -18,6 +18,7 @@ import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,13 +27,16 @@ import java.util.Calendar;
 /**
  * Created by Laura on 12/09/2016.
  */
-public class AgregarEventoActivity extends AppCompatActivity{
+public class AgregarEventoActivity extends AppCompatActivity implements  DatePickerDialog.OnDateSetListener{
 
     //Atributos interfaz
     EditText txtNombre, txtDescripcion , txtLugar, txtPuntoEncuentro;
     TextView lblFechaEncuentro;
 
+    private DatePickerDialog fechaEncuentroDatePickerDialog;
     private SimpleDateFormat dateFormatter;
+
+    final String TAG_FECHA_ENCUENTRO="FechaEnc";
 
     //Atributos para soporte a edición-----
     boolean editar;
@@ -73,18 +77,15 @@ public class AgregarEventoActivity extends AppCompatActivity{
 
     public void definirFechaEncuentro(View view)
     {
+        Calendar now = Calendar.getInstance();
 
-        Toast.makeText(this, "click", Toast.LENGTH_SHORT).show();
-        Calendar newCalendar = Calendar.getInstance();
-        DatePickerDialog fechaEncuentroDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener()
-        {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                lblFechaEncuentro.setText(dateFormatter.format(newDate.getTime()));
-            }
-        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        fechaEncuentroDatePickerDialog.show();
+        fechaEncuentroDatePickerDialog = DatePickerDialog.newInstance(
+                this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        fechaEncuentroDatePickerDialog.show(getFragmentManager(), TAG_FECHA_ENCUENTRO);
     }
 
     public void agregarEvento(View view)
@@ -138,6 +139,16 @@ public class AgregarEventoActivity extends AppCompatActivity{
     }
 
 
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth)
+    {
+        String tag = view.getTag();
+        Calendar newDate = Calendar.getInstance();
+        newDate.set(year, monthOfYear, dayOfMonth);
+        if(tag.equals(TAG_FECHA_ENCUENTRO))
+        {
+            lblFechaEncuentro.setText(dateFormatter.format(newDate.getTime()));
+        }
 
-
+    }
 }
