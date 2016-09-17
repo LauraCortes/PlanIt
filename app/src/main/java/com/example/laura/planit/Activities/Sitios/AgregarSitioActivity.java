@@ -59,6 +59,10 @@ public class AgregarSitioActivity extends AppCompatActivity{
         {
             Toast.makeText(this, "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
         }
+        else if (PlanIt.darInstancia().existeSitio(nombre))
+        {
+            Toast.makeText(this, "Ya existe otro sitio con ese nombre", Toast.LENGTH_SHORT).show();
+        }
         else
         {
 

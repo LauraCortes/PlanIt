@@ -57,6 +57,18 @@ public class PlanIt
         return agregado;
     }
 
+    public boolean existeSitio(String nombre)
+    {
+        for(Sitio sitio:sitios)
+        {
+            if(sitio.getNombre().equals(nombre))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void eliminarSitio(int posicion)
     {
         sitios.remove(posicion);
