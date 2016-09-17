@@ -16,8 +16,10 @@ public class MiAplicacion extends Application
     @Override
     public void onCreate() {
         super.onCreate();
+
         //Garantiza que cuando se lanza la aplicación se carga la info
-        PlanIt.darInstancia();
+
+
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/DarwinRegular.ttf")
                 .setFontAttrId(R.attr.fontPath)

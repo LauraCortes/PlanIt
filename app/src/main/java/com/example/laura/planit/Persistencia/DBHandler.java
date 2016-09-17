@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.laura.planit.Logica.Sitio;
-import com.example.laura.planit.Logica.User;
+import com.example.laura.planit.Logica.Usuario;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,20 +48,20 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     }
 
     //Agregar un usuario
-    public void addUser(User user)
+    public void addUser(Usuario usuario)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("PHONE_NUMBER", user.getNumeroTelefonico());
-        values.put("NOMBRE", user.getNombre());// User Phone Number
+        values.put("PHONE_NUMBER", usuario.getNumeroTelefonico());
+        values.put("NOMBRE", usuario.getNombre());// User Phone Number
 
         db.insert(TABLE_USERS, null, values);
         db.close(); // Closing database connection
     }
 
     // Getting one user
-    public User getUser(int id) {
+    public Usuario getShop(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_USERS, new String[]{"PHONE_NUMBER","NOMBRE"}, "PHONE_NUMBER" + "=?",
@@ -69,7 +69,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         if (cursor != null)
             cursor.moveToFirst();
 
-        User contact = new User(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
+        Usuario contact = new Usuario(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
 
         return contact;
     }
@@ -81,12 +81,42 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         values.put("NOMBRE", nSitio.getNombre());
         values.put("BARRIO", nSitio.getBarrio());
         values.put("DIRECCION", nSitio.getDirección());
-        long resultado = db.insert(TABLE_SITIOS_FAVORITOS, null, values);
-        db.close();
-        if(resultado<0)
+        try
         {
-            throw new Exception("Hubo un error guardando los datos");
+            long resultado = db.insert(TABLE_SITIOS_FAVORITOS, null, values);
         }
+        catch(Exception e)
+        {
+            new Exception("Nombre del sitio ya existe");
+        }
+        db.close();
+    }
+
+    public int editarSitio(String nombreSitio, Sitio nSitio)
+    {
+        int modificaciones=0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("NOMBRE", nSitio.getNombre());
+        values.put("BARRIO", nSitio.getBarrio());
+        values.put("DIRECCION", nSitio.getDirección());
+        try
+        {
+            modificaciones= db.update(TABLE_SITIOS_FAVORITOS, values, "NOMBRE='"+nombreSitio+"'",null);
+
+        }
+        catch(Exception e)
+        {
+            new Exception("Error persistiendo");
+        }
+        db.close();
+        return modificaciones;
+    }
+
+    public int eliminarSitio(String nombreSitio)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_SITIOS_FAVORITOS, "NOMBRE='"+nombreSitio+"'",null);
     }
 
     public List<Sitio> darSitios()
@@ -96,17 +126,19 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         Cursor cursor = db.query(TABLE_SITIOS_FAVORITOS, new String[]{"NOMBRE", "BARRIO", "DIRECCION"}, null, null, null, null, null, null);
         if(cursor!=null)
         {
-            cursor.moveToFirst();
-            do
+            if(cursor.getCount()>0)
             {
-                Sitio actual= new Sitio(cursor.getString(0), cursor.getString(1),  cursor.getString(2));
-                resultado.add(actual);
+                cursor.moveToFirst();
+                do
+                {
+                    Sitio actual= new Sitio(cursor.getString(0), cursor.getString(1),  cursor.getString(2));
+                    resultado.add(actual);
+                }
+                while (cursor.moveToNext());
+                cursor.close();
             }
-            while (cursor.moveToNext());
-            cursor.close();
         }
         db.close();
         return resultado;
     }
-
 }

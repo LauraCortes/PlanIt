@@ -1,9 +1,11 @@
 package com.example.laura.planit.Logica;
 
+import java.io.Serializable;
+
 /**
  * Created by Usuario on 15/09/2016.
  */
-public class Sitio
+public class Sitio implements Serializable
 {
     private String nombre;
     private String barrio;

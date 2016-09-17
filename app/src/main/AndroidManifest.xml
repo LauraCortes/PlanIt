@@ -22,9 +22,11 @@
         <activity android:name=".Activities.RegistroActivity"></activity>
         <activity android:name=".Activities.Sitios.SitiosActivity" />
         <activity android:name=".Activities.Sitios.AgregarSitioActivity" />
+        <activity android:name=".Activities.Eventos.AgregarEventoActivity"/>
+        <activity android:name=".Activities.Eventos.MisEventosActivity"/>
 
         <service
-            android:name=".Services.MyService"
+            android:name=".Services.PersitenciaService"
             android:enabled="true"
             android:exported="true"></service>
     </application>
