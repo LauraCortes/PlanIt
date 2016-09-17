@@ -44,6 +44,7 @@ public class PlanIt
     public void inicializar()
     {
         sitios=db.darSitios();
+        eventos=new ArrayList<Evento>();
     }
 
     public Sitio agregarSitio(String nNombre, String nBarrio, String nDireccion)

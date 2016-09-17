@@ -4,18 +4,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Sitios.SitiosActivity">
+    tools:context=".Activities.Eventos.MisEventosActivity">
 
     <android.support.v7.widget.ContentFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewSitios"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-        </android.support.v7.widget.RecyclerView>
+
 
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"

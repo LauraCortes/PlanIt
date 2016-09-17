@@ -2,18 +2,18 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppTheme"
-    fontPath="@string/fuenteNormal"
-    tools:context=".Activities.Sitios.AgregarSitioActivity">
+    tools:context=".Activities.Eventos.AgregarEventoActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ta"
+        android:scaleType="centerInside"
+        android:src="@drawable/evento_fondo"
         android:alpha=".50"
         android:layout_marginTop="@dimen/card_margin"
         android:layout_gravity="top"
@@ -29,16 +29,42 @@
         android:paddingTop="60dp">
 
 
+
+        <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/txtNombreEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="Nombre del evento" />
+    </android.support.design.widget.TextInputLayout>
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/txtNombreSitioFavorito"
+                android:id="@+id/txtDescripcionEvento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:hint="Nombre del sitio" />
+                android:inputType="text"
+                android:hint="Descripción" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/txtLugarEvento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="Lugar" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -46,23 +72,25 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/txtBarrioFavorito"
+                android:id="@+id/txtPuntoEncuentroEvento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapWords"
-                android:hint="Barrio" />
+                android:inputType="text"
+                android:hint="Punto de encuentro" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
+            android:clickable="true"
+            android:onClick="definirFechaEncuentro"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/txtDireccionFavorito"
+            <TextView
+                android:id="@+id/lblFechaEncuentro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapWords"
-                android:hint="Dirección" />
+                android:inputType="text"
+                android:hint="Fecha del evento" />
         </android.support.design.widget.TextInputLayout>
 
         <Button
