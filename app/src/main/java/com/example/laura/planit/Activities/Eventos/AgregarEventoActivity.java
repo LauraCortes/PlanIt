@@ -1,24 +1,22 @@
 package com.example.laura.planit.Activities.Eventos;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.util.ULocale;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.laura.planit.Activities.Sitios.SitiosActivity;
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,21 +25,25 @@ import java.util.Calendar;
 /**
  * Created by Laura on 12/09/2016.
  */
-public class AgregarEventoActivity extends AppCompatActivity implements  DatePickerDialog.OnDateSetListener{
+public class AgregarEventoActivity extends AppCompatActivity implements  DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
     //Atributos interfaz
     EditText txtNombre, txtDescripcion , txtLugar, txtPuntoEncuentro;
-    TextView lblFechaEncuentro;
+    EditText txtFechaEncuentro, txtHoraEncuentro;
 
-    private DatePickerDialog fechaEncuentroDatePickerDialog;
+
     private SimpleDateFormat dateFormatter;
+    private SimpleDateFormat timeFormatter;
 
     final String TAG_FECHA_ENCUENTRO="FechaEnc";
+    final String TAG_HORA_ENCUENTRO="HoraEnc";
 
     //Atributos para soporte a edición-----
     boolean editar;
     int pos;
     String nombre;
+    boolean horaEncuentro;
+    boolean horaRegreso;
 
 
     @Override
@@ -53,9 +55,14 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
         txtDescripcion=(EditText)findViewById(R.id.txtDescripcionEvento);
         txtLugar=(EditText)findViewById(R.id.txtLugarEvento);
         txtPuntoEncuentro=(EditText)findViewById(R.id.txtPuntoEncuentroEvento);
-        lblFechaEncuentro=(TextView)findViewById(R.id.lblFechaEncuentro);
+        txtFechaEncuentro =(EditText) findViewById(R.id.txtFechaEncuentro);
+        txtHoraEncuentro=(EditText) findViewById(R.id.txtHoraEncuentro);
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+        timeFormatter = new SimpleDateFormat("hh:mm a");
+
+        horaEncuentro=false;
+        horaRegreso=false;
 
         Intent intent = getIntent();
         editar = intent.getExtras().getBoolean("editar");
@@ -79,13 +86,44 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
     {
         Calendar now = Calendar.getInstance();
 
-        fechaEncuentroDatePickerDialog = DatePickerDialog.newInstance(
+        DatePickerDialog fechaEncuentroDatePickerDialog = DatePickerDialog.newInstance(
                 this,
                 now.get(Calendar.YEAR),
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
         );
+        fechaEncuentroDatePickerDialog.setTitle("Fecha del evento");
         fechaEncuentroDatePickerDialog.show(getFragmentManager(), TAG_FECHA_ENCUENTRO);
+        horaEncuentro=true;
+
+    }
+
+    public void definirHoraEncuentro(View view)
+    {
+        Calendar now = Calendar.getInstance();
+        TimePickerDialog horaEncuentroTimePickerDialog = TimePickerDialog.newInstance(
+                this,
+                now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE),
+                false
+        );
+        horaEncuentroTimePickerDialog.setTitle("Hora de encuentro");
+        horaEncuentroTimePickerDialog.setOnCancelListener(
+                new DialogInterface.OnCancelListener()
+                {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        horaEncuentro=false;
+                    }
+                }
+        );
+        horaEncuentroTimePickerDialog.show(getFragmentManager(), TAG_HORA_ENCUENTRO);
+        horaEncuentro=true;
+    }
+
+    public void definirHoraRegreso(View view)
+    {
+        horaRegreso=true;
     }
 
     public void agregarEvento(View view)
@@ -147,8 +185,24 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
         newDate.set(year, monthOfYear, dayOfMonth);
         if(tag.equals(TAG_FECHA_ENCUENTRO))
         {
-            lblFechaEncuentro.setText(dateFormatter.format(newDate.getTime()));
+            txtFechaEncuentro.setText(dateFormatter.format(newDate.getTime()));
         }
 
+    }
+
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second)
+    {
+        Calendar newDate = Calendar.getInstance();
+        newDate.set(0,0,0,hourOfDay,minute);
+        if(horaEncuentro)
+        {
+            horaEncuentro=false;
+            txtHoraEncuentro.setText(timeFormatter.format(newDate.getTime()));
+        }
+        else if(horaRegreso)
+        {
+            horaRegreso=false;
+        }
     }
 }

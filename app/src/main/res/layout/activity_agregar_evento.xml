@@ -86,10 +86,23 @@
             <EditText
                 android:clickable="true"
                 android:onClick="definirFechaEncuentro"
-                android:id="@+id/lblFechaEncuentro"
+                android:id="@+id/txtFechaEncuentro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Fecha del evento" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:clickable="true"
+                android:onClick="definirHoraEncuentro"
+                android:id="@+id/txtHoraEncuentro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Hora de encuentro" />
         </android.support.design.widget.TextInputLayout>
 
         <Button
