@@ -24,7 +24,7 @@
         android:id="@+id/editTextPhoneNumber"
         android:layout_marginLeft="0dp"
         android:textSize="15dp"
-        android:text="Número de celular"
+        android:hint="Número de celular"
         android:layout_below="@+id/editTextName"
         android:layout_alignEnd="@+id/editTextConfirmation"
         android:layout_marginTop="35dp"
@@ -50,6 +50,7 @@
         android:id="@+id/editTextConfirmation"
         android:layout_marginTop="41dp"
         android:layout_below="@+id/buttonRegitrar"
+        android:hint="Número de confirmación"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -69,7 +70,7 @@
         android:id="@+id/editTextName"
         android:layout_below="@+id/imageView"
         android:layout_alignStart="@+id/editTextPhoneNumber"
-        android:text="Nombre"
+        android:hint="Nombre"
         android:layout_alignEnd="@+id/editTextPhoneNumber"
         android:textSize="15dp"
         android:layout_marginTop="35dp" />
