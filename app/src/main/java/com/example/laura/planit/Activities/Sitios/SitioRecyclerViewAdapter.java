@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
+import com.example.laura.planit.Services.PersitenciaService;
 
 import java.util.List;
 
@@ -76,8 +77,12 @@ public class SitioRecyclerViewAdapter extends RecyclerView.Adapter<SitioRowViewH
                                 }
                                 else
                                 {
-                                    PlanIt.darInstancia().eliminarSitio(position);
                                     recycler.notifyDataSetChanged();
+                                    Intent service = new Intent(context, PersitenciaService.class);
+                                    service.putExtra("Requerimiento","EliminarSitio");
+                                    service.putExtra("Nombre",PlanIt.darInstancia().darSitios().get(position).getNombre());
+                                    context.startService(service);
+                                    PlanIt.darInstancia().eliminarSitio(position);
                                 }
                             }
                         });

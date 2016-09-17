@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
+import com.bumptech.glide.util.ExceptionCatchingInputStream;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.Logica.User;
 
@@ -81,12 +83,42 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         values.put("NOMBRE", nSitio.getNombre());
         values.put("BARRIO", nSitio.getBarrio());
         values.put("DIRECCION", nSitio.getDirección());
-        long resultado = db.insert(TABLE_SITIOS_FAVORITOS, null, values);
-        db.close();
-        if(resultado<0)
+        try
         {
-            throw new Exception("Hubo un error guardando los datos");
+            long resultado = db.insert(TABLE_SITIOS_FAVORITOS, null, values);
         }
+        catch(Exception e)
+        {
+            new Exception("Nombre del sitio ya existe");
+        }
+        db.close();
+    }
+
+    public int editarSitio(String nombreSitio, Sitio nSitio)
+    {
+        int modificaciones=0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("NOMBRE", nSitio.getNombre());
+        values.put("BARRIO", nSitio.getBarrio());
+        values.put("DIRECCION", nSitio.getDirección());
+        try
+        {
+            modificaciones= db.update(TABLE_SITIOS_FAVORITOS, values, "NOMBRE='"+nombreSitio+"'",null);
+
+        }
+        catch(Exception e)
+        {
+            new Exception("Error persistiendo");
+        }
+        db.close();
+        return modificaciones;
+    }
+
+    public int eliminarSitio(String nombreSitio)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_SITIOS_FAVORITOS, "NOMBRE='"+nombreSitio+"'",null);
     }
 
     public List<Sitio> darSitios()

@@ -50,6 +50,13 @@ public class PlanIt
         return agregado;
     }
 
+    public Sitio editarSitio (int pos, String nNombre, String nBarrio, String nDireccion)
+    {
+        Sitio agregado = new Sitio(nNombre,nBarrio,nDireccion);
+        sitios.set(pos,agregado);
+        return agregado;
+    }
+
     public void eliminarSitio(int posicion)
     {
         sitios.remove(posicion);

@@ -51,11 +51,5 @@ public class SitiosActivity extends Activity {
         startActivity(i);
     }
 
-    public void editarSitio(int pos) {
-        Intent i = new Intent(this, AgregarSitioActivity.class);
-        i.putExtra("titulo", "Editar sitio favorito");
-        startActivity(i);
-    }
-
 
 }

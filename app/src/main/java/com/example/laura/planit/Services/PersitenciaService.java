@@ -3,6 +3,7 @@ package com.example.laura.planit.Services;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.widget.Toast;
 
 import com.example.laura.planit.Logica.PlanIt;
@@ -36,27 +37,30 @@ public class PersitenciaService extends Service {
         }
         else if (requerimiento.equals("AgregarSitio"))
         {
-
-            Toast.makeText(this, ("DB nula->"+(db==null)), Toast.LENGTH_SHORT).show();
-
             Sitio sitio = (Sitio) intent.getExtras().get("Sitio");
             try
             {
-
                 db.agregarSitio(sitio);
-                Toast.makeText(this, "Sitio persistido en la DB", Toast.LENGTH_SHORT).show();
             }
             catch(Exception e)
             {
                 e.printStackTrace();
-                Toast.makeText(this, "Error persistiendo datos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error persistiendo datos: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
             sitio=null;
         }
+        else if (requerimiento.equals("EditarSitio"))
+        {
+            Sitio sitio = (Sitio) intent.getExtras().get("Sitio");
+            db.editarSitio(intent.getExtras().getString("Nombre"),sitio);
+            sitio=null;
+        }
+        else if (requerimiento.equals("EliminarSitio"))
+        {
+            db.eliminarSitio(intent.getExtras().getString("Nombre"));
+        }
         onDestroy();
         return super.onStartCommand(intent, flags, startId);
-
-
     }
 
     @Override
