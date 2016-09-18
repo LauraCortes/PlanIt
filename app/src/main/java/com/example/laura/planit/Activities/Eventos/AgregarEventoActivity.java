@@ -103,7 +103,6 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                         builder.setTitle("Sitio del evento");
                         List<Sitio> sitios = PlanIt.darInstancia().darSitios();
-                        Toast.makeText(contexto,"Sitios: "+sitios.size(),Toast.LENGTH_SHORT).show();
                         final CharSequence[] opciones = new CharSequence[sitios.size()+1];
                         opciones[0] = "Otro";
                         for (int i = 0; i < opciones.length-1; i++) {
