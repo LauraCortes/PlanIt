@@ -3,8 +3,11 @@ package com.example.laura.planit.Activities.Eventos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
+import com.example.laura.planit.Activities.Sitios.SitioRecyclerViewAdapter;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
 
@@ -27,4 +30,13 @@ public class MisEventosActivity extends AppCompatActivity
         getSupportActionBar().setTitle("Mis eventos");
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        super.onResume();
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewEventos);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        EventoRecyclerViewAdapter adapter = new EventoRecyclerViewAdapter(this, PlanIt.darInstancia().darEventos());
+        recyclerView.setAdapter(adapter);
+    }
 }

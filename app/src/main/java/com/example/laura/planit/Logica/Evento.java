@@ -1,28 +1,32 @@
 package com.example.laura.planit.Logica;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Usuario on 17/09/2016.
  */
-public class Evento
+public class Evento implements Serializable
 {
-    private String nombreEvento,descripcionEvento, puntoEncuentro;
+    private String nombreEvento,descripcionEvento, puntoEncuentro, lugar;
     private MedioTransporte medioRegreso;
-    private int horaEncuentro, minutosEncuentro;
+    Date horaEncuentro, fechaEvento;
     private List<Usuario> invitados;
 
     public Evento() {
     }
 
-    public Evento(String nombreEvento, String descripcionEvento, String puntoEncuentro, MedioTransporte medioRegreso, int horaEncuentro, int minutosEncuentro, List<Usuario> invitados) {
+    public Evento(String nombreEvento, String descripcionEvento, String lugar, String puntoEncuentro, MedioTransporte medioRegreso, Date horaEncuentro, Date fechaEvento , List<Usuario> invitados) {
         this.nombreEvento = nombreEvento;
         this.descripcionEvento = descripcionEvento;
         this.puntoEncuentro = puntoEncuentro;
         this.medioRegreso = medioRegreso;
         this.horaEncuentro = horaEncuentro;
-        this.minutosEncuentro = minutosEncuentro;
+        this.fechaEvento =fechaEvento;
         this.invitados = invitados;
+        this.lugar=lugar;
     }
 
     public String getNombreEvento() {
@@ -57,27 +61,35 @@ public class Evento
         this.medioRegreso = medioRegreso;
     }
 
-    public int getHoraEncuentro() {
-        return horaEncuentro;
-    }
-
-    public void setHoraEncuentro(int horaEncuentro) {
-        this.horaEncuentro = horaEncuentro;
-    }
-
-    public int getMinutosEncuentro() {
-        return minutosEncuentro;
-    }
-
-    public void setMinutosEncuentro(int minutosEncuentro) {
-        this.minutosEncuentro = minutosEncuentro;
-    }
-
     public List<Usuario> getInvitados() {
         return invitados;
     }
 
     public void setInvitados(List<Usuario> invitados) {
         this.invitados = invitados;
+    }
+
+    public Date getHoraEncuentro() {
+        return horaEncuentro;
+    }
+
+    public void setHoraEncuentro(Date horaEncuentro) {
+        this.horaEncuentro = horaEncuentro;
+    }
+
+    public Date getFechaEvento() {
+        return fechaEvento;
+    }
+
+    public void setFechaEvento(Date fechaEvento) {
+        this.fechaEvento = fechaEvento;
+    }
+
+    public String getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
     }
 }

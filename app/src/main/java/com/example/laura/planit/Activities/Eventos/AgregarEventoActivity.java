@@ -14,12 +14,15 @@ import android.widget.Toast;
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
+import com.example.laura.planit.Services.PersitenciaService;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -34,9 +37,6 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
 
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
-
-    final String TAG_FECHA_ENCUENTRO="FechaEnc";
-    final String TAG_HORA_ENCUENTRO="HoraEnc";
 
     //Atributos para soporte a edición-----
     boolean editar;
@@ -93,7 +93,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                 now.get(Calendar.DAY_OF_MONTH)
         );
         fechaEncuentroDatePickerDialog.setTitle("Fecha del evento");
-        fechaEncuentroDatePickerDialog.show(getFragmentManager(), TAG_FECHA_ENCUENTRO);
+        fechaEncuentroDatePickerDialog.show(getFragmentManager(), "tagDatePicker");
         horaEncuentro=true;
 
     }
@@ -108,16 +108,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                 false
         );
         horaEncuentroTimePickerDialog.setTitle("Hora de encuentro");
-        horaEncuentroTimePickerDialog.setOnCancelListener(
-                new DialogInterface.OnCancelListener()
-                {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
-                        horaEncuentro=false;
-                    }
-                }
-        );
-        horaEncuentroTimePickerDialog.show(getFragmentManager(), TAG_HORA_ENCUENTRO);
+        horaEncuentroTimePickerDialog.show(getFragmentManager(), "tagTimePicker");
         horaEncuentro=true;
     }
 
@@ -128,24 +119,26 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
 
     public void agregarEvento(View view)
     {
-        /**
-        String nombre,barrio,direccion;
-        nombre=txtNombre.getText().toString().trim();
-        barrio=txtBarrio.getText().toString().trim();
-        direccion=txtDireccion.getText().toString().trim();
-        if(nombre.isEmpty()||barrio.isEmpty()||direccion.isEmpty())
+        String nombre=txtNombre.getText().toString().trim();
+        String descripcion=txtDescripcion.getText().toString().trim();
+        String sitioEvento = txtLugar.getText().toString().trim();
+        String fechaString = txtFechaEncuentro.getText().toString().trim();
+        String puntoEncuentro = txtPuntoEncuentro.getText().toString().trim();
+        String horaEncuentroString = txtHoraEncuentro.getText().toString().trim();
+
+        if(nombre.isEmpty()||descripcion.isEmpty()||sitioEvento.isEmpty()||fechaString.isEmpty()||puntoEncuentro.isEmpty()||horaEncuentroString.isEmpty())
         {
             Toast.makeText(this, "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
         }
-        else if (PlanIt.darInstancia().existeSitio(nombre))
+        else if (PlanIt.darInstancia().existeEventoNombre(nombre))
         {
-            Toast.makeText(this, "Ya existe otro sitio con ese nombre", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ya existe otro evento con ese nombre", Toast.LENGTH_SHORT).show();
         }
         else
         {
-
             if(editar)
             {
+                /**
                 Sitio agregado = PlanIt.darInstancia().editarSitio(pos,nombre,barrio,direccion);
                 Toast.makeText(this, "Tu sitio se editó", Toast.LENGTH_SHORT).show();
                 finish();
@@ -156,23 +149,33 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                 startService(service);
                 agregado = null;
                 this.nombre=null;
-            }
-            else
+                 **/
+            } else
             {
-                Sitio agregado = PlanIt.darInstancia().agregarSitio(nombre,barrio,direccion);
+                Evento agregado = null;
+                try
+                {
+                    agregado = PlanIt.darInstancia().agregarEvento(nombre, descripcion,sitioEvento, puntoEncuentro, null, timeFormatter.parse(horaEncuentroString), dateFormatter.parse(fechaString),null);
+                }
+                catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
                 Toast.makeText(this, "Tu sitio se agregó", Toast.LENGTH_SHORT).show();
                 finish();
+                //TODO
+                /**
                 Intent intent = new Intent(this, PersitenciaService.class);
-                intent.putExtra("Requerimiento","AgregarSitio");
-                intent.putExtra("Sitio", agregado);
+                intent.putExtra("Requerimiento","AgregarEvento");
+                intent.putExtra("Evento", agregado);
                 startService(intent);
+                 **/
                 agregado = null;
             }
-            Intent i = new Intent(this, SitiosActivity.class);
+            Intent i = new Intent(this, MisEventosActivity.class);
             startActivity(i);
 
         }
-         **/
 
     }
 
@@ -183,10 +186,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
         String tag = view.getTag();
         Calendar newDate = Calendar.getInstance();
         newDate.set(year, monthOfYear, dayOfMonth);
-        if(tag.equals(TAG_FECHA_ENCUENTRO))
-        {
-            txtFechaEncuentro.setText(dateFormatter.format(newDate.getTime()));
-        }
+        txtFechaEncuentro.setText(dateFormatter.format(newDate.getTime()));
 
     }
 
@@ -195,14 +195,6 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
     {
         Calendar newDate = Calendar.getInstance();
         newDate.set(0,0,0,hourOfDay,minute);
-        if(horaEncuentro)
-        {
-            horaEncuentro=false;
-            txtHoraEncuentro.setText(timeFormatter.format(newDate.getTime()));
-        }
-        else if(horaRegreso)
-        {
-            horaRegreso=false;
-        }
+        txtHoraEncuentro.setText(timeFormatter.format(newDate.getTime()));
     }
 }

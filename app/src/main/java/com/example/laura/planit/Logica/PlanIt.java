@@ -3,6 +3,7 @@ package com.example.laura.planit.Logica;
 import com.example.laura.planit.Persistencia.DBHandler;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -73,8 +74,8 @@ public class PlanIt {
         return sitios;
     }
 
-    public Evento agregarEvento(String nombreEvento, String descripcionEvento, String puntoEncuentro, MedioTransporte medioRegreso, int horaEncuentro, int minutosEncuentro, List<Usuario> invitados) {
-        Evento agregado = new Evento(nombreEvento, descripcionEvento, puntoEncuentro, medioRegreso, horaEncuentro, minutosEncuentro, invitados);
+    public Evento agregarEvento(String nombreEvento, String descripcionEvento,String sitio, String puntoEncuentro, MedioTransporte medioRegreso, Date horaEncuentro, Date fechaEncuentro, List<Usuario> invitados) {
+        Evento agregado = new Evento(nombreEvento, descripcionEvento,sitio, puntoEncuentro, medioRegreso, horaEncuentro, fechaEncuentro, invitados);
         eventos.add(agregado);
         return agregado;
     }
