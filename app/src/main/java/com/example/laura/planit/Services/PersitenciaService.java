@@ -66,6 +66,13 @@ public class PersitenciaService extends Service {
             db.editarSitio(intent.getExtras().getString("Nombre"),sitio);
             sitio=null;
         }
+        else if (requerimiento.equals("MarcarContacto"))
+        {
+            Contacto contacto = (Contacto) intent.getExtras().get("Contacto");
+            int marcado = intent.getExtras().getInt("Favoritos");
+            db.marcarContacto(contacto,marcado);
+            contacto=null;
+        }
         else if (requerimiento.equals("EliminarSitio"))
         {
             db.eliminarSitio(intent.getExtras().getString("Nombre"));

@@ -72,7 +72,7 @@ public class AgregarContactoActivity extends ListActivity {
                 if (mCursor.getCount() > 0) {
                     mCursor.moveToFirst();
                     do {
-                        contact = new Contacto(mCursor.getString(0), mCursor.getString(1), false);
+                        contact = new Contacto(mCursor.getString(0), mCursor.getString(1));
                         contactos.add(contact);
                     }
                     while (mCursor.moveToNext());
@@ -106,7 +106,7 @@ public class AgregarContactoActivity extends ListActivity {
                         if (mCursor.getCount() > 0) {
                             mCursor.moveToFirst();
                             do {
-                                contact = new Contacto(mCursor.getString(0), mCursor.getString(1), false);
+                                contact = new Contacto(mCursor.getString(0), mCursor.getString(1));
                                 contactos.add(contact);
                             }
                             while (mCursor.moveToNext());
@@ -156,7 +156,7 @@ public class AgregarContactoActivity extends ListActivity {
                 PlanIt.darInstancia().agregarContacto(t.getText().toString(),tN.getText().toString());
                 Intent intent = new Intent(this, PersitenciaService.class);
                 intent.putExtra("Requerimiento","AgregarContacto");
-                intent.putExtra("Contacto", new Contacto(t.getText().toString(),tN.getText().toString(),true));
+                intent.putExtra("Contacto", new Contacto(t.getText().toString(),tN.getText().toString()));
                 startService(intent);
 
 

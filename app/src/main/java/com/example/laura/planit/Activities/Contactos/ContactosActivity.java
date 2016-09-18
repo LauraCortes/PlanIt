@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,15 +26,13 @@ public class ContactosActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contactos);
-        Log.v("Contactos: ", String.valueOf(PlanIt.darInstancia().darContactos().size()));
         if (PlanIt.darInstancia().darContactos().size() == 0) {
             Intent i = new Intent(this, AgregarContactoActivity.class);
-
             finish();
             startActivity(i);
         }
         ListView listView = (ListView) findViewById(android.R.id.list);
-        listView.setAdapter(new AddContactAdapter(this,PlanIt.darInstancia().darContactos()));
+        listView.setAdapter(new ContactAdapter(this,PlanIt.darInstancia().darContactos()));
     }
 
     public void agregarContactos(View view)
@@ -64,6 +63,6 @@ public class ContactosActivity extends Activity{
             }
         }
 
-        listView.setAdapter(new AddContactAdapter(this,PlanIt.darInstancia().darContactos()));
+        listView.setAdapter(new ContactAdapter(this,PlanIt.darInstancia().darContactos()));
     }
 }

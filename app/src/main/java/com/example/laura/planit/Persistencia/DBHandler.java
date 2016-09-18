@@ -39,7 +39,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
 
         //Lau, habíamos dicho que íbamos a programar en español para no tener revueltos :s
         db.execSQL("CREATE TABLE " + TABLE_USERS + "(PHONE_NUMBER TEXT PRIMARY KEY,NOMBRE TEXT)");
-        db.execSQL("CREATE TABLE " + TABLE_EMERGENCY_CONTACTS + "(PHONE_NUMBER TEXT PRIMARY KEY,NOMBRE TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_EMERGENCY_CONTACTS + "(PHONE_NUMBER TEXT PRIMARY KEY,NOMBRE TEXT, FAVORITO BOOLEAN)");
         db.execSQL("CREATE TABLE " + TABLE_SITIOS_FAVORITOS + "(NOMBRE TEXT PRIMARY KEY, BARRIO TEXT, DIRECCION, TEXT)");
     }
 
@@ -155,6 +155,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
 
         values.put("PHONE_NUMBER", contacto.getNumeroTelefonico());
         values.put("NOMBRE", contacto.getNombre());
+        values.put("FAVORITO", contacto.isSelected());
         try
         {
             long resultado = db.insert(TABLE_EMERGENCY_CONTACTS, null, values);
@@ -170,7 +171,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     {
         ArrayList<Contacto> resultado = new ArrayList<Contacto>();
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query(TABLE_EMERGENCY_CONTACTS, new String[]{"PHONE_NUMBER", "NOMBRE"}, null, null, null, null, null, null);
+        Cursor cursor = db.query(TABLE_EMERGENCY_CONTACTS, new String[]{"PHONE_NUMBER", "NOMBRE", "FAVORITO"}, null, null, null, null, null, null);
         if(cursor!=null)
         {
             if(cursor.getCount()>0)
@@ -178,7 +179,8 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
                 cursor.moveToFirst();
                 do
                 {
-                    Contacto actual= new Contacto(cursor.getString(1),cursor.getString(0),true);
+                    Contacto actual= new Contacto(cursor.getString(1),cursor.getString(0));
+                    actual.setSelected(Integer.valueOf(cursor.getString(2)));
                     resultado.add(actual);
                 }
                 while (cursor.moveToNext());
@@ -193,5 +195,23 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_EMERGENCY_CONTACTS, "PHONE_NUMBER='"+telefono+"'",null);
+    }
+
+    public void marcarContacto(Contacto contacto, int seleccionado)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("PHONE_NUMBER", contacto.getNumeroTelefonico());
+        values.put("NOMBRE", contacto.getNombre());
+        values.put("FAVORITO", seleccionado);
+        try
+        {
+            db.update(TABLE_EMERGENCY_CONTACTS, values, "PHONE_NUMBER='"+contacto.getNumeroTelefonico()+"'",null);
+        }
+        catch(Exception e)
+        {
+            new Exception("Error persistiendo");
+        }
+        db.close();
     }
 }

@@ -112,11 +112,20 @@ public class PlanIt {
         }
         if(!encontro)
         {
-            contactos.add(new Contacto(nombre,numero,true));
+            contactos.add(new Contacto(nombre,numero));
         }
     }
 
     public void eliminarContacto(int pos) {
         contactos.remove(pos);
+    }
+
+    public void marcarFavorito(int pos, int selected){
+        contactos.get(pos).setSelected(selected);
+    }
+
+    public Contacto darContacto(int pos)
+    {
+        return contactos.get(pos);
     }
 }
