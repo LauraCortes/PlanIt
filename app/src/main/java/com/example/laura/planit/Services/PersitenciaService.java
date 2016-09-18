@@ -29,56 +29,54 @@ public class PersitenciaService extends Service {
         if(requerimiento!=null)
         {
 
-            if(requerimiento.equals("Registrar"))
-            {
+            if(requerimiento.equals("Registrar")) {
                 Usuario usuario = (Usuario) intent.getExtras().get("Usuario");
                 db.addUser(usuario);
-
-        }
-        else if (requerimiento.equals("AgregarContacto"))
-        {
-            Contacto contacto = (Contacto) intent.getExtras().get("Contacto");
-            try
-            {
-                db.agregarContacto(contacto);
             }
-            catch(Exception e)
+            else if (requerimiento.equals("AgregarContacto"))
             {
-                e.printStackTrace();
-                Toast.makeText(this, "Error persistiendo datos: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Contacto contacto = (Contacto) intent.getExtras().get("Contacto");
+                try
+                {
+                    db.agregarContacto(contacto);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Error persistiendo datos: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                contacto=null;
             }
-            contacto=null;
-        }
-        else if (requerimiento.equals("AgregarSitio"))
-        {
-            Sitio sitio = (Sitio) intent.getExtras().get("Sitio");
-            try
+            else if (requerimiento.equals("AgregarSitio"))
             {
-                db.agregarSitio(sitio);
+                Sitio sitio = (Sitio) intent.getExtras().get("Sitio");
+                try
+                {
+                    db.agregarSitio(sitio);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Error persistiendo datos: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                sitio=null;
             }
-            catch(Exception e)
+            else if (requerimiento.equals("EditarSitio"))
             {
-                e.printStackTrace();
-                Toast.makeText(this, "Error persistiendo datos: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Sitio sitio = (Sitio) intent.getExtras().get("Sitio");
+                db.editarSitio(intent.getExtras().getString("Nombre"),sitio);
+                sitio=null;
             }
-            sitio=null;
-        }
-        else if (requerimiento.equals("EditarSitio"))
-        {
-            Sitio sitio = (Sitio) intent.getExtras().get("Sitio");
-            db.editarSitio(intent.getExtras().getString("Nombre"),sitio);
-            sitio=null;
-        }
-        else if (requerimiento.equals("MarcarContacto"))
-        {
-            Contacto contacto = (Contacto) intent.getExtras().get("Contacto");
-            int marcado = intent.getExtras().getInt("Favoritos");
-            db.marcarContacto(contacto,marcado);
-            contacto=null;
-        }
-        else if (requerimiento.equals("EliminarSitio"))
-        {
-            db.eliminarSitio(intent.getExtras().getString("Nombre"));
+            else if (requerimiento.equals("MarcarContacto"))
+            {
+                Contacto contacto = (Contacto) intent.getExtras().get("Contacto");
+                int marcado = intent.getExtras().getInt("Favoritos");
+                db.marcarContacto(contacto,marcado);
+                contacto=null;
+            }
+            else if (requerimiento.equals("EliminarSitio"))
+            {
+                db.eliminarSitio(intent.getExtras().getString("Nombre"));
             }
             else if (requerimiento.equals("AgregarContacto"))
             {
@@ -118,12 +116,11 @@ public class PersitenciaService extends Service {
             {
                 db.eliminarSitio(intent.getExtras().getString("Nombre"));
             }
+            else if (requerimiento.equals("EliminarContacto"))
+            {
+                db.eliminarContacto(intent.getExtras().getString("Telefono"));
+            }
         }
-        else if (requerimiento.equals("EliminarContacto"))
-        {
-            db.eliminarContacto(intent.getExtras().getString("Telefono"));
-        }
-
         onDestroy();
         return super.onStartCommand(intent, flags, startId);
     }
