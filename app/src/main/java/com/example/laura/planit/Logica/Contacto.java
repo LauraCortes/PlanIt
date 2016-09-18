@@ -3,28 +3,30 @@ package com.example.laura.planit.Logica;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by Laura on 17/09/2016.
  */
-public class Contacto
+public class Contacto implements Serializable
 {
-    private int numeroTelefonico;
+    private String numeroTelefonico;
 
     private String nombre;
 
     private boolean selected;
 
-    public Contacto(String nombre, int numeroTelefonico, boolean selected) {
+    public Contacto(String nombre, String numeroTelefonico, boolean selected) {
         this.nombre = nombre;
         this.numeroTelefonico = numeroTelefonico;
         this.selected=selected;
     }
 
-    public int getNumeroTelefonico() {
+    public String getNumeroTelefonico() {
         return numeroTelefonico;
     }
 
-    public void setNumeroTelefonico(int numeroTelefonico) {
+    public void setNumeroTelefonico(String numeroTelefonico) {
         this.numeroTelefonico = numeroTelefonico;
     }
 

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.laura.planit.Activities.Contactos.ContactosActivity;
 import com.example.laura.planit.Activities.Eventos.MisEventosActivity;
 import com.example.laura.planit.Activities.Sitios.SitiosActivity;
 import com.example.laura.planit.Logica.PlanIt;
@@ -47,6 +48,12 @@ public class MainActivity extends AppCompatActivity {
     public void lanzarSitios(View view)
     {
         Intent i = new Intent(this, SitiosActivity.class);
+        startActivity(i);
+    }
+
+    public void contactosEmergencia(View view)
+    {
+        Intent i = new Intent(this, ContactosActivity.class);
         startActivity(i);
     }
 

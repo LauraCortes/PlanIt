@@ -9,8 +9,7 @@ import java.util.StringTokenizer;
 /**
  * Created by Usuario on 15/09/2016.
  */
-public class PlanIt
-{
+public class PlanIt {
     private static PlanIt instancia;
 
     private DBHandler db;
@@ -19,102 +18,101 @@ public class PlanIt
 
     private List<Evento> eventos;
 
-    public static PlanIt darInstancia()
-    {
-        if(instancia==null)
-        {
-            instancia=new PlanIt();
+    private List<Contacto> contactos;
+
+    public static PlanIt darInstancia() {
+        if (instancia == null) {
+            instancia = new PlanIt();
         }
         return instancia;
     }
 
-    public void setDB(DBHandler db)
-    {
-        this.db=db;
+    public void setDB(DBHandler db) {
+        this.db = db;
     }
 
     public DBHandler getDb() {
         return db;
     }
 
-    private PlanIt()
-    {
+    private PlanIt() {
     }
 
-    public void inicializar()
-    {
-        sitios=db.darSitios();
-        eventos=new ArrayList<Evento>();
+    public void inicializar() {
+        sitios = db.darSitios();
+        eventos = new ArrayList<Evento>();
+        contactos = new ArrayList<Contacto>();
     }
 
-    public Sitio agregarSitio(String nNombre, String nBarrio, String nDireccion)
-    {
-        Sitio agregado = new Sitio(nNombre,nBarrio,nDireccion);
+    public Sitio agregarSitio(String nNombre, String nBarrio, String nDireccion) {
+        Sitio agregado = new Sitio(nNombre, nBarrio, nDireccion);
         sitios.add(agregado);
         return agregado;
     }
 
-    public Sitio editarSitio (int pos, String nNombre, String nBarrio, String nDireccion)
-    {
-        Sitio agregado = new Sitio(nNombre,nBarrio,nDireccion);
-        sitios.set(pos,agregado);
+    public Sitio editarSitio(int pos, String nNombre, String nBarrio, String nDireccion) {
+        Sitio agregado = new Sitio(nNombre, nBarrio, nDireccion);
+        sitios.set(pos, agregado);
         return agregado;
     }
 
-    public boolean existeSitio(String nombre)
-    {
-        for(Sitio sitio:sitios)
-        {
-            if(sitio.getNombre().equals(nombre))
-            {
+    public boolean existeSitio(String nombre) {
+        for (Sitio sitio : sitios) {
+            if (sitio.getNombre().equals(nombre)) {
                 return true;
             }
         }
         return false;
     }
 
-    public void eliminarSitio(int posicion)
-    {
+    public void eliminarSitio(int posicion) {
         sitios.remove(posicion);
     }
 
-    public List<Sitio> darSitios()
-    {
+    public List<Sitio> darSitios() {
         return sitios;
     }
 
-    public Evento agregarEvento (String nombreEvento, String descripcionEvento, String puntoEncuentro, MedioTransporte medioRegreso, int horaEncuentro, int minutosEncuentro, List<Usuario> invitados)
-    {
-        Evento agregado = new Evento(nombreEvento,descripcionEvento,puntoEncuentro,medioRegreso,horaEncuentro,minutosEncuentro,invitados);
+    public Evento agregarEvento(String nombreEvento, String descripcionEvento, String puntoEncuentro, MedioTransporte medioRegreso, int horaEncuentro, int minutosEncuentro, List<Usuario> invitados) {
+        Evento agregado = new Evento(nombreEvento, descripcionEvento, puntoEncuentro, medioRegreso, horaEncuentro, minutosEncuentro, invitados);
         eventos.add(agregado);
         return agregado;
     }
 
-    public Evento darEventoPos (int pos)
-    {
+    public Evento darEventoPos(int pos) {
         return eventos.get(pos);
     }
 
-    public boolean existeEventoNombre(String nombreEvento)
-    {
-        for(Sitio sitio: sitios)
-        {
-            if(sitio.getNombre().equals(nombreEvento))
-            {
+    public boolean existeEventoNombre(String nombreEvento) {
+        for (Sitio sitio : sitios) {
+            if (sitio.getNombre().equals(nombreEvento)) {
                 return true;
             }
         }
         return false;
     }
 
-    public void eliminarEvento (int pos)
-    {
+    public void eliminarEvento(int pos) {
         eventos.remove(pos);
     }
 
-    public List<Evento> darEventos()
-    {
+    public List<Evento> darEventos() {
         return eventos;
     }
 
+    public List<Contacto> darContactos(){return contactos;}
+
+    public void agregarContacto(String numero, String nombre)
+    {
+        boolean encontro=false;
+        for (Contacto contacto : contactos) {
+            if (contacto.getNumeroTelefonico().equals(numero)) {
+                encontro= true;
+            }
+        }
+        if(!encontro)
+        {
+            contactos.add(new Contacto(nombre,numero,true));
+        }
+    }
 }

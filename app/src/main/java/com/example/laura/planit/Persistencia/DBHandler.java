@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.Logica.Usuario;
 
@@ -37,7 +38,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     public void onCreate(SQLiteDatabase db) {
 
         //Lau, habíamos dicho que íbamos a programar en español para no tener revueltos :s
-        db.execSQL("CREATE TABLE " + TABLE_USERS + "(PHONE_NUMBER INTEGER PRIMARY KEY,NOMBRE TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_USERS + "(PHONE_NUMBER TEXT PRIMARY KEY,NOMBRE TEXT)");
         db.execSQL("CREATE TABLE " + TABLE_EMERGENCY_CONTACTS + "(PHONE_NUMBER INTEGER PRIMARY KEY,NOMBRE TEXT)");
         db.execSQL("CREATE TABLE " + TABLE_SITIOS_FAVORITOS + "(NOMBRE TEXT PRIMARY KEY, BARRIO TEXT, DIRECCION, TEXT)");
     }
@@ -55,13 +56,18 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         ContentValues values = new ContentValues();
         values.put("PHONE_NUMBER", usuario.getNumeroTelefonico());
         values.put("NOMBRE", usuario.getNombre());// User Phone Number
-
-        db.insert(TABLE_USERS, null, values);
-        db.close(); // Closing database connection
+        try {
+            db.insert(TABLE_USERS, null, values);
+            db.close(); // Closing database connection
+        }
+        catch (Exception e)
+        {
+            new Exception("El usuario ya existe");
+        }
     }
 
     // Getting one user
-    public Usuario getShop(int id) {
+    public Usuario getUser(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_USERS, new String[]{"PHONE_NUMBER","NOMBRE"}, "PHONE_NUMBER" + "=?",
@@ -69,7 +75,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         if (cursor != null)
             cursor.moveToFirst();
 
-        Usuario contact = new Usuario(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
+        Usuario contact = new Usuario(cursor.getString(0), cursor.getString(1));
 
         return contact;
     }
@@ -140,5 +146,22 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         }
         db.close();
         return resultado;
+    }
+
+    public void agregarContacto(Contacto contacto)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("NOMBRE", contacto.getNombre());
+        values.put("PHONE_NUMBER", contacto.getNumeroTelefonico());
+        try
+        {
+            long resultado = db.insert(TABLE_EMERGENCY_CONTACTS, null, values);
+        }
+        catch(Exception e)
+        {
+            new Exception("Contacto ya existe");
+        }
+        db.close();
     }
 }

@@ -7,22 +7,22 @@ import java.io.Serializable;
  */
 public class Usuario implements Serializable
 {
-    private int numeroTelefonico;
+    private String numeroTelefonico;
 
     private String nombre;
 
-    public Usuario(int numeroTelefonico, String nombre)
+    public Usuario(String numeroTelefonico, String nombre)
     {
         this.numeroTelefonico=numeroTelefonico;
         this.nombre=nombre;
     }
 
-    public void setNumeroTelefonico(int numeroTelefonico)
+    public void setNumeroTelefonico(String numeroTelefonico)
     {
         this.numeroTelefonico=numeroTelefonico;
     }
 
-    public int getNumeroTelefonico()
+    public String getNumeroTelefonico()
     {
         return numeroTelefonico;
     }
