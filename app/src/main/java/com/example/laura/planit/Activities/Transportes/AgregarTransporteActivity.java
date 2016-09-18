@@ -60,6 +60,7 @@ public class AgregarTransporteActivity extends AppCompatActivity
         getSupportActionBar().setTitle("Regreso del evento");
     }
 
+
     public void desactivarRadios(View originador)
     {
         for(RadioButton radio: radios)
