@@ -14,6 +14,8 @@ public class Evento implements Serializable
     private MedioTransporte medioRegreso;
     Date horaEncuentro, fechaEvento;
     private List<Usuario> invitados;
+    private Sitio puntoEncuentroObjeto;
+    private Sitio lugarEventoObjeto;
 
     public Evento() {
     }
@@ -27,6 +29,8 @@ public class Evento implements Serializable
         this.fechaEvento =fechaEvento;
         this.invitados = invitados;
         this.lugar=lugar;
+        puntoEncuentro=null;
+        lugarEventoObjeto=null;
     }
 
     public String getNombreEvento() {
@@ -46,7 +50,15 @@ public class Evento implements Serializable
     }
 
     public String getPuntoEncuentro() {
-        return puntoEncuentro;
+
+        if(puntoEncuentroObjeto==null)
+        {
+            return puntoEncuentro;
+        }
+        else
+        {
+            return puntoEncuentroObjeto.toString();
+        }
     }
 
     public void setPuntoEncuentro(String puntoEncuentro) {
@@ -86,10 +98,26 @@ public class Evento implements Serializable
     }
 
     public String getLugar() {
-        return lugar;
+
+        if(lugarEventoObjeto==null)
+        {
+            return lugar;
+        }
+        else
+        {
+            return lugarEventoObjeto.toString();
+        }
     }
 
     public void setLugar(String lugar) {
         this.lugar = lugar;
+    }
+
+    public void setPuntoEncuentroObjeto(Sitio puntoEncuentroObjeto) {
+        this.puntoEncuentroObjeto = puntoEncuentroObjeto;
+    }
+
+    public void setLugarEventoObjeto(Sitio lugarEventoObjeto) {
+        this.lugarEventoObjeto = lugarEventoObjeto;
     }
 }

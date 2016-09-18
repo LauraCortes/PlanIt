@@ -52,13 +52,16 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
     boolean horaEncuentro;
     boolean horaRegreso;
     int sitioEventoPos;
-    boolean otroSitioEvento;
+    int puntoEncuentroPos;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_evento);
+
+        sitioEventoPos=-1;
+        puntoEncuentroPos=-1;
 
         txtNombre=(EditText)findViewById(R.id.txtNombreEvento);
         txtDescripcion=(EditText)findViewById(R.id.txtDescripcionEvento);
@@ -72,7 +75,6 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
 
         horaEncuentro=false;
         horaRegreso=false;
-        otroSitioEvento=false;
         contexto=this;
 
         Intent intent = getIntent();
@@ -92,6 +94,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
         getSupportActionBar().setTitle(intent.getStringExtra("titulo"));
         intent=null;
 
+
         txtLugar.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -104,13 +107,15 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                         final CharSequence[] opciones = new CharSequence[sitios.size()+1];
                         opciones[0] = "Otro";
                         for (int i = 0; i < opciones.length-1; i++) {
-                            opciones[i + 1] = sitios.get(i).getNombre();
+                            Sitio sitio = sitios.get(i);
+                            opciones[i + 1] = sitio.toString();
                         }
                         builder.setItems(opciones, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (which == 0) {
-                                    otroSitioEvento = true;
+                                    txtLugar.setText("");
+                                    sitioEventoPos=-1;
                                 } else {
                                     txtLugar.setText(opciones[which]);
                                     sitioEventoPos = which;
@@ -123,6 +128,41 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                     }
                 }
         );
+
+        txtPuntoEncuentro.setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                builder.setTitle("Sitio del evento");
+                                List<Sitio> sitios = PlanIt.darInstancia().darSitios();
+                                Toast.makeText(contexto,"Sitios: "+sitios.size(),Toast.LENGTH_SHORT).show();
+                                final CharSequence[] opciones = new CharSequence[sitios.size()+1];
+                                opciones[0] = "Otro";
+                                for (int i = 0; i < opciones.length-1; i++) {
+                                    Sitio sitio = sitios.get(i);
+                                    opciones[i + 1] = sitio.toString();
+                                }
+                                builder.setItems(opciones, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (which == 0) {
+                                            txtPuntoEncuentro.setText("");
+                                            puntoEncuentroPos=-1;
+                                        } else {
+                                            txtPuntoEncuentro.setText(opciones[which]);
+                                            puntoEncuentroPos = which;
+                                        }
+                                    }
+                                });
+                                builder.show();
+
+
+                            }
+                        }
+                );
+
 
 
 
@@ -202,20 +242,29 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                 try
                 {
                     agregado = PlanIt.darInstancia().agregarEvento(nombre, descripcion,sitioEvento, puntoEncuentro, null, timeFormatter.parse(horaEncuentroString), dateFormatter.parse(fechaString),null);
+                    if(puntoEncuentroPos!=-1)
+                    {
+                        agregado.setPuntoEncuentroObjeto(PlanIt.darInstancia().darSitios().get(puntoEncuentroPos));
+                    }
+                    if(sitioEventoPos!=-1)
+                    {
+                        agregado.setLugarEventoObjeto(PlanIt.darInstancia().darSitios().get(sitioEventoPos));
+                    }
+                    //TODO
+                    /**
+                     Intent intent = new Intent(this, PersitenciaService.class);
+                     intent.putExtra("Requerimiento","AgregarEvento");
+                     intent.putExtra("Evento", agregado);
+                     startService(intent);
+                     **/
                 }
                 catch (ParseException e)
                 {
-                    e.printStackTrace();
+                   Toast.makeText(contexto,"Debe seleccionar una fecha y hora correcta", Toast.LENGTH_LONG);
                 }
                 Toast.makeText(this, "Evento creado", Toast.LENGTH_SHORT).show();
                 finish();
-                //TODO
-                /**
-                Intent intent = new Intent(this, PersitenciaService.class);
-                intent.putExtra("Requerimiento","AgregarEvento");
-                intent.putExtra("Evento", agregado);
-                startService(intent);
-                 **/
+
                 agregado = null;
             }
             Intent i = new Intent(this, MisEventosActivity.class);

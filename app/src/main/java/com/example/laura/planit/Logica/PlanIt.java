@@ -80,6 +80,12 @@ public class PlanIt {
         return agregado;
     }
 
+    public Evento agregarEvento(Evento agregar)
+    {
+        eventos.add(agregar);
+        return agregar;
+    }
+
     public Evento darEventoPos(int pos) {
         return eventos.get(pos);
     }
