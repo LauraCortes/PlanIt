@@ -90,6 +90,7 @@
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/LineaEncuentro"
             android:layout_below="@+id/LineaRealizacion">
 
             <TextView
@@ -144,7 +145,8 @@
             android:id="@+id/medioTransporteNoSeleccionado"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/LineaEncuentro">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -157,6 +159,7 @@
             android:id="@+id/medioTransporteSeleccionado"
             android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:layout_below="@+id/LineaEncuentro"
             android:layout_height="wrap_content">
 
             <TextView
@@ -169,7 +172,58 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/taxi24p"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lblmedioRegreso"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/clock24p"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lblHoraRegreso"/>
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/hourglass"
+                        android:layout_marginLeft="@dimen/card_margin"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lblTiempoAproximadoRegreso"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/imagenlugar24p"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lblDestinoRegreso"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

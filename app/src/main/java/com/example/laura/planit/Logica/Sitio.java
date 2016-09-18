@@ -40,4 +40,9 @@ public class Sitio implements Serializable
     public void setBarrio(String barrio) {
         this.barrio = barrio;
     }
+
+    @Override
+    public String toString() {
+        return nombre+": "+dirección+" ("+barrio+")";
+    }
 }

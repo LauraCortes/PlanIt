@@ -2,7 +2,7 @@ package com.example.laura.planit.Activities.Eventos;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.laura.planit.R;
@@ -12,26 +12,35 @@ import com.example.laura.planit.R;
  */
 public class EventoRowViewHolder extends RecyclerView.ViewHolder {
 
-    TextView nombreTextView;
-    TextView descripcionTextView;
-    TextView fechaTextView;
-    TextView lugarEventoTextView;
-    TextView lugarEncuentroTextView;
-    TextView horaEncuentroTextView;
-    TextView medioTransporte;
-    TextView horaIda;
-    TextView tiempoAproximado;
+    TextView lblnombre;
+    TextView lblDescripcion;
+    TextView lblFechaEvento;
+    TextView lblLugarEvento;
+    TextView lblLugarEncuentro;
+    TextView lblHoraEncuentro;
+    TextView lblmedioTransporte;
+    TextView lblhoraIda;
+    TextView lbltiempoAproximado;
+    TextView lbldestinoRegreso;
+    LinearLayout medioTransporteSeleccionado;
+    LinearLayout medioNOSeleccionado;
 
     View vista;
 
     public EventoRowViewHolder(View view) {
         super(view);
         vista=view;
-        nombreTextView=(TextView)view.findViewById(R.id.nombreEvento);
-        descripcionTextView=(TextView)view.findViewById(R.id.descripcionEvento);
-        fechaTextView=(TextView)view.findViewById(R.id.fechaEvento);
-        lugarEventoTextView=(TextView)view.findViewById(R.id.lugarEvento);
-        lugarEncuentroTextView=(TextView)view.findViewById(R.id.lugarEncuentro);
-        horaEncuentroTextView=(TextView)view.findViewById(R.id.horaEncuentro);
+        lblnombre =(TextView)view.findViewById(R.id.nombreEvento);
+        lblDescripcion =(TextView)view.findViewById(R.id.descripcionEvento);
+        lblFechaEvento =(TextView)view.findViewById(R.id.fechaEvento);
+        lblLugarEvento =(TextView)view.findViewById(R.id.lugarEvento);
+        lblLugarEncuentro =(TextView)view.findViewById(R.id.lugarEncuentro);
+        lblHoraEncuentro =(TextView)view.findViewById(R.id.horaEncuentro);
+        lblmedioTransporte=(TextView)view.findViewById(R.id.lblmedioRegreso);
+        lblhoraIda=(TextView)view.findViewById(R.id.lblHoraRegreso);
+        lbltiempoAproximado=(TextView)view.findViewById(R.id.lblTiempoAproximadoRegreso);
+        lbldestinoRegreso=(TextView)view.findViewById(R.id.lblDestinoRegreso);
+        medioTransporteSeleccionado=(LinearLayout)view.findViewById(R.id.medioTransporteSeleccionado);
+        medioNOSeleccionado=(LinearLayout)view.findViewById(R.id.medioTransporteNoSeleccionado);
     }
 }

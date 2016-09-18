@@ -82,4 +82,9 @@ public class MedioTransporte
     public void setCupoCompartido(int cupoCompartido) {
         this.cupoCompartido = cupoCompartido;
     }
+
+    public String getTiempoAproximado()
+    {
+        return "";
+    }
 }

@@ -1,24 +1,15 @@
 package com.example.laura.planit.Activities.Eventos;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
-import com.example.laura.planit.Activities.Sitios.SitioRowViewHolder;
 import com.example.laura.planit.Logica.Evento;
-import com.example.laura.planit.Logica.PlanIt;
+import com.example.laura.planit.Logica.MedioTransporte;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -66,12 +57,35 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
     public void onBindViewHolder(EventoRowViewHolder rowViewHolder, int position)
     {
         final Evento evento = this.eventos.get(position);
-        rowViewHolder.nombreTextView.setText(evento.getNombreEvento());
-        rowViewHolder.descripcionTextView.setText(evento.getDescripcionEvento());
-        rowViewHolder.fechaTextView.setText(dateFormatter.format(evento.getFechaEvento()));
-        rowViewHolder.lugarEventoTextView.setText(evento.getLugar());
-        rowViewHolder.lugarEncuentroTextView.setText(evento.getPuntoEncuentro());
-        rowViewHolder.horaEncuentroTextView.setText(timeFormatter.format(evento.getHoraEncuentro()));
+        rowViewHolder.lblnombre.setText(evento.getNombreEvento());
+        rowViewHolder.lblDescripcion.setText(evento.getDescripcionEvento());
+        rowViewHolder.lblFechaEvento.setText(dateFormatter.format(evento.getFechaEvento()));
+        rowViewHolder.lblLugarEvento.setText(evento.getLugar());
+        rowViewHolder.lblLugarEncuentro.setText(evento.getPuntoEncuentro());
+        rowViewHolder.lblHoraEncuentro.setText(timeFormatter.format(evento.getHoraEncuentro()));
+        if(evento.getMedioRegreso()==null)
+        {
+            rowViewHolder.medioNOSeleccionado.setVisibility(View.VISIBLE);
+            rowViewHolder.medioTransporteSeleccionado.setVisibility(View.GONE);
+        }
+        else
+        {
+            MedioTransporte medio = evento.getMedioRegreso();
+            rowViewHolder.lblhoraIda.setText(timeFormatter.format(medio.getHoraRegreso()));
+            rowViewHolder.lbltiempoAproximado.setText(medio.getTiempoAproximado());
+            rowViewHolder.lblmedioTransporte.setText(medio.getNombre());
+            rowViewHolder.medioNOSeleccionado.setVisibility(View.GONE);
+            rowViewHolder.medioTransporteSeleccionado.setVisibility(View.VISIBLE);
+            Sitio sitioRegreso = evento.getMedioRegreso().getSitioRegreso();
+            if(sitioRegreso==null)
+            {
+                rowViewHolder.lbldestinoRegreso.setText(medio.getDireccionRegreso());
+            }
+            else
+            {
+                rowViewHolder.lbldestinoRegreso.setText(sitioRegreso.toString());
+            }
+        }
         /**
         rowViewHolder.vista.setOnLongClickListener(
                 new View.OnLongClickListener() {
