@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
 import com.example.laura.planit.Activities.Sitios.SitioRecyclerViewAdapter;
+import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
 
@@ -48,5 +49,11 @@ public class MisEventosActivity extends AppCompatActivity
         i.putExtra("titulo", "Agregar evento");
         finish();
         startActivity(i);
+    }
+
+    public void agregarTransporte(View vista, int elemento)
+    {
+        Intent agregarTransporte = new Intent(this, AgregarTransporteActivity.class);
+        startActivity(agregarTransporte);
     }
 }

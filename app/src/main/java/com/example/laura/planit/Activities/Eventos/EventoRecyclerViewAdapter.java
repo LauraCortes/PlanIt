@@ -1,14 +1,19 @@
 package com.example.laura.planit.Activities.Eventos;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.MedioTransporte;
+import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
 
@@ -55,7 +60,7 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
     }
 
     @Override
-    public void onBindViewHolder(EventoRowViewHolder rowViewHolder, int position)
+    public void onBindViewHolder(EventoRowViewHolder rowViewHolder, final int position)
     {
         final Evento evento = this.eventos.get(position);
         rowViewHolder.lblnombre.setText(evento.getNombreEvento());
@@ -86,44 +91,37 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
             rowViewHolder.lblmedioTransporte.setText(medio.getNombre());
             rowViewHolder.medioNOSeleccionado.setVisibility(View.GONE);
             rowViewHolder.medioTransporteSeleccionado.setVisibility(View.VISIBLE);
-            Sitio sitioRegreso = evento.getMedioRegreso().getSitioRegreso();
-            if(sitioRegreso==null)
-            {
-                rowViewHolder.lbldestinoRegreso.setText(medio.getDireccionRegreso());
-            }
-            else
-            {
-                rowViewHolder.lbldestinoRegreso.setText(sitioRegreso.toString());
-            }
+            rowViewHolder.lbldestinoRegreso.setText(medio.getDireccionRegreso());
         }
-        /**
+
         rowViewHolder.vista.setOnLongClickListener(
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(evento.getNombre());
-                        builder.setItems(new CharSequence[]{"editar", "eliminar"}, new DialogInterface.OnClickListener() {
+                        builder.setTitle(evento.getNombreEvento());
+                        builder.setItems(new CharSequence[]{"Configurar regreso","Eliminar"}, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if(which==0)
                                 {
-                                    Intent i = new Intent(context, AgregarSitioActivity.class);
-                                    i.putExtra("editar",true);
-                                    i.putExtra("titulo","Editar sitio favorito");
-                                    i.putExtra("posicion", position);
-                                    context.startActivity(i);
-                                    ((Activity)context).finish();
+                                    Intent agregarTransporte = new Intent(context, AgregarTransporteActivity.class);
+                                    agregarTransporte.putExtra("pos",position);
+                                    context.startActivity(agregarTransporte);
                                 }
-                                else
+                                else if(which==1)
                                 {
+                                    PlanIt.darInstancia().eliminarEvento(position);
                                     recycler.notifyDataSetChanged();
+
+                                    /**
                                     Intent service = new Intent(context, PersitenciaService.class);
                                     service.putExtra("Requerimiento","EliminarSitio");
                                     service.putExtra("Nombre",PlanIt.darInstancia().darSitios().get(position).getNombre());
                                     context.startService(service);
                                     PlanIt.darInstancia().eliminarSitio(position);
                                     Toast.makeText(context, "Sitio eliminado de favoritos", Toast.LENGTH_SHORT).show();
+                                     */
                                 }
                             }
                         });
@@ -132,6 +130,6 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
                     }
                 }
         );
-    */
+
     }
 }

@@ -1,30 +1,34 @@
 package com.example.laura.planit.Logica;
 
+import java.util.Date;
+
 /**
  * Created by Usuario on 17/09/2016.
  */
 public class MedioTransporte
 {
     private String nombre;
-    private int horaRegreso;
-    private int minRegreso;
+    Date horaRegreso;
     private Sitio sitioRegreso;
     private String direccionRegreso;
-    private boolean compartir;
-    private int cupoCompartido;
+    private int tiempoAproximado;
+    //private boolean compartir;
+    //private int cupoCompartido;
 
 
     public MedioTransporte() {
     }
 
-    public MedioTransporte(String nombre, int horaRegreso, int minRegreso, Sitio sitioRegreso, String direccionRegreso, boolean compartir, int cupoCompartido) {
+    public MedioTransporte(String nombre, Date horaRegreso, String direccionRegreso, int tiempoAproximado)
+    {
         this.nombre = nombre;
         this.horaRegreso = horaRegreso;
-        this.minRegreso = minRegreso;
-        this.sitioRegreso = sitioRegreso;
         this.direccionRegreso = direccionRegreso;
-        this.compartir = compartir;
-        this.cupoCompartido = cupoCompartido;
+        this.tiempoAproximado = tiempoAproximado;
+    }
+
+    public void setSitioRegreso(Sitio sitioRegreso) {
+        this.sitioRegreso = sitioRegreso;
     }
 
     public String getNombre() {
@@ -35,56 +39,34 @@ public class MedioTransporte
         this.nombre = nombre;
     }
 
-    public int getHoraRegreso() {
+    public Date getHoraRegreso() {
         return horaRegreso;
     }
 
-    public void setHoraRegreso(int horaRegreso) {
+    public void setHoraRegreso(Date horaRegreso) {
         this.horaRegreso = horaRegreso;
     }
 
-    public int getMinRegreso() {
-        return minRegreso;
-    }
-
-    public void setMinRegreso(int minRegreso) {
-        this.minRegreso = minRegreso;
-    }
-
-    public Sitio getSitioRegreso() {
-        return sitioRegreso;
-    }
-
-    public void setSitioRegreso(Sitio sitioRegreso) {
-        this.sitioRegreso = sitioRegreso;
-    }
-
     public String getDireccionRegreso() {
-        return direccionRegreso;
+        if(sitioRegreso==null)
+        {
+            return direccionRegreso;
+        }
+        else
+        {
+            return sitioRegreso.toString();
+        }
     }
 
     public void setDireccionRegreso(String direccionRegreso) {
         this.direccionRegreso = direccionRegreso;
     }
 
-    public boolean isCompartir() {
-        return compartir;
+    public int getTiempoAproximado() {
+        return tiempoAproximado;
     }
 
-    public void setCompartir(boolean compartir) {
-        this.compartir = compartir;
-    }
-
-    public int getCupoCompartido() {
-        return cupoCompartido;
-    }
-
-    public void setCupoCompartido(int cupoCompartido) {
-        this.cupoCompartido = cupoCompartido;
-    }
-
-    public String getTiempoAproximado()
-    {
-        return "";
+    public void setTiempoAproximado(int tiempoAproximado) {
+        this.tiempoAproximado = tiempoAproximado;
     }
 }

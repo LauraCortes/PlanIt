@@ -62,6 +62,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         }
         catch (Exception e)
         {
+            db.close();
             new Exception("El usuario ya existe");
         }
     }
@@ -93,6 +94,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         }
         catch(Exception e)
         {
+            db.close();
             new Exception("Nombre del sitio ya existe");
         }
         db.close();
@@ -113,6 +115,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         }
         catch(Exception e)
         {
+            db.close();
             new Exception("Error persistiendo");
         }
         db.close();
@@ -160,6 +163,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         }
         catch(Exception e)
         {
+            db.close();
             new Exception("Contacto ya existe");
         }
         db.close();
