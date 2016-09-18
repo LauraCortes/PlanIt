@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
 import com.example.laura.planit.Activities.Sitios.SitioRecyclerViewAdapter;
@@ -38,5 +39,14 @@ public class MisEventosActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         EventoRecyclerViewAdapter adapter = new EventoRecyclerViewAdapter(this, PlanIt.darInstancia().darEventos());
         recyclerView.setAdapter(adapter);
+    }
+
+    public void agregarEvento(View vista)
+    {
+        Intent i = new Intent(this, AgregarEventoActivity.class);
+        i.putExtra("editar", false);
+        i.putExtra("titulo", "Agregar evento");
+        finish();
+        startActivity(i);
     }
 }

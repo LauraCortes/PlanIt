@@ -24,6 +24,7 @@ public class EventoRowViewHolder extends RecyclerView.ViewHolder {
     TextView lbldestinoRegreso;
     LinearLayout medioTransporteSeleccionado;
     LinearLayout medioNOSeleccionado;
+    TextView lblInvitados;
 
     View vista;
 
@@ -42,5 +43,6 @@ public class EventoRowViewHolder extends RecyclerView.ViewHolder {
         lbldestinoRegreso=(TextView)view.findViewById(R.id.lblDestinoRegreso);
         medioTransporteSeleccionado=(LinearLayout)view.findViewById(R.id.medioTransporteSeleccionado);
         medioNOSeleccionado=(LinearLayout)view.findViewById(R.id.medioTransporteNoSeleccionado);
+        lblInvitados=(TextView)view.findViewById(R.id.lblInvitados);
     }
 }

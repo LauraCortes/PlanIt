@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            android:onClick="agregarSitio"
+            android:onClick="agregarEvento"
             android:src="@drawable/agregar" />
 
     </android.support.v7.widget.ContentFrameLayout>

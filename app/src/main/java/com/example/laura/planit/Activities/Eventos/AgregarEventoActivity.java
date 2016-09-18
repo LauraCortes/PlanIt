@@ -161,7 +161,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                 {
                     e.printStackTrace();
                 }
-                Toast.makeText(this, "Tu sitio se agregó", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Evento creado", Toast.LENGTH_SHORT).show();
                 finish();
                 //TODO
                 /**

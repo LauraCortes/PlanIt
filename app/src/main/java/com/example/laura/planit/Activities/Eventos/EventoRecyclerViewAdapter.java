@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.MedioTransporte;
@@ -63,6 +64,15 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
         rowViewHolder.lblLugarEvento.setText(evento.getLugar());
         rowViewHolder.lblLugarEncuentro.setText(evento.getPuntoEncuentro());
         rowViewHolder.lblHoraEncuentro.setText(timeFormatter.format(evento.getHoraEncuentro()));
+        List invitados = evento.getInvitados();
+        if(invitados==null || invitados.size()==0)
+        {
+            rowViewHolder.lblInvitados.setText("   Aún no has invitado a nadie a tu evento");
+        }
+        else
+        {
+            rowViewHolder.lblInvitados.setText("  "+invitados+" amigos en el evento");
+        }
         if(evento.getMedioRegreso()==null)
         {
             rowViewHolder.medioNOSeleccionado.setVisibility(View.VISIBLE);
