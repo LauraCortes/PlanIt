@@ -25,7 +25,8 @@ public class ContactosActivity extends Activity{
             finish();
             startActivity(i);
         }
-        ListView listView = (ListView) findViewById(android.R.id.list);
+        ListView listView = (ListView) findViewById(R.id.listView);
+        System.out.println("ListView vacío->"+(listView==null));
         listView.setAdapter(new AddContactAdapter(this,PlanIt.darInstancia().darContactos()));
     }
 
