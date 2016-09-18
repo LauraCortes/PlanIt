@@ -118,7 +118,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                                     sitioEventoPos=-1;
                                 } else {
                                     txtLugar.setText(opciones[which]);
-                                    sitioEventoPos = which;
+                                    sitioEventoPos = which-1;
                                 }
                             }
                         });
