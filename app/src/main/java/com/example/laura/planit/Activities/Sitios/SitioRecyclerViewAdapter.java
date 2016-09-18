@@ -61,7 +61,8 @@ public class SitioRecyclerViewAdapter extends RecyclerView.Adapter<SitioRowViewH
         rowViewHolder.vista.setOnLongClickListener(
                 new View.OnLongClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
+                    public boolean onLongClick(View v)
+                    {
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle(sitio.getNombre());
                         builder.setItems(new CharSequence[]{"editar", "eliminar"}, new DialogInterface.OnClickListener() {

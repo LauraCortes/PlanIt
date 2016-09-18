@@ -1,9 +1,12 @@
 package com.example.laura.planit.Activities.Eventos;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,8 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.PlanIt;
+import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -23,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -34,6 +40,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
     EditText txtNombre, txtDescripcion , txtLugar, txtPuntoEncuentro;
     EditText txtFechaEncuentro, txtHoraEncuentro;
 
+    Context contexto;
 
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
@@ -44,6 +51,8 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
     String nombre;
     boolean horaEncuentro;
     boolean horaRegreso;
+    int sitioEventoPos;
+    boolean otroSitioEvento;
 
 
     @Override
@@ -63,6 +72,8 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
 
         horaEncuentro=false;
         horaRegreso=false;
+        otroSitioEvento=false;
+        contexto=this;
 
         Intent intent = getIntent();
         editar = intent.getExtras().getBoolean("editar");
@@ -80,6 +91,41 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
         }
         getSupportActionBar().setTitle(intent.getStringExtra("titulo"));
         intent=null;
+
+        txtLugar.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                        builder.setTitle("Sitio del evento");
+                        List<Sitio> sitios = PlanIt.darInstancia().darSitios();
+                        Toast.makeText(contexto,"Sitios: "+sitios.size(),Toast.LENGTH_SHORT).show();
+                        final CharSequence[] opciones = new CharSequence[sitios.size()+1];
+                        opciones[0] = "Otro";
+                        for (int i = 0; i < opciones.length-1; i++) {
+                            opciones[i + 1] = sitios.get(i).getNombre();
+                        }
+                        builder.setItems(opciones, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == 0) {
+                                    otroSitioEvento = true;
+                                } else {
+                                    txtLugar.setText(opciones[which]);
+                                    sitioEventoPos = which;
+                                }
+                            }
+                        });
+                        builder.show();
+
+
+                    }
+                }
+        );
+
+
+
     }
 
     public void definirFechaEncuentro(View view)
