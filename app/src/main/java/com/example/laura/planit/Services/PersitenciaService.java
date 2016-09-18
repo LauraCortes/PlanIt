@@ -28,6 +28,7 @@ public class PersitenciaService extends Service {
         String requerimiento = intent.getExtras().getString("Requerimiento");
         if(requerimiento!=null)
         {
+
             if(requerimiento.equals("Registrar"))
             {
                 Usuario usuario = (Usuario) intent.getExtras().get("Usuario");
