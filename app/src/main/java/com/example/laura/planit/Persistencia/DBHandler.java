@@ -45,7 +45,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
 
         //Lau, habíamos dicho que íbamos a programar en español para no tener revueltos :s
         db.execSQL("CREATE TABLE " + TABLE_USERS + "(PHONE_NUMBER TEXT PRIMARY KEY,NOMBRE TEXT)");
-        db.execSQL("CREATE TABLE " + TABLE_EMERGENCY_CONTACTS + "(PHONE_NUMBER INTEGER PRIMARY KEY,NOMBRE TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_EMERGENCY_CONTACTS + "(PHONE_NUMBER TEXT PRIMARY KEY,NOMBRE TEXT, FAVORITO BOOLEAN)");
         db.execSQL("CREATE TABLE " + TABLE_SITIOS_FAVORITOS + "(NOMBRE TEXT PRIMARY KEY, BARRIO TEXT, DIRECCION, TEXT)");
         db.execSQL("CREATE TABLE " + TABLE_EVENTOS + " (NOMBRE TEXT PRIMARY KEY, DESCRIPCION TEXT, " +
                 "LUGAR_ENCUENTRO TEXT, LUGAR_EVENTO TEXT," +
@@ -270,8 +270,10 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("NOMBRE", contacto.getNombre());
+
         values.put("PHONE_NUMBER", contacto.getNumeroTelefonico());
+        values.put("NOMBRE", contacto.getNombre());
+        values.put("FAVORITO", contacto.isSelected());
         try
         {
             long resultado = db.insert(TABLE_EMERGENCY_CONTACTS, null, values);
@@ -280,6 +282,54 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         {
             db.close();
             new Exception("Contacto ya existe");
+        }
+        db.close();
+    }
+
+    public List<Contacto> darContactos()
+    {
+        ArrayList<Contacto> resultado = new ArrayList<Contacto>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_EMERGENCY_CONTACTS, new String[]{"PHONE_NUMBER", "NOMBRE", "FAVORITO"}, null, null, null, null, null, null);
+        if(cursor!=null)
+        {
+            if(cursor.getCount()>0)
+            {
+                cursor.moveToFirst();
+                do
+                {
+                    Contacto actual= new Contacto(cursor.getString(1),cursor.getString(0));
+                    actual.setSelected(Integer.valueOf(cursor.getString(2)));
+                    resultado.add(actual);
+                }
+                while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+        db.close();
+        return resultado;
+    }
+
+    public int eliminarContacto(String telefono)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_EMERGENCY_CONTACTS, "PHONE_NUMBER='"+telefono+"'",null);
+    }
+
+    public void marcarContacto(Contacto contacto, int seleccionado)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("PHONE_NUMBER", contacto.getNumeroTelefonico());
+        values.put("NOMBRE", contacto.getNombre());
+        values.put("FAVORITO", seleccionado);
+        try
+        {
+            db.update(TABLE_EMERGENCY_CONTACTS, values, "PHONE_NUMBER='"+contacto.getNumeroTelefonico()+"'",null);
+        }
+        catch(Exception e)
+        {
+            new Exception("Error persistiendo");
         }
         db.close();
     }

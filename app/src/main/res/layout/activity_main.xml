@@ -93,7 +93,7 @@
             android:layout_marginLeft="5px"
             android:src="@drawable/home" />
 
-            android:orientation="vertical">
+
             <TextView
                 android:paddingLeft="10px"
                 android:layout_width="match_parent"
@@ -126,7 +126,7 @@
             android:layout_marginLeft="5px"
             android:src="@drawable/home" />
 
-        android:orientation="vertical">
+
         <TextView
             android:paddingLeft="10px"
             android:layout_width="match_parent"

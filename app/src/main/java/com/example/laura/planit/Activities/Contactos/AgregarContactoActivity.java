@@ -5,16 +5,23 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.*;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.example.laura.planit.Activities.Sitios.SitiosActivity;
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.PlanIt;
+import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
@@ -38,10 +45,42 @@ public class AgregarContactoActivity extends ListActivity {
         listView = (ListView) findViewById(android.R.id.list);
         contactos= new ArrayList<Contacto>();
 
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_CONTACTS},
-                MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
 
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+                showSnackBar();
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_CONTACTS},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+            }
+        }
+        else {
+            Cursor mCursor = getContentResolver().query(
+                    Data.CONTENT_URI,
+                    new String[]{Data.DISPLAY_NAME, CommonDataKinds.Phone.NUMBER},
+                    Data.MIMETYPE + "='" + CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND "
+                            + CommonDataKinds.Phone.NUMBER + " IS NOT NULL", null,
+                    Data.DISPLAY_NAME + " ASC");
+            startManagingCursor(mCursor);
+            Contacto contact;
+            if(mCursor!=null) {
+                if (mCursor.getCount() > 0) {
+                    mCursor.moveToFirst();
+                    do {
+                        contact = new Contacto(mCursor.getString(0), mCursor.getString(1));
+                        contactos.add(contact);
+                    }
+                    while (mCursor.moveToNext());
+                    mCursor.close();
+                }
+            }contact = null;
+                listView.setAdapter(new AddContactAdapter(this, contactos));
+        }
     }
 
     public void onRequestPermissionsResult(int requestCode,
@@ -63,25 +102,43 @@ public class AgregarContactoActivity extends ListActivity {
                             Data.DISPLAY_NAME + " ASC");
                     startManagingCursor(mCursor);
                     Contacto contact;
-                    for (int i=0;i<mCursor.getCount();i++)
-                    {
-                        String nombre= mCursor.getString(1);
-                        String telefono=mCursor.getString(2);
-                        contact=new Contacto(nombre,telefono,false);
-                        contactos.add(contact);
+                    if(mCursor!=null) {
+                        if (mCursor.getCount() > 0) {
+                            mCursor.moveToFirst();
+                            do {
+                                contact = new Contacto(mCursor.getString(0), mCursor.getString(1));
+                                contactos.add(contact);
+                            }
+                            while (mCursor.moveToNext());
+                            mCursor.close();
+                        }
                     }
-                    contact=null;
-
+                    contact = null;
                     listView.setAdapter(new AddContactAdapter(this,contactos));
 
                 } else {
-                    finish();
+                    showSnackBar();
+                    //finish();
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
                 return;
             }
         }
+    }
+
+    private void showSnackBar() {
+        Snackbar.make(findViewById(R.id.relativeLayout),"Activar envío sms",Snackbar.LENGTH_LONG)
+                .setAction("Settings", new View.OnClickListener() {
+                    @Override public void onClick(View view){
+                        openSettings();
+                    }}).show();
+    }
+
+    public void openSettings() {
+        Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.parse("package:" + getPackageName()));
+        startActivity(intent);
     }
 
     public void agregar(View view)
@@ -94,12 +151,20 @@ public class AgregarContactoActivity extends ListActivity {
             if (tvTest.isChecked())
             {
                 // DO SOMETHING
-                PlanIt.darInstancia().agregarContacto(row.findViewById(R.id.textViewTelefono).toString(),row.findViewById(R.id.textViewNombre).toString());
+                TextView t= (TextView) row.findViewById(R.id.textViewNombre);
+                TextView tN= (TextView) row.findViewById(R.id.textViewTelefono);
+                PlanIt.darInstancia().agregarContacto(t.getText().toString(),tN.getText().toString());
                 Intent intent = new Intent(this, PersitenciaService.class);
                 intent.putExtra("Requerimiento","AgregarContacto");
-                intent.putExtra("Contacto", new Contacto(row.findViewById(R.id.textViewNombre).toString(),row.findViewById(R.id.textViewTelefono).toString(),true));
+                intent.putExtra("Contacto", new Contacto(t.getText().toString(),tN.getText().toString()));
                 startService(intent);
+
+
             }
         }
+        finish();
+        Intent i = new Intent(this, ContactosActivity.class);
+        startActivity(i);
+
     }
 }

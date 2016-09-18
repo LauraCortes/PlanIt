@@ -14,12 +14,13 @@ public class Contacto implements Serializable
 
     private String nombre;
 
-    private boolean selected;
+    //0= false, 1=true
+    private int selected;
 
-    public Contacto(String nombre, String numeroTelefonico, boolean selected) {
+    public Contacto(String nombre, String numeroTelefonico) {
         this.nombre = nombre;
         this.numeroTelefonico = numeroTelefonico;
-        this.selected=selected;
+        this.selected=0;
     }
 
     public String getNumeroTelefonico() {
@@ -38,11 +39,11 @@ public class Contacto implements Serializable
         this.nombre = nombre;
     }
 
-    public boolean isSelected() {
+    public int isSelected() {
         return selected;
     }
 
-    public void setSelected(boolean selected) {
+    public void setSelected(int selected) {
         this.selected = selected;
     }
 }

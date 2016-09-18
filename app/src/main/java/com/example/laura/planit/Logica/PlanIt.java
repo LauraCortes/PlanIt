@@ -42,7 +42,7 @@ public class PlanIt {
     public void inicializar() {
         sitios = db.darSitios();
         eventos = new ArrayList<Evento>();
-        contactos = new ArrayList<Contacto>();
+        contactos = db.darContactos();
     }
 
     public Sitio agregarSitio(String nNombre, String nBarrio, String nDireccion) {
@@ -109,7 +109,7 @@ public class PlanIt {
 
     public List<Contacto> darContactos(){return contactos;}
 
-    public void agregarContacto(String numero, String nombre)
+    public void agregarContacto(String nombre, String numero)
     {
         boolean encontro=false;
         for (Contacto contacto : contactos) {
@@ -119,7 +119,20 @@ public class PlanIt {
         }
         if(!encontro)
         {
-            contactos.add(new Contacto(nombre,numero,true));
+            contactos.add(new Contacto(nombre,numero));
         }
+    }
+
+    public void eliminarContacto(int pos) {
+        contactos.remove(pos);
+    }
+
+    public void marcarFavorito(int pos, int selected){
+        contactos.get(pos).setSelected(selected);
+    }
+
+    public Contacto darContacto(int pos)
+    {
+        return contactos.get(pos);
     }
 }

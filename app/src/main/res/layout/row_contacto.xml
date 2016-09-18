@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        
+
         <ImageView
             android:layout_width="30px"
             android:layout_height="30px"
@@ -48,5 +48,14 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/black"/>
 
+        <ImageButton
+            android:layout_width="30px"
+            android:layout_height="30px"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5px"
+            android:background="@android:drawable/btn_star_big_off"
+            android:id="@+id/imageContactoFavorito"/>
+
     </LinearLayout>
+
 </LinearLayout>
