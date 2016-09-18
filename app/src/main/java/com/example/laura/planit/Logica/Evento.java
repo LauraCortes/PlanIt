@@ -120,4 +120,12 @@ public class Evento implements Serializable
     public void setLugarEventoObjeto(Sitio lugarEventoObjeto) {
         this.lugarEventoObjeto = lugarEventoObjeto;
     }
+
+    public Sitio getPuntoEncuentroObjeto() {
+        return puntoEncuentroObjeto;
+    }
+
+    public Sitio getLugarEventoObjeto() {
+        return lugarEventoObjeto;
+    }
 }

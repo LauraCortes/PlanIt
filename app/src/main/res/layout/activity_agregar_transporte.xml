@@ -65,6 +65,7 @@
                                 android:layout_height="wrap_content"
                                 android:checked="false"
                                 android:id="@+id/radioTaxi"
+                                android:onClick="desactivarRadios"
                                 android:text="Taxi"/>
                         </LinearLayout>
 
@@ -81,7 +82,7 @@
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:checked="false"
+                                android:onClick="desactivarRadios"
                                 android:id="@+id/radioUber"
                                 android:text="Uber"/>
                         </LinearLayout>
@@ -103,6 +104,7 @@
                                 android:layout_height="wrap_content"
                                 android:checked="false"
                                 android:id="@+id/radioTransportePublico"
+                                android:onClick="desactivarRadios"
                                 android:text="Transporte público"/>
                         </LinearLayout>
                         <LinearLayout
@@ -120,8 +122,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checked="false"
+                                android:onClick="desactivarRadios"
                                 android:id="@+id/radioCarro"
-                                android:text="Taxi"/>
+                                android:text="Carro"/>
                         </LinearLayout>
 
                     </LinearLayout>

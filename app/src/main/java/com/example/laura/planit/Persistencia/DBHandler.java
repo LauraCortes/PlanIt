@@ -7,12 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.laura.planit.Logica.Contacto;
+import com.example.laura.planit.Logica.Evento;
+import com.example.laura.planit.Logica.MedioTransporte;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.Logica.Usuario;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TransferQueue;
 
 /**
  * Created by Laura on 14/09/2016.
@@ -29,6 +33,8 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     private static final String TABLE_USERS = "USUARIOS";
     private static final String TABLE_EMERGENCY_CONTACTS = "CONTACTOS_EMERGENCIA";
     private static final String TABLE_SITIOS_FAVORITOS ="SITIOS_FAVORITOS";
+    private static final String TABLE_EVENTOS="TABLA_EVENTOS";
+    private static final String TABLE_INVITADOS_EVENTO="INVITADOS";
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,6 +47,11 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         db.execSQL("CREATE TABLE " + TABLE_USERS + "(PHONE_NUMBER TEXT PRIMARY KEY,NOMBRE TEXT)");
         db.execSQL("CREATE TABLE " + TABLE_EMERGENCY_CONTACTS + "(PHONE_NUMBER INTEGER PRIMARY KEY,NOMBRE TEXT)");
         db.execSQL("CREATE TABLE " + TABLE_SITIOS_FAVORITOS + "(NOMBRE TEXT PRIMARY KEY, BARRIO TEXT, DIRECCION, TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_EVENTOS + " (NOMBRE TEXT PRIMARY KEY, DESCRIPCION TEXT, " +
+                "LUGAR_ENCUENTRO TEXT, LUGAR_EVENTO TEXT," +
+                " HORA_EVENTO DATETIME, TIPO_TRANSPORTE TEXT," +
+                " HORA_TRANSPORTE DATETIME, SITIO_TRANSPORTE TEXT, TIEMPO_TRANSPORTE INTEGER");
+        db.execSQL("CREATE TABLE" + TABLE_INVITADOS_EVENTO + "(EVENTO TEXT, PHONE_NUMBER TEXT, PRIMARY KEY (EVENTO,PHONE_NUMBER))");
     }
 
     @Override
@@ -100,6 +111,110 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         db.close();
     }
 
+    public void agregarEvento(Evento evento)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("NOMBRE", evento.getNombreEvento());
+        values.put("DESCRIPCION", evento.getDescripcionEvento());
+        values.put("LUGAR_ENCUENTRO", evento.getPuntoEncuentro());
+        values.put("LUGAR_EVENTO",evento.getLugar());
+        values.put("HORA_EVENTO", String.valueOf(evento.getHoraEncuentro()));
+        MedioTransporte transporte = evento.getMedioRegreso();
+        if(transporte!=null)
+        {
+            values.put("TIPO_TRANSPORTE",transporte.getNombre());
+            values.put("HORA_TRANPORTE",transporte.getHoraRegreso().toString());
+            values.put("SITIO_TRANSPORTE", transporte.getDireccionRegreso());
+            values.put("TIEMPO_TRANSPORTE", transporte.getTiempoAproximado());
+        }
+        evento=null;
+        db.insert(TABLE_EVENTOS, null, values);
+        db.close();
+    }
+
+    public int editarEvento(Evento evento, String nombreEvento)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("NOMBRE", evento.getNombreEvento());
+        values.put("DESCRIPCION", evento.getDescripcionEvento());
+        values.put("LUGAR_ENCUENTRO", evento.getPuntoEncuentro());
+        values.put("LUGAR_EVENTO",evento.getLugar());
+        values.put("HORA_EVENTO", String.valueOf(evento.getHoraEncuentro()));
+        MedioTransporte transporte = evento.getMedioRegreso();
+        if(transporte!=null)
+        {
+            values.put("TIPO_TRANSPORTE",transporte.getNombre());
+            values.put("HORA_TRANPORTE",transporte.getHoraRegreso().toString());
+            values.put("SITIO_TRANSPORTE", transporte.getDireccionRegreso());
+            values.put("TIEMPO_TRANSPORTE", transporte.getTiempoAproximado());
+        }
+        int modificaciones= db.update(TABLE_EVENTOS, values, "NOMBRE='"+nombreEvento+"'",null);
+        evento=null;
+        db.close();
+        return modificaciones;
+    }
+
+    public int agregarTransporteAEvento(MedioTransporte transporte, String nombreEvento)
+    {
+        int modificaciones=0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("TIPO_TRANSPORTE",transporte.getNombre());
+        values.put("HORA_TRANPORTE",transporte.getHoraRegreso().toString());
+        values.put("SITIO_TRANSPORTE", transporte.getDireccionRegreso());
+        values.put("TIEMPO_TRANSPORTE", transporte.getTiempoAproximado());
+        modificaciones= db.update(TABLE_EVENTOS, values, "NOMBRE='"+nombreEvento+"'",null);
+        db.close();
+        return modificaciones;
+    }
+    public int eliminarEvento(String nombreEvento)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result= db.delete(TABLE_EVENTOS, "NOMBRE='"+nombreEvento+"'",null);
+        db.close();
+        return result;
+    }
+
+    public List<Evento> darEventos()
+    {
+        ArrayList<Evento> resultado = new ArrayList<Evento>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_EVENTOS, new String[]{"NOMBRE", "DESCRIPCION", "LUGAR_ENCUENTRO", "LUGAR_EVENTO",
+                "HORA_EVENTO","TIPO_TRANSPORTE","HORA_TRANPORTE","TIEMPO_TRANSPORTE","SITIO_TRANSPORTE" }, null, null, null, null, null, null);
+        if(cursor!=null)
+        {
+            if(cursor.getCount()>0)
+            {
+                cursor.moveToFirst();
+                do
+                {
+                    Evento actual= new Evento();
+                    actual.setNombreEvento(cursor.getString(0));
+                    actual.setDescripcionEvento(cursor.getString(1));
+                    actual.setPuntoEncuentro(cursor.getString(2));
+                    actual.setLugar(cursor.getString(3));
+                    actual.setHoraEncuentro(Date.valueOf(cursor.getString(4)));
+                    actual.setFechaEvento(Date.valueOf(cursor.getString(4)));
+
+                    MedioTransporte transporte= new MedioTransporte();
+                    transporte.setNombre(cursor.getString(5));
+                    transporte.setHoraRegreso(Date.valueOf(cursor.getString(6)));
+                    transporte.setTiempoAproximado(cursor.getInt(7));
+                    transporte.setDireccionRegreso(cursor.getString(8));
+
+                    actual.setMedioRegreso(transporte);
+                    resultado.add(actual);
+                }
+                while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+        db.close();
+        return resultado;
+    }
+
     public int editarSitio(String nombreSitio, Sitio nSitio)
     {
         int modificaciones=0;
@@ -131,7 +246,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     public List<Sitio> darSitios()
     {
         ArrayList<Sitio> resultado = new ArrayList<Sitio>();
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_SITIOS_FAVORITOS, new String[]{"NOMBRE", "BARRIO", "DIRECCION"}, null, null, null, null, null, null);
         if(cursor!=null)
         {

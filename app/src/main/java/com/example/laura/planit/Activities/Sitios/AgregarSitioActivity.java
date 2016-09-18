@@ -50,6 +50,8 @@ public class AgregarSitioActivity extends AppCompatActivity{
         intent=null;
     }
 
+
+
     public void agregarSitio(View view)
     {
         String nombre,barrio,direccion;
