@@ -256,15 +256,17 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                      intent.putExtra("Evento", agregado);
                      startService(intent);
                      **/
+
+                    Toast.makeText(this, "Evento creado", Toast.LENGTH_SHORT).show();
+                    finish();
+
+                    agregado = null;
                 }
                 catch (ParseException e)
                 {
                    Toast.makeText(contexto,"Debe seleccionar una fecha y hora correcta", Toast.LENGTH_LONG);
                 }
-                Toast.makeText(this, "Evento creado", Toast.LENGTH_SHORT).show();
-                finish();
 
-                agregado = null;
             }
             Intent i = new Intent(this, MisEventosActivity.class);
             startActivity(i);
