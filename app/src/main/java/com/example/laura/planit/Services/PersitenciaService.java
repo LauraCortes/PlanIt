@@ -70,6 +70,10 @@ public class PersitenciaService extends Service {
         {
             db.eliminarSitio(intent.getExtras().getString("Nombre"));
         }
+        else if (requerimiento.equals("EliminarContacto"))
+        {
+            db.eliminarContacto(intent.getExtras().getString("Telefono"));
+        }
         onDestroy();
         return super.onStartCommand(intent, flags, startId);
     }
