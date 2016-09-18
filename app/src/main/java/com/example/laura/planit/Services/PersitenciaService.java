@@ -123,6 +123,7 @@ public class PersitenciaService extends Service {
         }
         onDestroy();
         return super.onStartCommand(intent, flags, startId);
+
     }
 
     @Override
