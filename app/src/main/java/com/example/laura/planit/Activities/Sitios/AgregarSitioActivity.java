@@ -18,10 +18,11 @@ import com.example.laura.planit.Services.PersitenciaService;
  */
 public class AgregarSitioActivity extends AppCompatActivity{
 
-    EditText txtNombre, txtBarrio, txtDireccion;
-    boolean editar;
-    int pos;
-    String nombre;
+    private EditText txtNombre, txtBarrio, txtDireccion;
+    private boolean editar;
+    private int pos;
+    private String nombre;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +97,4 @@ public class AgregarSitioActivity extends AppCompatActivity{
         }
 
     }
-
-
 }

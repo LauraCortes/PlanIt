@@ -24,6 +24,8 @@
         <activity android:name=".Activities.Sitios.AgregarSitioActivity" />
         <activity android:name=".Activities.Eventos.AgregarEventoActivity"/>
         <activity android:name=".Activities.Eventos.MisEventosActivity"/>
+        <activity android:name=".Activities.Contactos.AgregarContactoActivity"/>
+        <activity android:name=".Activities.Contactos.ContactosActivity"/>
 
         <service
             android:name=".Services.PersitenciaService"
