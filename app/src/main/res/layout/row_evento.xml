@@ -142,6 +142,20 @@
         </android.support.v7.widget.LinearLayoutCompat>
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_below="@+id/medioTransporteSeleccionado"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/btnTimerRegreso"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/timer"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout
             android:id="@+id/medioTransporteNoSeleccionado"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -181,6 +195,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lblInvitados"/>
         </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/medioTransporteSeleccionado"

@@ -69,6 +69,7 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
         rowViewHolder.lblLugarEvento.setText(evento.getLugar());
         rowViewHolder.lblLugarEncuentro.setText(evento.getPuntoEncuentro());
         rowViewHolder.lblHoraEncuentro.setText(timeFormatter.format(evento.getHoraEncuentro()));
+
         List invitados = evento.getInvitados();
         if(invitados==null || invitados.size()==0)
         {
@@ -127,6 +128,15 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
                         });
                         builder.show();
                         return true;
+                    }
+                }
+        );
+
+        rowViewHolder.btnTimer.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO Aquí poner el método que necesitas del mundo.
                     }
                 }
         );
