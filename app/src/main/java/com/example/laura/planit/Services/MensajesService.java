@@ -31,6 +31,7 @@ public class MensajesService extends Service
         String requerimiento = intent.getExtras().getString("Requerimiento");
         if(requerimiento!=null)
         {
+            Toast.makeText(this,"Enviar sms",Toast.LENGTH_LONG).show();
             if(requerimiento.equals("EnviarALista"))
             {
                 ArrayList<Contacto> contactos = (ArrayList<Contacto>)intent.getExtras().get("Contactos");
@@ -40,7 +41,7 @@ public class MensajesService extends Service
                 {
                     smsManager.sendTextMessage(contacto.getNumeroTelefonico(), null, mensaje, null, null);
                 }
-                Toast.makeText(this,"Todos los contactos fueron invitados mediante SMS",Toast.LENGTH_LONG);
+                Toast.makeText(this,"Todos los contactos fueron invitados mediante SMS",Toast.LENGTH_LONG).show();
             }
 
 
@@ -49,9 +50,14 @@ public class MensajesService extends Service
         return super.onStartCommand(intent, flags, startId);
     }
 
-    @Nullable
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        // TODO: Return the communication channel to the service.
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

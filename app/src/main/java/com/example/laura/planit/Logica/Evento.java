@@ -127,4 +127,10 @@ public class Evento implements Serializable
     public Sitio getLugarEventoObjeto() {
         return lugarEventoObjeto;
     }
+
+
+    public String toStringSMS()
+    {
+        return nombreEvento+": "+descripcionEvento+"\n el día "+fechaEvento.toString()+" a las "+horaEncuentro+". Nos vemos en "+puntoEncuentro;
+    }
 }

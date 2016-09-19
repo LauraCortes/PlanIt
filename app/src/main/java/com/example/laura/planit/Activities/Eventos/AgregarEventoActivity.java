@@ -258,8 +258,9 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                     intent= new Intent(this, MensajesService.class);
                     intent.putExtra("Requerimiento","EnviarALista");
                     intent.putExtra("Contactos",(Serializable)invitados);
-
-
+                    intent.putExtra("Msj","Te estoy invitando al siguiente evento\n "+agregado.toStringSMS()+"\nDescargar PlanIt y accede a la info completa de este envento. Podrás crear los tuyos y maximizar tu seguridad");
+                    startService(intent);
+                    intent=null;
                     Toast.makeText(this, "Evento creado", Toast.LENGTH_SHORT).show();
                     finish();
 
