@@ -137,6 +137,10 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
                     @Override
                     public void onClick(View v) {
                         //TODO Aquí poner el método que necesitas del mundo.
+                        int tiempo= PlanIt.darInstancia().darEventoPos(position).getMedioRegreso().getTiempoAproximado();
+                        Intent intent= new Intent(context, TimerActivity.class);
+                        intent.putExtra("Tiempo",tiempo);
+                        context.startActivity(intent);
                     }
                 }
         );

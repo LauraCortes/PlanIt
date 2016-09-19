@@ -21,7 +21,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
     private boolean timerHasStarted = false;
     private Button startB;
     public TextView text;
-    private final long startTime = 2 * 1000;
+    private long startTime;
     private final long interval = 1 * 1000;
 
     private final Context context= this;
@@ -29,7 +29,9 @@ public class TimerActivity extends Activity implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int tiempo = (int) getIntent().getExtras().get("Tiempo");
         setContentView(R.layout.activity_timer);
+        startTime=tiempo*1000;
         startB = (Button) this.findViewById(R.id.button);
         startB.setOnClickListener(this);
         text = (TextView) this.findViewById(R.id.timer);
@@ -59,7 +61,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         public void onFinish() {
             text.setText("Time's up!");
             Intent intent= new Intent(context, NotificationService.class);
-
+            startService(intent);
         }
 
         @Override
