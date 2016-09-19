@@ -26,11 +26,16 @@
         <activity android:name=".Activities.Contactos.ContactosActivity"/>
         <activity android:name=".Activities.Contactos.AgregarInvitadosActivity"/>
         <activity android:name=".Activities.Transportes.AgregarTransporteActivity"/>
+        <activity android:name=".Activities.Eventos.TimerActivity"/>
 
         <service
             android:name=".Services.PersitenciaService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"></service><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

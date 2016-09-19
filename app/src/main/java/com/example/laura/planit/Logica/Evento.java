@@ -16,7 +16,6 @@ public class Evento implements Serializable
     private List<Usuario> invitados;
     private Sitio puntoEncuentroObjeto;
     private Sitio lugarEventoObjeto;
-
     public Evento() {
     }
 

@@ -1,7 +1,7 @@
 package com.example.laura.planit.Activities.Eventos;
 
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,13 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
-import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Contactos.AgregarInvitadosActivity;
-import com.example.laura.planit.Activities.Contactos.ContactAdapter;
-import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
+
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.PlanIt;
@@ -268,6 +266,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                      intent.putExtra("Requerimiento","AgregarEvento");
                      intent.putExtra("Evento", agregado);
                      startService(intent);
+
                     Toast.makeText(this, "Evento creado", Toast.LENGTH_SHORT).show();
                     finish();
 
