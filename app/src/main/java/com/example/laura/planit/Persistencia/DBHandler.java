@@ -58,7 +58,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         db.execSQL("CREATE TABLE " + TABLE_EVENTOS + " ( NOMBRE TEXT PRIMARY KEY, DESCRIPCION TEXT, " +
                 "LUGAR_ENCUENTRO TEXT, LUGAR_EVENTO TEXT," +
                 " HORA_EVENTO TEXT, FECHA_EVENTO TEXT,  TIPO_TRANSPORTE TEXT," +
-                " HORA_TRANSPORTE TEXT, SITIO_TRANSPORTE TEXT, TIEMPO_TRANSPORTE INTEGER) ");
+                " HORA_TRANSPORTE TEXT, SITIO_TRANSPORTE TEXT, TIEMPO_TRANSPORTE INTEGER, INVITADOS INTEGER) ");
         db.execSQL("CREATE TABLE " + TABLE_INVITADOS_EVENTO + " (EVENTO TEXT, PHONE_NUMBER TEXT, PRIMARY KEY (EVENTO,PHONE_NUMBER) ) ");
     }
 
@@ -129,6 +129,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         values.put("LUGAR_EVENTO",evento.getLugar());
         values.put("HORA_EVENTO", timeFormatter.format(evento.getHoraEncuentro()));
         values.put("FECHA_EVENTO", dateFormatter.format(evento.getFechaEvento()));
+        values.put("INVITADOS",evento.getInvitados()!=null?evento.getInvitados().size():0);
         MedioTransporte transporte = evento.getMedioRegreso();
         if(transporte!=null)
         {
@@ -153,6 +154,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         values.put("LUGAR_EVENTO",evento.getLugar());
         values.put("HORA_EVENTO", timeFormatter.format(evento.getHoraEncuentro()));
         values.put("FECHA_EVENTO", dateFormatter.format(evento.getFechaEvento()));
+        values.put("INVITADOS",evento.getInvitados()!=null?evento.getInvitados().size():0);
         MedioTransporte transporte = evento.getMedioRegreso();
         if(transporte!=null)
         {
@@ -192,8 +194,9 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     {
         ArrayList<Evento> resultado = new ArrayList<Evento>();
         SQLiteDatabase db = this.getReadableDatabase();
+
         Cursor cursor = db.query(TABLE_EVENTOS, new String[]{"NOMBRE", "DESCRIPCION", "LUGAR_ENCUENTRO", "LUGAR_EVENTO",
-                "HORA_EVENTO","TIPO_TRANSPORTE","HORA_TRANSPORTE","TIEMPO_TRANSPORTE","SITIO_TRANSPORTE", "FECHA_EVENTO" }, null, null, null, null, null, null);
+                "HORA_EVENTO","TIPO_TRANSPORTE","HORA_TRANSPORTE","TIEMPO_TRANSPORTE","SITIO_TRANSPORTE", "FECHA_EVENTO", "INVITADOS" }, null, null, null, null, null, null);
         if(cursor!=null)
         {
             if(cursor.getCount()>0)
@@ -221,6 +224,13 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
                         transporte.setTiempoAproximado(cursor.getInt(7));
                         transporte.setDireccionRegreso(cursor.getString(8));
                         actual.setMedioRegreso(transporte);
+                        int invitados=cursor.getInt(9);
+                        if(invitados>0)
+                        {
+                            ArrayList<Contacto> inv = new ArrayList<Contacto>();
+                            for(int i=0;i<invitados;i++){inv.add(null);}
+                            actual.setInvitados(inv);
+                        }
                         resultado.add(actual);
                     }
                     catch (Exception e)

@@ -2,6 +2,7 @@ package com.example.laura.planit.Activities.Eventos;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class EventoRowViewHolder extends RecyclerView.ViewHolder {
     LinearLayout medioTransporteSeleccionado;
     LinearLayout medioNOSeleccionado;
     TextView lblInvitados;
+    ImageButton btnTimer;
 
     View vista;
 
@@ -44,5 +46,6 @@ public class EventoRowViewHolder extends RecyclerView.ViewHolder {
         medioTransporteSeleccionado=(LinearLayout)view.findViewById(R.id.medioTransporteSeleccionado);
         medioNOSeleccionado=(LinearLayout)view.findViewById(R.id.medioTransporteNoSeleccionado);
         lblInvitados=(TextView)view.findViewById(R.id.lblInvitados);
+        btnTimer=(ImageButton)view.findViewById(R.id.btnTimerRegreso);
     }
 }
