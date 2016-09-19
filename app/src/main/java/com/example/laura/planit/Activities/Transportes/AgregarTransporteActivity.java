@@ -5,12 +5,16 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
+import com.example.laura.planit.Logica.Evento;
+import com.example.laura.planit.Logica.MedioTransporte;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
@@ -18,8 +22,10 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,14 +35,21 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
 {
     RadioButton radioTaxi, radioUber, radioBus, radioCarro;
     List<RadioButton> radios;
-    EditText txtSitioRegreso, txtHoraRegreso, txtFechaRegreso;
+    EditText txtSitioRegreso, txtHoraRegreso, txtFechaRegreso, txtTiempoRegreso;
     Context contexto;
 
+    private SimpleDateFormat dateFormatter;
+    private SimpleDateFormat timeFormatter;
+
+    int pos;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         contexto=this;
+        pos=(int)getIntent().getExtras().get("pos");
+        dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+        timeFormatter = new SimpleDateFormat("hh:mm a");
         setContentView(R.layout.activity_agregar_transporte);
         radioBus=(RadioButton) findViewById(R.id.radioTransportePublico);
         radioBus.setOnClickListener(new View.OnClickListener()
@@ -81,6 +94,7 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
         txtSitioRegreso=(EditText)findViewById(R.id.txtSitioRegreso);
         txtHoraRegreso=(EditText)findViewById(R.id.txtHoraRegreso);
         txtFechaRegreso=(EditText)findViewById(R.id.txtFechaRegreso);
+        txtTiempoRegreso=(EditText)findViewById(R.id.txtTiempoRegreso);
 
         getSupportActionBar().setTitle("Regreso del evento");
 
@@ -160,11 +174,80 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-
+        Calendar newDate = Calendar.getInstance();
+        newDate.set(year, monthOfYear, dayOfMonth);
+        txtFechaRegreso.setText(dateFormatter.format(newDate.getTime()));
     }
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+        Calendar newDate = Calendar.getInstance();
+        newDate.set(0, 0, 0, hourOfDay, minute);
+        txtHoraRegreso.setText(timeFormatter.format(newDate.getTime()));
+    }
 
+    public void agregarRegreso(View view)
+    {
+
+        MedioTransporte medio = new MedioTransporte();
+        String nombre="";
+        String hora,fecha,tiempo,lugar;
+        hora=txtHoraRegreso.getText().toString().trim();
+        fecha=txtFechaRegreso.getText().toString().trim();
+        tiempo=txtHoraRegreso.getText().toString().trim();
+        lugar=txtSitioRegreso.getText().toString().trim();
+        boolean continuar=true;
+        if(radioCarro.isChecked())
+        {
+            nombre="Carro propio";
+        }
+        else if( radioBus.isChecked())
+        {
+            nombre="Otro medio trans. público";
+        }
+        else if(radioUber.isChecked())
+        {
+            nombre="Uber";
+        }
+        else if(radioTaxi.isChecked())
+        {
+            nombre="Taxi";
+        }
+        else
+        {
+            continuar=false;
+            Toast.makeText(this,"Debes seleccionar un medio de transporte",Toast.LENGTH_SHORT).show();
+        }
+        if(continuar)
+        {
+            if(lugar.isEmpty()||hora.isEmpty()||fecha.isEmpty()||tiempo.isEmpty())
+            {
+                Toast.makeText(this,"Debes llenar todos los campos",Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                medio.setNombre(nombre);
+                medio.setDireccionRegreso(lugar);
+                try{
+                    medio.setTiempoAproximado(Integer.parseInt(tiempo));
+                    Date fechaRegreso =(Date) dateFormatter.parse(fecha);
+                    Date horaRegreso=(Date)timeFormatter.parse(hora);
+                    horaRegreso.setMonth(fechaRegreso.getMonth());
+                    horaRegreso.setYear(fechaRegreso.getYear());
+                    horaRegreso.setDate(fechaRegreso.getDate());
+                    medio.setHoraRegreso(horaRegreso);
+                    PlanIt.darInstancia().darEventoPos(pos).setMedioRegreso(medio);
+                    Toast.makeText(this,"Regreso configurado",Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Toast.makeText(this,"Los datos deben respetar el formato indicado",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+        }
     }
 }
