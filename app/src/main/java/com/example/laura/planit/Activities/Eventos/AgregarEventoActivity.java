@@ -25,6 +25,7 @@ import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
+import com.example.laura.planit.Services.MensajesService;
 import com.example.laura.planit.Services.PersitenciaService;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -254,6 +255,12 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                     intent.putExtra("Requerimiento", "AgregarEvento");
                     intent.putExtra("Evento", agregado);
                     startService(intent);
+                    intent= new Intent(this, MensajesService.class);
+                    intent.putExtra("Requerimiento","EnviarALista");
+                    intent.putExtra("Contactos",(Serializable)invitados);
+                    intent.putExtra("Msj","Te estoy invitando al siguiente evento\n "+agregado.toStringSMS()+"\nDescargar PlanIt y accede a la info completa de este envento. Podrás crear los tuyos y maximizar tu seguridad");
+                    startService(intent);
+                    intent=null;
                     Toast.makeText(this, "Evento creado", Toast.LENGTH_SHORT).show();
                     finish();
 
