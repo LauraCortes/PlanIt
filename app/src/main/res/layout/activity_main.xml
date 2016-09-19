@@ -91,7 +91,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="5px"
-            android:src="@drawable/home" />
+            android:src="@drawable/login" />
 
 
             <TextView
@@ -124,7 +124,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="5px"
-            android:src="@drawable/home" />
+            android:src="@drawable/contacts" />
 
 
         <TextView
