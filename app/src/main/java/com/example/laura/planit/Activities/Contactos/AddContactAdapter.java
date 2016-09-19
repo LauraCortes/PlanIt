@@ -33,10 +33,9 @@ public class AddContactAdapter extends ArrayAdapter<Contacto> {
         if (convertView == null)
         {
             holder = new Holder();
-
             convertView = layoutInflater.inflate(R.layout.row_contacto_agregar, null);
-            holder.setTextViewTitle((TextView) convertView.findViewById(R.id.textViewNombre));
-            holder.setTextViewSubtitle((TextView) convertView.findViewById(R.id.textViewTelefono));
+            holder.setTextViewTitle((TextView) convertView.findViewById(R.id.textViewNombreAgregar));
+            holder.setTextViewSubtitle((TextView) convertView.findViewById(R.id.textViewTelefonoAgregar));
             convertView.setTag(holder);
         }
         else

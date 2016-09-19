@@ -17,7 +17,7 @@
             android:layout_centerVertical="true"/>
 
         <TextView
-            android:id="@+id/textViewNombre"
+            android:id="@+id/textViewNombreAgregar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/checkBox"
@@ -40,7 +40,7 @@
             android:background="@android:drawable/stat_sys_phone_call" />
 
         <TextView
-            android:id="@+id/textViewTelefono"
+            android:id="@+id/textViewTelefonoAgregar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/textViewNombre"

@@ -13,14 +13,14 @@ public class Evento implements Serializable
     private String nombreEvento,descripcionEvento, puntoEncuentro, lugar;
     private MedioTransporte medioRegreso;
     Date horaEncuentro, fechaEvento;
-    private List<Usuario> invitados;
+    private List<Contacto> invitados;
     private Sitio puntoEncuentroObjeto;
     private Sitio lugarEventoObjeto;
 
     public Evento() {
     }
 
-    public Evento(String nombreEvento, String descripcionEvento, String lugar, String puntoEncuentro, MedioTransporte medioRegreso, Date horaEncuentro, Date fechaEvento , List<Usuario> invitados) {
+    public Evento(String nombreEvento, String descripcionEvento, String lugar, String puntoEncuentro, MedioTransporte medioRegreso, Date horaEncuentro, Date fechaEvento , List<Contacto> invitados) {
         this.nombreEvento = nombreEvento;
         this.descripcionEvento = descripcionEvento;
         this.puntoEncuentro = puntoEncuentro;
@@ -73,11 +73,11 @@ public class Evento implements Serializable
         this.medioRegreso = medioRegreso;
     }
 
-    public List<Usuario> getInvitados() {
+    public List<Contacto> getInvitados() {
         return invitados;
     }
 
-    public void setInvitados(List<Usuario> invitados) {
+    public void setInvitados(List<Contacto> invitados) {
         this.invitados = invitados;
     }
 

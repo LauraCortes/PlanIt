@@ -76,7 +76,7 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
         }
         else
         {
-            rowViewHolder.lblInvitados.setText("  "+invitados+" amigos en el evento");
+            rowViewHolder.lblInvitados.setText("  "+invitados.size()+" amigos en el evento");
         }
         if(evento.getMedioRegreso()==null||evento.getMedioRegreso().getNombre()==null)
         {

@@ -26,7 +26,15 @@ public class AgregarTransporteActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_transporte);
         radioBus=(RadioButton) findViewById(R.id.radioTransportePublico);
-
+        radioBus.setOnClickListener(new View.OnClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(View v)
+                                        {
+                                            desactivarRadios(radioBus);
+                                        }
+                                    }
+        );
         radioTaxi=(RadioButton) findViewById(R.id.radioTaxi);
         radioTaxi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +63,7 @@ public class AgregarTransporteActivity extends AppCompatActivity
         radios.add(radioBus);
         radios.add(radioTaxi);
         radios.add(radioUber);
-        radios.add(radioBus);
+        radios.add(radioCarro);
 
         getSupportActionBar().setTitle("Regreso del evento");
     }

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.laura.planit.Logica.Contacto;
@@ -26,6 +27,7 @@ import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +48,7 @@ public class AgregarInvitadosActivity extends ListActivity {
 
         listView = (ListView) findViewById(android.R.id.list);
         contactos= new ArrayList<Contacto>();
-        invitados= (List<Contacto>) getIntent().getExtras().get("Invitados");
+        invitados=new ArrayList<Contacto>();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_CONTACTS)
@@ -153,12 +155,12 @@ public class AgregarInvitadosActivity extends ListActivity {
             //  Get your controls from this ViewGroup and perform your task on them =)
             if (tvTest.isChecked())
             {
-                // DO SOMETHING
-                TextView t= (TextView) row.findViewById(R.id.textViewNombre);
-                TextView tN= (TextView) row.findViewById(R.id.textViewTelefono);
-                invitados.add(new Contacto(t.getText().toString(),tN.getText().toString()));
+                invitados.add(contactos.get(i));
             }
         }
+        Intent intent = new Intent();
+        intent.putExtra("Invitados",(Serializable)invitados);
+        setResult(invitados.size(),intent);
         finish();
     }
 }

@@ -74,7 +74,7 @@ public class PlanIt {
         return sitios;
     }
 
-    public Evento agregarEvento(String nombreEvento, String descripcionEvento,String sitio, String puntoEncuentro, MedioTransporte medioRegreso, Date horaEncuentro, Date fechaEncuentro, List<Usuario> invitados) {
+    public Evento agregarEvento(String nombreEvento, String descripcionEvento,String sitio, String puntoEncuentro, MedioTransporte medioRegreso, Date horaEncuentro, Date fechaEncuentro, List<Contacto> invitados) {
         Evento agregado = new Evento(nombreEvento, descripcionEvento,sitio, puntoEncuentro, medioRegreso, horaEncuentro, fechaEncuentro, invitados);
         eventos.add(agregado);
         return agregado;
