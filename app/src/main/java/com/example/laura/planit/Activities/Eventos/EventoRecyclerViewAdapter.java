@@ -78,7 +78,7 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
         {
             rowViewHolder.lblInvitados.setText("  "+invitados+" amigos en el evento");
         }
-        if(evento.getMedioRegreso()==null)
+        if(evento.getMedioRegreso()==null||evento.getMedioRegreso().getNombre()==null)
         {
             rowViewHolder.medioNOSeleccionado.setVisibility(View.VISIBLE);
             rowViewHolder.medioTransporteSeleccionado.setVisibility(View.GONE);

@@ -41,7 +41,7 @@ public class PlanIt {
 
     public void inicializar() {
         sitios = db.darSitios();
-        eventos = new ArrayList<Evento>();
+        eventos = db.darEventos();
         contactos = db.darContactos();
     }
 

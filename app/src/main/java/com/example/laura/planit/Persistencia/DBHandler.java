@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.Evento;
@@ -14,6 +15,7 @@ import com.example.laura.planit.Logica.Usuario;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TransferQueue;
@@ -36,8 +38,14 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     private static final String TABLE_EVENTOS="TABLA_EVENTOS";
     private static final String TABLE_INVITADOS_EVENTO="INVITADOS";
 
+    private SimpleDateFormat dateFormatter;
+    private SimpleDateFormat timeFormatter;
+
     public DBHandler(Context context) {
+
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+        timeFormatter = new SimpleDateFormat("hh:mm a");
     }
 
     @Override
@@ -49,8 +57,8 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         db.execSQL("CREATE TABLE " + TABLE_SITIOS_FAVORITOS + "(NOMBRE TEXT PRIMARY KEY, BARRIO TEXT, DIRECCION, TEXT)");
         db.execSQL("CREATE TABLE " + TABLE_EVENTOS + " ( NOMBRE TEXT PRIMARY KEY, DESCRIPCION TEXT, " +
                 "LUGAR_ENCUENTRO TEXT, LUGAR_EVENTO TEXT," +
-                " HORA_EVENTO DATETIME, TIPO_TRANSPORTE TEXT," +
-                " HORA_TRANSPORTE DATETIME, SITIO_TRANSPORTE TEXT, TIEMPO_TRANSPORTE INTEGER) ");
+                " HORA_EVENTO TEXT, FECHA_EVENTO TEXT,  TIPO_TRANSPORTE TEXT," +
+                " HORA_TRANSPORTE TEXT, SITIO_TRANSPORTE TEXT, TIEMPO_TRANSPORTE INTEGER) ");
         db.execSQL("CREATE TABLE " + TABLE_INVITADOS_EVENTO + " (EVENTO TEXT, PHONE_NUMBER TEXT, PRIMARY KEY (EVENTO,PHONE_NUMBER) ) ");
     }
 
@@ -111,7 +119,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         db.close();
     }
 
-    public void agregarEvento(Evento evento)
+    public long agregarEvento(Evento evento)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -119,18 +127,20 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         values.put("DESCRIPCION", evento.getDescripcionEvento());
         values.put("LUGAR_ENCUENTRO", evento.getPuntoEncuentro());
         values.put("LUGAR_EVENTO",evento.getLugar());
-        values.put("HORA_EVENTO", String.valueOf(evento.getHoraEncuentro()));
+        values.put("HORA_EVENTO", timeFormatter.format(evento.getHoraEncuentro()));
+        values.put("FECHA_EVENTO", dateFormatter.format(evento.getFechaEvento()));
         MedioTransporte transporte = evento.getMedioRegreso();
         if(transporte!=null)
         {
             values.put("TIPO_TRANSPORTE",transporte.getNombre());
-            values.put("HORA_TRANPORTE",transporte.getHoraRegreso().toString());
+            values.put("HORA_TRANPORTE",timeFormatter.format(transporte.getHoraRegreso()));
             values.put("SITIO_TRANSPORTE", transporte.getDireccionRegreso());
             values.put("TIEMPO_TRANSPORTE", transporte.getTiempoAproximado());
         }
         evento=null;
-        db.insert(TABLE_EVENTOS, null, values);
+        long result = db.insert(TABLE_EVENTOS, null, values);
         db.close();
+        return result;
     }
 
     public int editarEvento(Evento evento, String nombreEvento)
@@ -141,12 +151,13 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         values.put("DESCRIPCION", evento.getDescripcionEvento());
         values.put("LUGAR_ENCUENTRO", evento.getPuntoEncuentro());
         values.put("LUGAR_EVENTO",evento.getLugar());
-        values.put("HORA_EVENTO", String.valueOf(evento.getHoraEncuentro()));
+        values.put("HORA_EVENTO", timeFormatter.format(evento.getHoraEncuentro()));
+        values.put("FECHA_EVENTO", dateFormatter.format(evento.getFechaEvento()));
         MedioTransporte transporte = evento.getMedioRegreso();
         if(transporte!=null)
         {
             values.put("TIPO_TRANSPORTE",transporte.getNombre());
-            values.put("HORA_TRANPORTE",transporte.getHoraRegreso().toString());
+            values.put("HORA_TRANPORTE",timeFormatter.format(transporte.getHoraRegreso()));
             values.put("SITIO_TRANSPORTE", transporte.getDireccionRegreso());
             values.put("TIEMPO_TRANSPORTE", transporte.getTiempoAproximado());
         }
@@ -162,7 +173,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("TIPO_TRANSPORTE",transporte.getNombre());
-        values.put("HORA_TRANPORTE",transporte.getHoraRegreso().toString());
+        values.put("HORA_TRANPORTE", dateFormatter.format(transporte.getHoraRegreso()));
         values.put("SITIO_TRANSPORTE", transporte.getDireccionRegreso());
         values.put("TIEMPO_TRANSPORTE", transporte.getTiempoAproximado());
         modificaciones= db.update(TABLE_EVENTOS, values, "NOMBRE='"+nombreEvento+"'",null);
@@ -182,7 +193,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         ArrayList<Evento> resultado = new ArrayList<Evento>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_EVENTOS, new String[]{"NOMBRE", "DESCRIPCION", "LUGAR_ENCUENTRO", "LUGAR_EVENTO",
-                "HORA_EVENTO","TIPO_TRANSPORTE","HORA_TRANPORTE","TIEMPO_TRANSPORTE","SITIO_TRANSPORTE" }, null, null, null, null, null, null);
+                "HORA_EVENTO","TIPO_TRANSPORTE","HORA_TRANSPORTE","TIEMPO_TRANSPORTE","SITIO_TRANSPORTE", "FECHA_EVENTO" }, null, null, null, null, null, null);
         if(cursor!=null)
         {
             if(cursor.getCount()>0)
@@ -190,22 +201,33 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
                 cursor.moveToFirst();
                 do
                 {
-                    Evento actual= new Evento();
-                    actual.setNombreEvento(cursor.getString(0));
-                    actual.setDescripcionEvento(cursor.getString(1));
-                    actual.setPuntoEncuentro(cursor.getString(2));
-                    actual.setLugar(cursor.getString(3));
-                    actual.setHoraEncuentro(Date.valueOf(cursor.getString(4)));
-                    actual.setFechaEvento(Date.valueOf(cursor.getString(4)));
+                    try
+                    {
+                        Evento actual= new Evento();
+                        actual.setNombreEvento(cursor.getString(0));
+                        actual.setDescripcionEvento(cursor.getString(1));
+                        actual.setPuntoEncuentro(cursor.getString(2));
+                        actual.setLugar(cursor.getString(3));
+                        System.out.println(cursor.getString(4));
+                        actual.setHoraEncuentro(timeFormatter.parse(cursor.getString(4)));
+                        actual.setFechaEvento(dateFormatter.parse(cursor.getString(9)));
+                        MedioTransporte transporte= new MedioTransporte();
+                        transporte.setNombre(cursor.getString(5));
+                        String horaRegreso= cursor.getString(6);
+                        if(horaRegreso!=null)
+                        {
+                            transporte.setHoraRegreso(timeFormatter.parse(horaRegreso));
+                        }
+                        transporte.setTiempoAproximado(cursor.getInt(7));
+                        transporte.setDireccionRegreso(cursor.getString(8));
+                        actual.setMedioRegreso(transporte);
+                        resultado.add(actual);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
 
-                    MedioTransporte transporte= new MedioTransporte();
-                    transporte.setNombre(cursor.getString(5));
-                    transporte.setHoraRegreso(Date.valueOf(cursor.getString(6)));
-                    transporte.setTiempoAproximado(cursor.getInt(7));
-                    transporte.setDireccionRegreso(cursor.getString(8));
-
-                    actual.setMedioRegreso(transporte);
-                    resultado.add(actual);
                 }
                 while (cursor.moveToNext());
                 cursor.close();
