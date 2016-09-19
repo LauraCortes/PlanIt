@@ -264,14 +264,10 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                     {
                         agregado.setLugarEventoObjeto(PlanIt.darInstancia().darSitios().get(sitioEventoPos));
                     }
-                    //TODO
-                    /**
                      Intent intent = new Intent(this, PersitenciaService.class);
                      intent.putExtra("Requerimiento","AgregarEvento");
                      intent.putExtra("Evento", agregado);
                      startService(intent);
-                     **/
-
                     Toast.makeText(this, "Evento creado", Toast.LENGTH_SHORT).show();
                     finish();
 
