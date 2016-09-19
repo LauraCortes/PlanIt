@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,7 +16,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
+import com.example.laura.planit.Activities.Contactos.AgregarInvitadosActivity;
+import com.example.laura.planit.Activities.Contactos.ContactAdapter;
 import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
+import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
@@ -24,8 +30,10 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +62,8 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
     int sitioEventoPos;
     int puntoEncuentroPos;
 
+    private List<Contacto> invitados;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
         txtPuntoEncuentro=(EditText)findViewById(R.id.txtPuntoEncuentroEvento);
         txtFechaEncuentro =(EditText) findViewById(R.id.txtFechaEncuentro);
         txtHoraEncuentro=(EditText) findViewById(R.id.txtHoraEncuentro);
+        invitados=new ArrayList<Contacto>();
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
         timeFormatter = new SimpleDateFormat("hh:mm a");
@@ -161,8 +172,13 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
                         }
                 );
 
-
-
+        FloatingActionButton floatingActionButton= (FloatingActionButton) findViewById(R.id.agregarInvitados);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                agregarInvitados(v);
+            }
+        });
 
     }
 
@@ -291,5 +307,12 @@ public class AgregarEventoActivity extends AppCompatActivity implements  DatePic
         Calendar newDate = Calendar.getInstance();
         newDate.set(0,0,0,hourOfDay,minute);
         txtHoraEncuentro.setText(timeFormatter.format(newDate.getTime()));
+    }
+
+    public void agregarInvitados(View view)
+    {
+        Intent intent = new Intent(this, AgregarInvitadosActivity.class);
+        intent.putExtra("Invitados", (Serializable) invitados);
+        startActivity(intent);
     }
 }

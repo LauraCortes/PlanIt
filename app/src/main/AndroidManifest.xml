@@ -24,6 +24,7 @@
         <activity android:name=".Activities.Eventos.MisEventosActivity"/>
         <activity android:name=".Activities.Contactos.AgregarContactoActivity"/>
         <activity android:name=".Activities.Contactos.ContactosActivity"/>
+        <activity android:name=".Activities.Contactos.AgregarInvitadosActivity"/>
         <activity android:name=".Activities.Transportes.AgregarTransporteActivity"/>
 
         <service

@@ -7,7 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract.*;
+import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -18,32 +18,35 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.laura.planit.Activities.Sitios.SitiosActivity;
+
 import com.example.laura.planit.Logica.Contacto;
+
 import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Laura on 17/09/2016.
+ * Created by Laura on 18/09/2016.
  */
-public class AgregarContactoActivity extends ListActivity {
+public class AgregarInvitadosActivity extends ListActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private List<Contacto> contactos;
-    private  ListView listView;
+    private List<Contacto> invitados;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agregar_contacto);
+        setContentView(R.layout.activity_invitar_contactos);
 
         listView = (ListView) findViewById(android.R.id.list);
         contactos= new ArrayList<Contacto>();
+        invitados= (List<Contacto>) getIntent().getExtras().get("Invitados");
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_CONTACTS)
@@ -61,11 +64,11 @@ public class AgregarContactoActivity extends ListActivity {
         }
         else {
             Cursor mCursor = getContentResolver().query(
-                    Data.CONTENT_URI,
-                    new String[]{Data.DISPLAY_NAME, CommonDataKinds.Phone.NUMBER},
-                    Data.MIMETYPE + "='" + CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND "
-                            + CommonDataKinds.Phone.NUMBER + " IS NOT NULL", null,
-                    Data.DISPLAY_NAME + " ASC");
+                    ContactsContract.Data.CONTENT_URI,
+                    new String[]{ContactsContract.Data.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER},
+                    ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND "
+                            + ContactsContract.CommonDataKinds.Phone.NUMBER + " IS NOT NULL", null,
+                    ContactsContract.Data.DISPLAY_NAME + " ASC");
             startManagingCursor(mCursor);
             Contacto contact;
             if(mCursor!=null) {
@@ -79,7 +82,7 @@ public class AgregarContactoActivity extends ListActivity {
                     mCursor.close();
                 }
             }contact = null;
-                listView.setAdapter(new AddContactAdapter(this, contactos));
+            listView.setAdapter(new AddContactAdapter(this, contactos));
         }
     }
 
@@ -94,12 +97,12 @@ public class AgregarContactoActivity extends ListActivity {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                     Cursor mCursor = getContentResolver().query(
-                            Data.CONTENT_URI,
-                            new String[] { Data._ID, Data.DISPLAY_NAME, CommonDataKinds.Phone.NUMBER,
-                                    CommonDataKinds.Phone.TYPE },
-                            Data.MIMETYPE + "='" + CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND "
-                                    + CommonDataKinds.Phone.NUMBER + " IS NOT NULL", null,
-                            Data.DISPLAY_NAME + " ASC");
+                            ContactsContract.Data.CONTENT_URI,
+                            new String[] { ContactsContract.Data._ID, ContactsContract.Data.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER,
+                                    ContactsContract.CommonDataKinds.Phone.TYPE },
+                            ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND "
+                                    + ContactsContract.CommonDataKinds.Phone.NUMBER + " IS NOT NULL", null,
+                            ContactsContract.Data.DISPLAY_NAME + " ASC");
                     startManagingCursor(mCursor);
                     Contacto contact;
                     if(mCursor!=null) {
@@ -153,17 +156,9 @@ public class AgregarContactoActivity extends ListActivity {
                 // DO SOMETHING
                 TextView t= (TextView) row.findViewById(R.id.textViewNombre);
                 TextView tN= (TextView) row.findViewById(R.id.textViewTelefono);
-                PlanIt.darInstancia().agregarContacto(t.getText().toString(),tN.getText().toString());
-                Intent intent = new Intent(this, PersitenciaService.class);
-                intent.putExtra("Requerimiento","AgregarContacto");
-                intent.putExtra("Contacto", new Contacto(t.getText().toString(),tN.getText().toString()));
-                startService(intent);
-
+                invitados.add(new Contacto(t.getText().toString(),tN.getText().toString()));
             }
         }
         finish();
-        Intent i = new Intent(this, ContactosActivity.class);
-        startActivity(i);
-
     }
 }
