@@ -88,7 +88,7 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
         {
             MedioTransporte medio = evento.getMedioRegreso();
             rowViewHolder.lblhoraIda.setText(timeFormatter.format(medio.getHoraRegreso()));
-            rowViewHolder.lbltiempoAproximado.setText(medio.getTiempoAproximado());
+            rowViewHolder.lbltiempoAproximado.setText(""+medio.getTiempoAproximado());
             rowViewHolder.lblmedioTransporte.setText(medio.getNombre());
             rowViewHolder.medioNOSeleccionado.setVisibility(View.GONE);
             rowViewHolder.medioTransporteSeleccionado.setVisibility(View.VISIBLE);
