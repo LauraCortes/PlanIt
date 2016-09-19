@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.Evento;
+import com.example.laura.planit.Logica.MedioTransporte;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.Logica.Usuario;
@@ -130,6 +131,10 @@ public class PersitenciaService extends Service {
             else if(requerimiento.equals("EliminarEvento"))
             {
                 db.eliminarEvento(intent.getExtras().getString("Nombre"));
+            }
+            else if (requerimiento.equals("AgregarRegresoSitio"))
+            {
+                db.agregarTransporteAEvento((MedioTransporte)intent.getExtras().get("Medio"),intent.getExtras().getString("Nombre"));
             }
         }
         onDestroy();

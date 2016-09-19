@@ -1,11 +1,12 @@
 package com.example.laura.planit.Logica;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Usuario on 17/09/2016.
  */
-public class MedioTransporte
+public class MedioTransporte implements Serializable
 {
     private String nombre;
     Date horaRegreso;

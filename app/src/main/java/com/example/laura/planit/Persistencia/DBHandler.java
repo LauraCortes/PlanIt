@@ -175,7 +175,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("TIPO_TRANSPORTE",transporte.getNombre());
-        values.put("HORA_TRANPORTE", dateFormatter.format(transporte.getHoraRegreso()));
+        values.put("HORA_TRANSPORTE", (transporte.getHoraRegreso().toString()));
         values.put("SITIO_TRANSPORTE", transporte.getDireccionRegreso());
         values.put("TIEMPO_TRANSPORTE", transporte.getTiempoAproximado());
         modificaciones= db.update(TABLE_EVENTOS, values, "NOMBRE='"+nombreEvento+"'",null);
@@ -219,7 +219,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
                         String horaRegreso= cursor.getString(6);
                         if(horaRegreso!=null)
                         {
-                            transporte.setHoraRegreso(timeFormatter.parse(horaRegreso));
+                            transporte.setHoraRegreso(new Date(java.util.Date.parse(horaRegreso)));
                         }
                         transporte.setTiempoAproximado(cursor.getInt(7));
                         transporte.setDireccionRegreso(cursor.getString(8));

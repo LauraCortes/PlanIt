@@ -2,6 +2,7 @@ package com.example.laura.planit.Activities.Transportes;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
@@ -18,6 +19,7 @@ import com.example.laura.planit.Logica.MedioTransporte;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
+import com.example.laura.planit.Services.PersitenciaService;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -238,9 +240,15 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                     horaRegreso.setYear(fechaRegreso.getYear());
                     horaRegreso.setDate(fechaRegreso.getDate());
                     medio.setHoraRegreso(horaRegreso);
-                    PlanIt.darInstancia().darEventoPos(pos).setMedioRegreso(medio);
+                    Evento evento = PlanIt.darInstancia().darEventoPos(pos);
+                    evento.setMedioRegreso(medio);
                     Toast.makeText(this,"Regreso configurado",Toast.LENGTH_SHORT).show();
                     finish();
+                    Intent service = new Intent(this, PersitenciaService.class);
+                    service.putExtra("Requerimiento","AgregarRegresoSitio");
+                    service.putExtra("Medio", medio);
+                    service.putExtra("Nombre",evento.getNombreEvento());
+                    startService(service);
                 }
                 catch (Exception e)
                 {
