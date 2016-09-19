@@ -151,8 +151,8 @@ public class AgregarContactoActivity extends ListActivity {
             if (tvTest.isChecked())
             {
                 // DO SOMETHING
-                TextView t= (TextView) row.findViewById(R.id.textViewNombre);
-                TextView tN= (TextView) row.findViewById(R.id.textViewTelefono);
+                TextView t= (TextView) row.findViewById(R.id.textViewNombreAgregar);
+                TextView tN= (TextView) row.findViewById(R.id.textViewTelefonoAgregar);
                 PlanIt.darInstancia().agregarContacto(t.getText().toString(),tN.getText().toString());
                 Intent intent = new Intent(this, PersitenciaService.class);
                 intent.putExtra("Requerimiento","AgregarContacto");
