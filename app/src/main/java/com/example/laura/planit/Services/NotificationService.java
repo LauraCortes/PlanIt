@@ -1,12 +1,13 @@
 package com.example.laura.planit.Services;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 
+import com.example.laura.planit.Activities.Eventos.MisEventosActivity;
 import com.example.laura.planit.Activities.Eventos.TimerActivity;
 
 /**
@@ -26,19 +27,32 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Intent i = new Intent(this, TimerActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), i, 0);
-        Notification n  = new Notification.Builder(this)
-                .setContentTitle("Timer")
-                .setContentText("Debes terminar el timer")
-                .setSmallIcon(android.R.drawable.ic_dialog_alert)
-                .setContentIntent(pIntent)
-                .setAutoCancel(true)
-                .addAction(android.R.drawable.ic_dialog_alert, "Call", pIntent).build();;
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                        .setContentTitle("Timer")
+                        .setContentText("Pausar el contador");
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        // hide the notification after its selected
-        notificationManager.notify(0,n);
+        Intent resultIntent = new Intent(this, MisEventosActivity.class);
+// Because clicking the notification opens a new ("special") activity, there's
+// no need to create an artificial back stack.
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        // Sets an ID for the notification
+        int mNotificationId = 001;
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+
+        mBuilder.setAutoCancel(true);
         onDestroy();
         return super.onStartCommand(intent, flags, startId);
 
