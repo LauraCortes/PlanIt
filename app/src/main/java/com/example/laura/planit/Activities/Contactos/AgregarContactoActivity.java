@@ -146,19 +146,20 @@ public class AgregarContactoActivity extends ListActivity {
         for (int i = 0; i <listView.getAdapter().getCount() ; i++)
         {
             ViewGroup row = (ViewGroup) listView.getChildAt(i);
-            CheckBox tvTest = (CheckBox) row.findViewById(R.id.checkBox);
-            //  Get your controls from this ViewGroup and perform your task on them =)
-            if (tvTest.isChecked())
-            {
-                // DO SOMETHING
-                TextView t= (TextView) row.findViewById(R.id.textViewNombreAgregar);
-                TextView tN= (TextView) row.findViewById(R.id.textViewTelefonoAgregar);
-                PlanIt.darInstancia().agregarContacto(t.getText().toString(),tN.getText().toString());
-                Intent intent = new Intent(this, PersitenciaService.class);
-                intent.putExtra("Requerimiento","AgregarContacto");
-                intent.putExtra("Contacto", new Contacto(t.getText().toString(),tN.getText().toString()));
-                startService(intent);
+            if(row!=null) {
+                CheckBox tvTest = (CheckBox) row.findViewById(R.id.checkBox);
+                //  Get your controls from this ViewGroup and perform your task on them =)
+                if (tvTest.isChecked()) {
+                    // DO SOMETHING
+                    TextView t = (TextView) row.findViewById(R.id.textViewNombreAgregar);
+                    TextView tN = (TextView) row.findViewById(R.id.textViewTelefonoAgregar);
+                    PlanIt.darInstancia().agregarContacto(t.getText().toString(), tN.getText().toString());
+                    Intent intent = new Intent(this, PersitenciaService.class);
+                    intent.putExtra("Requerimiento", "AgregarContacto");
+                    intent.putExtra("Contacto", new Contacto(t.getText().toString(), tN.getText().toString()));
+                    startService(intent);
 
+                }
             }
         }
         finish();

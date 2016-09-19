@@ -151,13 +151,16 @@ public class AgregarInvitadosActivity extends ListActivity {
         for (int i = 0; i <listView.getAdapter().getCount() ; i++)
         {
             ViewGroup row = (ViewGroup) listView.getChildAt(i);
-            CheckBox tvTest = (CheckBox) row.findViewById(R.id.checkBox);
-            //  Get your controls from this ViewGroup and perform your task on them =)
-            if (tvTest.isChecked())
+            if(row!=null)
             {
-                TextView t= (TextView) row.findViewById(R.id.textViewNombreAgregar);
-                TextView tN= (TextView) row.findViewById(R.id.textViewTelefonoAgregar);
-                invitados.add(new Contacto(t.getText().toString(),tN.getText().toString()));
+                CheckBox tvTest = (CheckBox) row.findViewById(R.id.checkBox);
+                //  Get your controls from this ViewGroup and perform your task on them =)
+                if (tvTest.isChecked())
+                {
+                    TextView t= (TextView) row.findViewById(R.id.textViewNombreAgregar);
+                    TextView tN= (TextView) row.findViewById(R.id.textViewTelefonoAgregar);
+                    invitados.add(new Contacto(t.getText().toString(),tN.getText().toString()));
+                }
             }
         }
         Intent intent = new Intent();
