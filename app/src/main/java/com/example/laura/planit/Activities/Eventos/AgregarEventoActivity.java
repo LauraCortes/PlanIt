@@ -273,7 +273,6 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String tag = view.getTag();
         Calendar newDate = Calendar.getInstance();
         newDate.set(year, monthOfYear, dayOfMonth);
         txtFechaEncuentro.setText(dateFormatter.format(newDate.getTime()));

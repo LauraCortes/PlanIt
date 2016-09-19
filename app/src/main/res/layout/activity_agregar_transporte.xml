@@ -157,6 +157,7 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:hint="Hora regreso"
+                    android:onClick="definirHoraRegreso"
                     android:id="@+id/txtHoraRegreso"/>
 
                 <ImageView
@@ -171,6 +172,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="Fecha ida"
+                    android:onClick="definirFechaRegreso"
                     android:textAlignment="center"
                     android:id="@+id/txtFechaRegreso"/>
 
@@ -187,6 +189,7 @@
                     android:src="@drawable/hourglass"/>
 
                 <EditText
+                    android:id="@+id/txtTiempoRegreso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
@@ -195,14 +198,12 @@
                     android:layout_marginLeft="10dp"/>
             </LinearLayout>
 
-
-
             <Button
                 android:theme="@style/AppTheme"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Listo"
-                android:onClick=""
+                android:onClick="agregarRegreso"
                 android:background="@color/colorAccent"
                 android:layout_marginTop="40dp"/>
 
