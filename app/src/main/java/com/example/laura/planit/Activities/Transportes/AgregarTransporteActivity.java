@@ -96,6 +96,8 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
         txtFechaRegreso=(EditText)findViewById(R.id.txtFechaRegreso);
         txtTiempoRegreso=(EditText)findViewById(R.id.txtTiempoRegreso);
 
+        txtFechaRegreso.setText(dateFormatter.format(PlanIt.darInstancia().darEventoPos(pos).getFechaEvento()));
+
         getSupportActionBar().setTitle("Regreso del evento");
 
         txtSitioRegreso.setOnClickListener(
@@ -194,7 +196,7 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
         String hora,fecha,tiempo,lugar;
         hora=txtHoraRegreso.getText().toString().trim();
         fecha=txtFechaRegreso.getText().toString().trim();
-        tiempo=txtHoraRegreso.getText().toString().trim();
+        tiempo=txtTiempoRegreso.getText().toString().trim();
         lugar=txtSitioRegreso.getText().toString().trim();
         boolean continuar=true;
         if(radioCarro.isChecked())
