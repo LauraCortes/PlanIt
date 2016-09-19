@@ -81,7 +81,6 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
         txtPuntoEncuentro = (EditText) findViewById(R.id.txtPuntoEncuentroEvento);
         txtFechaEncuentro = (EditText) findViewById(R.id.txtFechaEncuentro);
         txtHoraEncuentro = (EditText) findViewById(R.id.txtHoraEncuentro);
-        invitados = new ArrayList<Contacto>();
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
         timeFormatter = new SimpleDateFormat("hh:mm a");
