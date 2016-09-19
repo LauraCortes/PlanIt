@@ -155,7 +155,9 @@ public class AgregarInvitadosActivity extends ListActivity {
             //  Get your controls from this ViewGroup and perform your task on them =)
             if (tvTest.isChecked())
             {
-                invitados.add(contactos.get(i));
+                TextView t= (TextView) row.findViewById(R.id.textViewNombreAgregar);
+                TextView tN= (TextView) row.findViewById(R.id.textViewTelefonoAgregar);
+                invitados.add(new Contacto(t.getText().toString(),tN.getText().toString()));
             }
         }
         Intent intent = new Intent();
