@@ -33,6 +33,10 @@
             android:enabled="true"
             android:exported="true"></service>
         <service
+            android:name=".Services.MensajesService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
             android:name=".Services.NotificationService"
             android:enabled="true"
             android:exported="true"></service>

@@ -83,6 +83,7 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
         {
             rowViewHolder.medioNOSeleccionado.setVisibility(View.VISIBLE);
             rowViewHolder.medioTransporteSeleccionado.setVisibility(View.GONE);
+            rowViewHolder.btnTimer.setVisibility(View.GONE);
         }
         else
         {
@@ -92,6 +93,7 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
             rowViewHolder.lblmedioTransporte.setText(medio.getNombre());
             rowViewHolder.medioNOSeleccionado.setVisibility(View.GONE);
             rowViewHolder.medioTransporteSeleccionado.setVisibility(View.VISIBLE);
+            rowViewHolder.btnTimer.setVisibility(View.VISIBLE);
             rowViewHolder.lbldestinoRegreso.setText(medio.getDireccionRegreso());
         }
 
