@@ -11,17 +11,14 @@ import android.provider.ContactsContract.*;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.laura.planit.Activities.Sitios.SitiosActivity;
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
@@ -163,7 +160,7 @@ public class AgregarContactoActivity extends ListActivity {
             }
         }
         finish();
-        Intent i = new Intent(this, ContactosActivity.class);
+        Intent i = new Intent(this, ContactosTabFragment.class);
         startActivity(i);
 
     }

@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
-import com.example.laura.planit.Persistencia.DBHandler;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
@@ -93,7 +92,7 @@ public class AgregarSitioActivity extends AppCompatActivity{
                 startService(intent);
                 agregado = null;
             }
-            Intent i = new Intent(this, SitiosActivity.class);
+            Intent i = new Intent(this, SitiosTabFragment.class);
             startActivity(i);
 
         }

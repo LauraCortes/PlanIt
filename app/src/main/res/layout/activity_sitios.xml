@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Sitios.SitiosActivity">
+    tools:context=".Activities.Sitios.SitiosTabFragment">
 
     <android.support.v7.widget.ContentFrameLayout
         android:layout_width="match_parent"

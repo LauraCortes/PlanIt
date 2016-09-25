@@ -1,27 +1,35 @@
 package com.example.laura.planit.Activities.Contactos;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
-import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
 
 /**
  * Created by Laura on 14/09/2016.
  */
-public class ContactosActivity extends Activity{
+public class ContactosTabFragment extends Fragment
+{
+    public ContactosTabFragment()
+    {
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        // Inflate the layout for this fragment
+        View view=inflater.inflate(R.layout.activity_contactos, container, false);
+        ListView listView = (ListView) view.findViewById(android.R.id.list);
+        listView.setAdapter(new ContactAdapter(getActivity(), PlanIt.darInstancia().darContactos()));
+        return view;
+    }
 
+    /**
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,14 +42,16 @@ public class ContactosActivity extends Activity{
         ListView listView = (ListView) findViewById(android.R.id.list);
         listView.setAdapter(new ContactAdapter(this,PlanIt.darInstancia().darContactos()));
     }
+    **/
 
     public void agregarContactos(View view)
     {
-        Intent i = new Intent(this, AgregarContactoActivity.class);
-        finish();
+        Intent i = new Intent(getActivity().getApplicationContext(), AgregarContactoActivity.class);
+        //finish();
         startActivity(i);
     }
 
+    /**
     public void eliminarContactos(View view)
     {
        ListView listView = (ListView) findViewById(android.R.id.list);
@@ -65,4 +75,5 @@ public class ContactosActivity extends Activity{
 
         listView.setAdapter(new ContactAdapter(this,PlanIt.darInstancia().darContactos()));
     }
+     **/
 }

@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.MainActivity">
+        <activity android:name=".Activities.Main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,12 +18,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.RegistroActivity"></activity>
-        <activity android:name=".Activities.Sitios.SitiosActivity" />
+        <activity android:name=".Activities.Sitios.SitiosTabFragment" />
         <activity android:name=".Activities.Sitios.AgregarSitioActivity" />
         <activity android:name=".Activities.Eventos.AgregarEventoActivity"/>
         <activity android:name=".Activities.Eventos.MisEventosActivity"/>
         <activity android:name=".Activities.Contactos.AgregarContactoActivity"/>
-        <activity android:name=".Activities.Contactos.ContactosActivity"/>
+        <activity android:name=".Activities.Contactos.ContactosTabFragment"/>
         <activity android:name=".Activities.Contactos.AgregarInvitadosActivity"/>
         <activity android:name=".Activities.Transportes.AgregarTransporteActivity"/>
         <activity android:name=".Activities.Eventos.TimerActivity"/>
