@@ -58,6 +58,7 @@ public class ContactosTabFragment extends Fragment implements View.OnKeyListener
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View v, int pos, long id)
             {
+                Toast.makeText(getContext(),"Long Click",Toast.LENGTH_SHORT).show();
                 eliminar=true;
                 cambiarFAB(true);
                 View rowView = listView.getChildAt(pos);
