@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
 import com.example.laura.planit.Activities.Eventos.MisEventosActivity;
 import com.example.laura.planit.Activities.RegistroActivity;
@@ -95,7 +96,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
+    public void agregarContactos(View view)
+    {
+        Intent i = new Intent(this, AgregarContactoActivity.class);
+        startActivity(i);
     }
 
     public void Registrar(View view) {

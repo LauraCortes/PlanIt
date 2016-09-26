@@ -69,8 +69,8 @@
             android:layout_width="1dp"
             android:layout_height="fill_parent"
             android:layout_gravity="end"
-            android:paddingRight="10dp"
-            android:alpha="0.8"
+            android:layout_marginRight="10dp"
+            android:alpha="0.5"
             android:background="@color/colorDivider" />
 
         <ImageButton

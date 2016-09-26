@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
@@ -22,45 +23,48 @@ import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Laura on 18/09/2016.
  */
-public class ContactAdapter extends ArrayAdapter<Contacto> {
+public class ContactAdapter extends ArrayAdapter<Contacto>
+{
     private LayoutInflater layoutInflater;
-
     private Context context;
-    public ContactAdapter(Context context, List<Contacto> contactos) {
+
+    public ContactAdapter(Context context, List<Contacto> contactos)
+    {
         super(context, 0, contactos);
         layoutInflater = LayoutInflater.from(context);
         this.context=context;
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent)
+    public View getView(final int position, View rowView, ViewGroup parent)
     {
         // holder pattern
         Holder holder = null;
-        if (convertView == null)
+        if (rowView == null)
         {
             holder = new Holder();
-            convertView = layoutInflater.inflate(R.layout.row_contacto, null);
-            holder.setTextViewTitle((TextView) convertView.findViewById(R.id.textViewNombre));
-            holder.setTextViewSubtitle((TextView) convertView.findViewById(R.id.textViewTelefono));
-            holder.setFavorito((ImageButton) convertView.findViewById(R.id.imageContactoFavorito));
-            holder.circuloIniciales=(ImageView)convertView.findViewById(R.id.circulo_iniciales);
-            convertView.setTag(holder);
+            rowView = layoutInflater.inflate(R.layout.row_contacto, null);
+            holder.textViewTitle=((TextView) rowView.findViewById(R.id.textViewNombre));
+            holder.textViewSubtitle=((TextView) rowView.findViewById(R.id.textViewTelefono));
+            holder.favorito=((ImageButton) rowView.findViewById(R.id.imageContactoFavorito));
+            holder.circuloIniciales=(ImageView)rowView.findViewById(R.id.circulo_iniciales);
+            rowView.setTag(holder);
         }
         else
         {
-            holder = (Holder) convertView.getTag();
+            holder = (Holder) rowView.getTag();
         }
 
         Contacto contacto = getItem(position);
         String nombre = contacto.getNombre();
-        holder.getTextViewTitle().setText(nombre);
-        holder.getTextViewSubtitle().setText(contacto.getNumeroTelefonico());
+        holder.textViewTitle.setText(nombre);
+        holder.textViewSubtitle.setText(contacto.getNumeroTelefonico());
         String[] separaciones = nombre.trim().split(" ");
         String iniciales="";
         for(int i=0; i<separaciones.length && i<2;i++)
@@ -75,7 +79,8 @@ public class ContactAdapter extends ArrayAdapter<Contacto> {
 
         holder.decorarFavorito(contacto.isSelected()==1);
         final Holder finalHolder = holder;
-        holder.getFavorito().setOnClickListener(new View.OnClickListener() {
+        holder.favorito.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view)
             {
@@ -102,9 +107,8 @@ public class ContactAdapter extends ArrayAdapter<Contacto> {
             }
         });
 
-        return convertView;
+        return rowView;
     }
-
 
     static class Holder
     {
@@ -114,35 +118,6 @@ public class ContactAdapter extends ArrayAdapter<Contacto> {
         ImageView circuloIniciales;
         int[] colores = new int[]{Color.parseColor("#26532B"),Color.parseColor("#6A0136"),
                 Color.parseColor("#D72638"),Color.parseColor("#95C623"),Color.parseColor("#080708")};
-
-
-        public TextView getTextViewTitle()
-        {
-            return textViewTitle;
-        }
-
-        public void setTextViewTitle(TextView textViewTitle)
-        {
-            this.textViewTitle = textViewTitle;
-        }
-
-        public TextView getTextViewSubtitle()
-        {
-            return textViewSubtitle;
-        }
-
-        public void setTextViewSubtitle(TextView textViewSubtitle)
-        {
-            this.textViewSubtitle = textViewSubtitle;
-        }
-
-        public ImageButton getFavorito() {
-            return favorito;
-        }
-
-        public void setFavorito(ImageButton favorito) {
-            this.favorito = favorito;
-        }
 
         public void decorarFavorito(boolean isFavorito)
         {
@@ -154,7 +129,7 @@ public class ContactAdapter extends ArrayAdapter<Contacto> {
             else
             {
                 favorito.setBackgroundResource(R.drawable.estrella_gris);
-                favorito.setAlpha((float) 0.5);
+                favorito.setAlpha((float) 0.3);
             }
         }
     }

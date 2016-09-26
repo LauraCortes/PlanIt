@@ -160,8 +160,5 @@ public class AgregarContactoActivity extends ListActivity {
             }
         }
         finish();
-        Intent i = new Intent(this, ContactosTabFragment.class);
-        startActivity(i);
-
     }
 }
