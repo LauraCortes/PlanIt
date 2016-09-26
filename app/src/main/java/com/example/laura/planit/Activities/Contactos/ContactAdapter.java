@@ -3,6 +3,7 @@ package com.example.laura.planit.Activities.Contactos;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
@@ -43,11 +45,11 @@ public class ContactAdapter extends ArrayAdapter<Contacto> {
         if (convertView == null)
         {
             holder = new Holder();
-
             convertView = layoutInflater.inflate(R.layout.row_contacto, null);
             holder.setTextViewTitle((TextView) convertView.findViewById(R.id.textViewNombre));
             holder.setTextViewSubtitle((TextView) convertView.findViewById(R.id.textViewTelefono));
             holder.setFavorito((ImageButton) convertView.findViewById(R.id.imageContactoFavorito));
+            holder.circuloIniciales=(ImageView)convertView.findViewById(R.id.circulo_iniciales);
             convertView.setTag(holder);
         }
         else
@@ -55,19 +57,31 @@ public class ContactAdapter extends ArrayAdapter<Contacto> {
             holder = (Holder) convertView.getTag();
         }
 
-        Contacto row = getItem(position);
-        holder.getTextViewTitle().setText(row.getNombre());
-        holder.getTextViewSubtitle().setText(row.getNumeroTelefonico());
-
-        if(row.isSelected()==1)
+        Contacto contacto = getItem(position);
+        String nombre = contacto.getNombre();
+        holder.getTextViewTitle().setText(nombre);
+        holder.getTextViewSubtitle().setText(contacto.getNumeroTelefonico());
+        String[] separaciones = nombre.trim().split(" ");
+        String iniciales="";
+        for(int i=0; i<separaciones.length && i<2;i++)
         {
-            holder.getFavorito().setBackgroundResource(android.R.drawable.btn_star_big_on);
+            if(separaciones[i].trim().length()>0)
+            {
+                iniciales+=separaciones[i].trim().charAt(0);
+            }
         }
+        holder.circuloIniciales.setImageDrawable(
+                TextDrawable.builder().buildRound(iniciales.toUpperCase(), holder.colores[position%5]));
+
+        holder.decorarFavorito(contacto.isSelected()==1);
+        final Holder finalHolder = holder;
         holder.getFavorito().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if(PlanIt.darInstancia().darContacto(position).isSelected()==0) {
-                    view.setBackgroundResource(android.R.drawable.btn_star_big_on);
+            public void onClick(View view)
+            {
+                if(PlanIt.darInstancia().darContacto(position).isSelected()==0)
+                {
+                    finalHolder.decorarFavorito(true);
                     PlanIt.darInstancia().marcarFavorito(position, 1);
                     Intent intent = new Intent(context, PersitenciaService.class);
                     intent.putExtra("Requerimiento","MarcarContacto");
@@ -77,7 +91,7 @@ public class ContactAdapter extends ArrayAdapter<Contacto> {
                 }
                 else
                 {
-                    view.setBackgroundResource(android.R.drawable.btn_star_big_off);
+                    finalHolder.decorarFavorito(false);
                     PlanIt.darInstancia().marcarFavorito(position, 0);
                     Intent intent = new Intent(context, PersitenciaService.class);
                     intent.putExtra("Requerimiento","MarcarContacto");
@@ -97,6 +111,10 @@ public class ContactAdapter extends ArrayAdapter<Contacto> {
         TextView textViewTitle;
         TextView textViewSubtitle;
         ImageButton favorito;
+        ImageView circuloIniciales;
+        int[] colores = new int[]{Color.parseColor("#26532B"),Color.parseColor("#6A0136"),
+                Color.parseColor("#D72638"),Color.parseColor("#95C623"),Color.parseColor("#080708")};
+
 
         public TextView getTextViewTitle()
         {
@@ -124,6 +142,20 @@ public class ContactAdapter extends ArrayAdapter<Contacto> {
 
         public void setFavorito(ImageButton favorito) {
             this.favorito = favorito;
+        }
+
+        public void decorarFavorito(boolean isFavorito)
+        {
+            if(isFavorito)
+            {
+                favorito.setBackgroundResource(R.drawable.estrella_verde);
+                favorito.setAlpha((float) 1.0);
+            }
+            else
+            {
+                favorito.setBackgroundResource(R.drawable.estrella_gris);
+                favorito.setAlpha((float) 0.5);
+            }
         }
     }
 }

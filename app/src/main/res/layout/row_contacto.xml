@@ -1,61 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/circulo_iniciales"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:paddingLeft="10dp">
 
-        <CheckBox
+        <!--CheckBox
             android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
-
+            android:layout_centerVertical="true"/-->
         <TextView
             android:id="@+id/textViewNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/checkBox"
-            android:layout_toRightOf="@+id/checkBox"
+            android:inputType="textCapSentences"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/black" />
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/phone" />
+
+            <TextView
+                android:id="@+id/textViewTelefono"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="30px"
-            android:layout_height="30px"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="5px"
-            android:background="@android:drawable/stat_sys_phone_call" />
-
-        <TextView
-            android:id="@+id/textViewTelefono"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textViewNombre"
-            android:layout_below="@+id/textViewNombre"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/black"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="end"
+            android:paddingRight="10dp"
+            android:alpha="0.8"
+            android:background="@color/colorDivider" />
 
         <ImageButton
-            android:layout_width="30px"
-            android:layout_height="30px"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="5px"
-            android:background="@android:drawable/btn_star_big_off"
-            android:id="@+id/imageContactoFavorito"/>
+            android:id="@+id/imageContactoFavorito"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="#0000"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center_vertical" />
 
+        <ImageButton
+            android:id="@+id/btnLlamar"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_gravity="center_vertical"
+            android:adjustViewBounds="true"
+            android:background="#0000"
+            android:src="@drawable/llamar" />
     </LinearLayout>
 
 </LinearLayout>
