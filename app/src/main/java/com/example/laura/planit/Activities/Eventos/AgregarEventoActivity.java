@@ -1,25 +1,18 @@
 package com.example.laura.planit.Activities.Eventos;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Contactos.AgregarInvitadosActivity;
-import com.example.laura.planit.Activities.Contactos.ContactAdapter;
-import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.PlanIt;
@@ -34,9 +27,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 

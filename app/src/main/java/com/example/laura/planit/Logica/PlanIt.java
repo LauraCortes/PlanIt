@@ -2,10 +2,8 @@ package com.example.laura.planit.Logica;
 
 import com.example.laura.planit.Persistencia.DBHandler;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Created by Usuario on 15/09/2016.
@@ -128,7 +126,7 @@ public class PlanIt {
     }
 
     public void marcarFavorito(int pos, int selected){
-        contactos.get(pos).setSelected(selected);
+        contactos.get(pos).setFavorito(selected);
     }
 
     public Contacto darContacto(int pos)

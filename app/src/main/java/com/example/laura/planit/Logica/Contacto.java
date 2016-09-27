@@ -1,8 +1,5 @@
 package com.example.laura.planit.Logica;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**
@@ -15,12 +12,12 @@ public class Contacto implements Serializable
     private String nombre;
 
     //0= false, 1=true
-    private int selected;
+    private int favorito;
 
     public Contacto(String nombre, String numeroTelefonico) {
         this.nombre = nombre;
         this.numeroTelefonico = numeroTelefonico;
-        this.selected=0;
+        this.favorito =0;
     }
 
     public String getNumeroTelefonico() {
@@ -39,11 +36,11 @@ public class Contacto implements Serializable
         this.nombre = nombre;
     }
 
-    public int isSelected() {
-        return selected;
+    public int isFavorito() {
+        return favorito;
     }
 
-    public void setSelected(int selected) {
-        this.selected = selected;
+    public void setFavorito(int favorito) {
+        this.favorito = favorito;
     }
 }

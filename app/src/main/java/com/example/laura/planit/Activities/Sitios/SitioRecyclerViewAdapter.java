@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,8 @@ import java.util.List;
 /**
  * Created by Usuario on 16/09/2016.
  */
-public class SitioRecyclerViewAdapter extends RecyclerView.Adapter<SitioRowViewHolder> {
+public class SitioRecyclerViewAdapter extends RecyclerView.Adapter<SitioRowViewHolder>
+{
     Context context;
     List<Sitio> sitios;
     SitioRecyclerViewAdapter recycler;

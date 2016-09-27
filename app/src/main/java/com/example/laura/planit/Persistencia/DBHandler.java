@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.Evento;
@@ -18,7 +17,6 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TransferQueue;
 
 /**
  * Created by Laura on 14/09/2016.
@@ -305,7 +303,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
 
         values.put("PHONE_NUMBER", contacto.getNumeroTelefonico());
         values.put("NOMBRE", contacto.getNombre());
-        values.put("FAVORITO", contacto.isSelected());
+        values.put("FAVORITO", contacto.isFavorito());
         try
         {
             long resultado = db.insert(TABLE_EMERGENCY_CONTACTS, null, values);
@@ -331,7 +329,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
                 do
                 {
                     Contacto actual= new Contacto(cursor.getString(1),cursor.getString(0));
-                    actual.setSelected(Integer.valueOf(cursor.getString(2)));
+                    actual.setFavorito(Integer.valueOf(cursor.getString(2)));
                     resultado.add(actual);
                 }
                 while (cursor.moveToNext());
