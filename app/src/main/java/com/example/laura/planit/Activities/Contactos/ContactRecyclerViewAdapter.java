@@ -50,7 +50,9 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactoRow
         String nombre = contacto.getNombre();
         contactoRowViewHolder.textViewTitle.setText(nombre);
         contactoRowViewHolder.textViewSubtitle.setText(contacto.getNumeroTelefonico());
-        contactoRowViewHolder.circuloIniciales.setImageDrawable(darImagenIniciales(nombre,position));
+        Drawable iniciales =darImagenIniciales(nombre,position);
+        contactoRowViewHolder.imgCirculo=iniciales;
+        contactoRowViewHolder.circuloIniciales.setImageDrawable(iniciales);
         contactoRowViewHolder.decorarFavorito(contacto.isFavorito()==1);
         contactoRowViewHolder.decorarSeleccionado(contactosTabFragment.isItemSelected(position));
         final ContactoRowViewHolder finalContactoRowViewHolder = contactoRowViewHolder;

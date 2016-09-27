@@ -1,6 +1,8 @@
 package com.example.laura.planit.Activities.Contactos;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,6 +23,7 @@ public class ContactoRowViewHolder extends RecyclerView.ViewHolder
     TextView textViewSubtitle;
     ImageButton favorito;
     ImageView circuloIniciales;
+    Drawable imgCirculo;
 
 
     View vista;
@@ -59,9 +62,11 @@ public class ContactoRowViewHolder extends RecyclerView.ViewHolder
         if(seleccionado)
         {
             vista.setBackgroundColor(Color.parseColor("#BDBDBD"));
+            circuloIniciales.setImageDrawable( vista.getResources().getDrawable(R.drawable.check_circulo_blanco));
         }
         else
         {
+            circuloIniciales.setImageDrawable(imgCirculo);
             vista.setBackgroundColor(Color.TRANSPARENT);
         }
     }
