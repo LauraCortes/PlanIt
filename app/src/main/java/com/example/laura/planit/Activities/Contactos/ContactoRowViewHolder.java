@@ -35,7 +35,6 @@ public class ContactoRowViewHolder extends RecyclerView.ViewHolder
     {
         super(rowView);
         vista=rowView;
-        System.out.println("FALSE");
         textViewTitle=((TextView) rowView.findViewById(R.id.textViewNombre));
         textViewSubtitle=((TextView) rowView.findViewById(R.id.textViewTelefono));
         favorito=((ImageButton) rowView.findViewById(R.id.imageContactoFavorito));
@@ -61,7 +60,7 @@ public class ContactoRowViewHolder extends RecyclerView.ViewHolder
     {
         if(seleccionado)
         {
-            vista.setBackgroundColor(Color.parseColor("#BDBDBD"));
+            vista.setBackgroundColor(Color.parseColor("#45B29D"));
             circuloIniciales.setImageDrawable( vista.getResources().getDrawable(R.drawable.check_circulo_blanco));
         }
         else

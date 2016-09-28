@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
@@ -22,10 +23,12 @@ import com.example.laura.planit.R;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
 
     //Base de datos
     private DBHandler db ;
+    private TabsFragmenPageAdapter tabContactos;
 
 
 
@@ -78,21 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public int getCount() {
-                return 0;
-            }
-
-            @Override
-            public Fragment getItem(int position) {
-                return null;
-            }
-        };
-        viewPager.setAdapter(adapter);
-    }
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -124,5 +112,34 @@ public class MainActivity extends AppCompatActivity {
     public void lanzarEventos(View view)
     {
         startActivity(new Intent(this, MisEventosActivity.class));
+    }
+
+
+    public boolean onKeyDown(View v, int keyCode, KeyEvent event)
+    {
+        if(keyCode==KeyEvent.KEYCODE_BACK)
+        {
+            System.out.println("ATRÁS ACTIVITY from view class: "+v.getClass().getName());
+            if(v.getClass().equals(ContactosTabFragment.class))
+            {
+
+            }
+        }
+        return super.onKeyDown(keyCode,event);
+
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        ContactosTabFragment tabContactos = (ContactosTabFragment)getSupportFragmentManager().getFragments().get(0);
+        if(tabContactos.modoEliminar())
+        {
+            tabContactos.deseleccionarOnBack();
+        }
+        else
+        {
+            super.onBackPressed();
+        }
     }
 }

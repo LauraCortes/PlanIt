@@ -33,11 +33,11 @@ import static com.example.laura.planit.R.id.view;
 /**
  * Created by Laura on 14/09/2016.
  */
-public class ContactosTabFragment extends Fragment implements View.OnKeyListener
+public class ContactosTabFragment extends Fragment
 {
     private ContactRecyclerViewAdapter contactAdapter;
     private List<Contacto> contactos;
-    private HashMap<Integer,Contacto> contactosEliminar;
+    private HashMap<Integer,Integer> contactosEliminar;
     private FloatingActionButton btnFAB;
     private RecyclerView recyclerView;
 
@@ -50,7 +50,7 @@ public class ContactosTabFragment extends Fragment implements View.OnKeyListener
     {
         super.onCreate(savedInstanceState);
         contactos=PlanIt.darInstancia().darContactos();
-        contactosEliminar = new HashMap<Integer, Contacto>();
+        contactosEliminar = new HashMap<Integer, Integer>();
         contactAdapter=new ContactRecyclerViewAdapter(getActivity(), contactos,this);
 
         // Inflate the layout for this fragment
@@ -58,7 +58,6 @@ public class ContactosTabFragment extends Fragment implements View.OnKeyListener
         this.recyclerView = (RecyclerView) view.findViewById(android.R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.recyclerView.setAdapter(contactAdapter);
-
         btnFAB= (FloatingActionButton) view.findViewById(R.id.fabContactos);
         btnFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +97,7 @@ public class ContactosTabFragment extends Fragment implements View.OnKeyListener
 
     public void eliminarContactos(View view)
     {
-        for (Map.Entry<Integer, Contacto> entrada : contactosEliminar.entrySet())
+        for (Map.Entry<Integer, Integer> entrada : contactosEliminar.entrySet())
         {
             int pos = entrada.getKey();
             //Elimina del mundo
@@ -133,22 +132,10 @@ public class ContactosTabFragment extends Fragment implements View.OnKeyListener
          */
     }
 
-
-    public boolean onKey(View view, int keyCode, KeyEvent event) {
-        switch (keyCode)
-        {
-            case KeyEvent.KEYCODE_BACK:
-                //TODO cancelar borrado
-                return true;
-        }
-        return false;
-    }
-
     public void agregarItemEliminar(int pos)
     {
         Contacto contacto= contactos.get(pos);
-        contactosEliminar.put(pos,contacto);
-        System.out.println("Agregado:"+contacto.getNombre()+" ahora:"+contactosEliminar.size());
+        contactosEliminar.put(pos,pos);
         cambiarIconoFAB();
         contacto=null;
     }
@@ -156,7 +143,6 @@ public class ContactosTabFragment extends Fragment implements View.OnKeyListener
     public void removerItemEliminar(int pos)
     {
         contactosEliminar.remove(pos);
-        System.out.println("Eliminado:"+contactos.get(pos).getNombre()+" ahora:"+contactosEliminar.size());
         cambiarIconoFAB();
     }
 
@@ -183,4 +169,12 @@ public class ContactosTabFragment extends Fragment implements View.OnKeyListener
 
     }
 
+    public void deseleccionarOnBack()
+    {
+        if (!contactosEliminar.isEmpty()) {
+            contactosEliminar.clear();
+            contactAdapter.notifyDataSetChanged();
+            cambiarIconoFAB();
+        }
+    }
 }
