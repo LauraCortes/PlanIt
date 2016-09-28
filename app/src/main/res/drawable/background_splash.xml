@@ -6,6 +6,6 @@
 
         <bitmap
             android:gravity="center"
-            android:src="@drawable/splash_rancho"/>
+            android:src="@drawable/splash_darwin"/>
     </item>
 </layer-list>
