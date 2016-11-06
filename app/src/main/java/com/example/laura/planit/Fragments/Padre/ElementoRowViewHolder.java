@@ -17,6 +17,7 @@ abstract class ElementoRowViewHolder extends RecyclerView.ViewHolder
     public ElementoRowViewHolder(View itemView)
     {
         super(itemView);
+        vista = itemView;
     }
 
     public void decorarSeleccionado(boolean seleccionado)
