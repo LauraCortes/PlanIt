@@ -1,4 +1,4 @@
-package com.example.laura.planit.Activities.Main;
+package com.example.laura.planit.Fragments.Padre;
 
 
 import android.content.res.ColorStateList;
@@ -19,17 +19,17 @@ import java.util.Map;
  * Created by Usuario on 06/11/2016.
  */
 
-abstract class FragmentSuper extends Fragment
+abstract class TabFragment extends Fragment
 {
 
     protected RecyclerView.Adapter adapter;
     protected List<Object> elementos;
-    private HashMap<Integer,Integer> elementosSeleccionados;
-    private FloatingActionButton btnFAB;
-    private RecyclerView recyclerView;
+    protected HashMap<Integer,Integer> elementosSeleccionados;
+    protected FloatingActionButton btnFAB;
+    protected RecyclerView recyclerView;
 
 
-    public FragmentSuper()
+    public TabFragment()
     {
     }
 
@@ -69,7 +69,7 @@ abstract class FragmentSuper extends Fragment
         for (Map.Entry<Integer, Integer> entrada : elementosSeleccionados.entrySet())
         {
             int pos = entrada.getKey();
-            //Elimina del mundo
+            //TODO -> Eliminar del mundo
             elementos.remove(pos);
             //Remueve del view
             adapter.notifyItemRemoved(pos);
@@ -114,9 +114,10 @@ abstract class FragmentSuper extends Fragment
 
     }
 
-    public void deseleccionarOnBack()
+    public void deseleccionar()
     {
-        if (!elementosSeleccionados.isEmpty()) {
+        if (!elementosSeleccionados.isEmpty())
+        {
             elementosSeleccionados.clear();
             adapter.notifyDataSetChanged();
             cambiarIconoFAB();

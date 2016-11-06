@@ -1,38 +1,36 @@
-package com.example.laura.planit.Activities.Contactos;
+package com.example.laura.planit.Fragments.Padre;
 
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.example.laura.planit.Logica.Contacto;
-import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
 
 import java.util.List;
 
 /**
- * Created by Laura on 18/09/2016.
+ * Created by Usuario on 06/11/2016.
  */
-public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactoRowViewHolder>
+
+abstract class ElementRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
     private Context context;
-    List<Contacto> contactos;
-    ContactosTabFragment contactosTabFragment;
+    List<Object> elementos;
+    TabFragment tabFragment;
+    public final  static int[] COLORES = {Color.parseColor("#26532B"), Color.parseColor("#6A0136"),
+            Color.parseColor("#D72638"), Color.parseColor("#95C623"), Color.parseColor("#080708")};
 
 
-    public ContactRecyclerViewAdapter(Context context, List<Contacto> contactos, ContactosTabFragment contactosTabFragment)
+    public ElementRecyclerViewAdapter(Context context, List<Object> elementos, TabFragment tabFragment)
     {
-        this.contactos=contactos;
+        this.elementos =elementos;
         this.context=context;
-        this.contactosTabFragment=contactosTabFragment;
+        this.tabFragment = tabFragment;
     }
 
+    //TODO
+    /**
     @Override
     public ContactoRowViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType)
     {
@@ -41,10 +39,11 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactoRow
         return  new ContactoRowViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(final ContactoRowViewHolder contactoRowViewHolder, final int position)
     {
-        Contacto contacto = contactos.get(position);
+        Contacto contacto = elementos.get(position);
         String nombre = contacto.getNombre();
         contactoRowViewHolder.textViewTitle.setText(nombre);
         contactoRowViewHolder.textViewSubtitle.setText(contacto.getNumeroTelefonico());
@@ -52,7 +51,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactoRow
         contactoRowViewHolder.imgCirculo=iniciales;
         contactoRowViewHolder.circuloIniciales.setImageDrawable(iniciales);
         contactoRowViewHolder.decorarFavorito(contacto.isFavorito()==1);
-        contactoRowViewHolder.decorarSeleccionado(contactosTabFragment.isItemSelected(position));
+        contactoRowViewHolder.decorarSeleccionado(tabFragment.isItemSelected(position));
         final ContactoRowViewHolder finalContactoRowViewHolder = contactoRowViewHolder;
 
         //Marcar contacto como Favorito
@@ -61,10 +60,10 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactoRow
             @Override
             public void onClick(View view)
             {
-                Contacto contactoFavorito = contactos.get(position);
+                Contacto contactoFavorito = elementos.get(position);
                 Intent intent = new Intent(context, PersitenciaService.class);
                 intent.putExtra("Requerimiento","MarcarContacto");
-                intent.putExtra("Contacto",PlanIt.darInstancia().darContacto(position));
+                intent.putExtra("Contacto", PlanIt.darInstancia().darContacto(position));
                 if(contactoFavorito.isFavorito()==0)
                 {
                     finalContactoRowViewHolder.decorarFavorito(true);
@@ -87,7 +86,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactoRow
             @Override
             public void onClick(View v)
             {
-                if(contactosTabFragment.modoEliminar())
+                if(tabFragment.modoEliminar())
                 {
                     seleccionarItem(position,contactoRowViewHolder);
                 }
@@ -104,17 +103,18 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactoRow
             }
         });
     }
+     */
 
     @Override
     public int getItemCount() {
-        if (contactos == null) {
+        if (elementos == null) {
             return 0;
         } else {
-            return contactos.size();
+            return elementos.size();
         }
     }
 
-    public Drawable darImagenIniciales(String texto, int pos)
+    public Drawable darCirculoIniciales(String texto, int pos)
     {
         String[] separaciones = texto.trim().split(" ");
         String iniciales="";
@@ -129,14 +129,16 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactoRow
         {
             iniciales="-";
         }
-        return TextDrawable.builder().buildRound(iniciales.toUpperCase(), ContactoRowViewHolder.COLORES[pos%5]);
+        return TextDrawable.builder().buildRound(iniciales.toUpperCase(), COLORES[pos%5]);
 
     }
 
-    private void seleccionarItem(int position, ContactoRowViewHolder contactoRowViewHolder)
+    private void seleccionarItem(int position, RecyclerView.ViewHolder elementoRowViewHolder)
     {
-        boolean seleccionado = contactosTabFragment.isItemSelected(position);
-        contactoRowViewHolder.decorarSeleccionado(!seleccionado);
-        contactosTabFragment.seleccionarItem(position);
+        //TODO
+        // boolean seleccionado = tabFragment.isItemSelected(position);
+        //elementoRowViewHolder.decorarSeleccionado(!seleccionado);
+        tabFragment.seleccionarItem(position);
     }
+
 }

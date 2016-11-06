@@ -1,4 +1,4 @@
-package com.example.laura.planit.Activities.Main;
+package com.example.laura.planit.Fragments;
 
 
 import android.support.v4.app.Fragment;
