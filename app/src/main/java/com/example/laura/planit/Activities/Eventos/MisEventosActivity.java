@@ -18,42 +18,42 @@ import com.example.laura.planit.R;
  */
 public class MisEventosActivity extends AppCompatActivity
 {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_eventos);
-        if (PlanIt.darInstancia().darEventos().size() == 0) {
-            Intent i = new Intent(this, AgregarEventoActivity.class);
-            i.putExtra("editar", false);
-            i.putExtra("titulo", "Agregar evento");
-            finish();
-            startActivity(i);
-        }
-        getSupportActionBar().setTitle("Mis eventos");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        super.onResume();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewEventos);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        EventoRecyclerViewAdapter adapter = new EventoRecyclerViewAdapter(this, PlanIt.darInstancia().darEventos());
-        recyclerView.setAdapter(adapter);
-    }
-
-    public void agregarEvento(View vista)
-    {
-        Intent i = new Intent(this, AgregarEventoActivity.class);
-        i.putExtra("editar", false);
-        i.putExtra("titulo", "Agregar evento");
-        finish();
-        startActivity(i);
-    }
-
-    public void agregarTransporte(View vista, int elemento)
-    {
-        Intent agregarTransporte = new Intent(this, AgregarTransporteActivity.class);
-        startActivity(agregarTransporte);
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_eventos);
+//        if (PlanIt.darInstancia().darEventos().size() == 0) {
+//            Intent i = new Intent(this, AgregarEventoActivity.class);
+//            i.putExtra("editar", false);
+//            i.putExtra("titulo", "Agregar evento");
+//            finish();
+//            startActivity(i);
+//        }
+//        getSupportActionBar().setTitle("Mis eventos");
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        super.onResume();
+//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewEventos);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        EventoRecyclerViewAdapter adapter = new EventoRecyclerViewAdapter(this, PlanIt.darInstancia().darEventos());
+//        recyclerView.setAdapter(adapter);
+//    }
+//
+//    public void agregarEvento(View vista)
+//    {
+//        Intent i = new Intent(this, AgregarEventoActivity.class);
+//        i.putExtra("editar", false);
+//        i.putExtra("titulo", "Agregar evento");
+//        finish();
+//        startActivity(i);
+//    }
+//
+//    public void agregarTransporte(View vista, int elemento)
+//    {
+//        Intent agregarTransporte = new Intent(this, AgregarTransporteActivity.class);
+//        startActivity(agregarTransporte);
+//    }
 }

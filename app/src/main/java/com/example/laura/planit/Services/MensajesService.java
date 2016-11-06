@@ -70,7 +70,7 @@ public class MensajesService extends Service
                         ArrayList<String> parts = smsManager.divideMessage(msj);
                         smsManager.sendMultipartTextMessage(contacto.getNumeroTelefonico(), null, parts, null, null);
                     }
-                    Toast.makeText(this,contactos.size()+" contactos fueron invitados mediante SMS",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,contactos.size()+" elementos fueron invitados mediante SMS",Toast.LENGTH_LONG).show();
                 }
 
             }

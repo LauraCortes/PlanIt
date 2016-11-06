@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "388580342098",
+    "firebase_url": "https://planit-c5f71.firebaseio.com",
+    "project_id": "planit-c5f71",
+    "storage_bucket": "planit-c5f71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388580342098:android:75c062b063f0b6f7",
+        "android_client_info": {
+          "package_name": "com.example.laura.planit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388580342098-u83se3b0rapgcebh8u3cl8qqjle495oa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXZzIGxZDUUR9Xz-nJgux4gagKOYXKQZo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

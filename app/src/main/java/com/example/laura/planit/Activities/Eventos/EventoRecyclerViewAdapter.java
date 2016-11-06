@@ -28,17 +28,19 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
     Context context;
     List<Evento> eventos;
     EventoRecyclerViewAdapter recycler;
+    MisEventosTabFragment misEventosTabFragment;
 
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
 
-    public EventoRecyclerViewAdapter(Context context, List<Evento> eventos)
+    public EventoRecyclerViewAdapter(Context context, List<Evento> eventos, MisEventosTabFragment fragment)
     {
         recycler=this;
         this.context = context;
         this.eventos = eventos;
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
         timeFormatter = new SimpleDateFormat("hh:mm a");
+        misEventosTabFragment = fragment;
     }
 
 
