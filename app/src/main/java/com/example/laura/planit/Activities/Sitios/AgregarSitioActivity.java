@@ -1,5 +1,6 @@
 package com.example.laura.planit.Activities.Sitios;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,8 @@ import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Created by Laura on 12/09/2016.
  */
@@ -21,6 +24,11 @@ public class AgregarSitioActivity extends AppCompatActivity{
     private boolean editar;
     private int pos;
     private String nombre;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

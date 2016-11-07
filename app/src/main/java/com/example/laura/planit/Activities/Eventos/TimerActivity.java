@@ -25,6 +25,8 @@ import com.example.laura.planit.Logica.Usuario;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.NotificationService;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Created by Laura on 18/09/2016.
  */
@@ -40,6 +42,11 @@ public class TimerActivity extends Activity implements View.OnClickListener {
     private EmergencyTimer emergencyTimer;
 
     private final Context context= this;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -2,6 +2,7 @@ package com.example.laura.planit.Activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -18,6 +19,8 @@ import com.example.laura.planit.Logica.Usuario;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Created by Laura on 12/09/2016.
  */
@@ -27,6 +30,11 @@ public class RegistroActivity extends Activity{
     private Usuario usuario;
 
     private int confirmNumb;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

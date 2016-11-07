@@ -30,6 +30,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Created by Usuario on 18/09/2016.
  */
@@ -44,6 +46,11 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
     private SimpleDateFormat timeFormatter;
 
     int pos;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

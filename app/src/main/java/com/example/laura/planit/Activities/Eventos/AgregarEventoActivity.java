@@ -30,6 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 /**
  * Created by Laura on 12/09/2016.
@@ -57,6 +59,11 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     int puntoEncuentroPos;
 
     private List<Contacto> invitados;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
 
     @Override
