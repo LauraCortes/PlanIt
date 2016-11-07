@@ -1,13 +1,16 @@
 package com.example.laura.planit.Fragments;
 
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
+import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
 
 import java.util.HashMap;
@@ -26,11 +29,14 @@ public abstract class TabFragment extends Fragment
     protected HashMap<Integer,Integer> elementosSeleccionados;
     protected FloatingActionButton btnFAB;
     protected RecyclerView recyclerView;
+    protected static int AGREGAR_ELEMENTOS =97;
+    protected String msjToastAgregar;
 
 
     public TabFragment()
     {
         super();
+        msjToastAgregar="Elementos agregados";
     }
 
 
@@ -118,6 +124,21 @@ public abstract class TabFragment extends Fragment
             elementosSeleccionados.clear();
             adapter.notifyDataSetChanged();
             cambiarIconoFAB();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == AGREGAR_ELEMENTOS) {
+            // Make sure the request was successful
+            if (resultCode != 0)
+            {
+                elementos= PlanIt.darInstancia().darContactos();
+                adapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(elementos.size()-1);
+                Toast.makeText(getContext(),msjToastAgregar,Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

@@ -23,6 +23,7 @@ import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,8 +40,10 @@ public class AgregarContactoActivity extends AgregarSuper
         super.onCreate(savedInstanceState);
     }
 
-    public void agregar(View view) {
-        for (Map.Entry<Integer, Contacto> entrada : contactosSeleccionados.entrySet()) {
+    public void agregar(View view)
+    {
+        for (Map.Entry<Integer, Contacto> entrada : contactosSeleccionados.entrySet())
+        {
             Contacto contacto = entrada.getValue();
             PlanIt.darInstancia().agregarContacto(contacto.getNombre(), contacto.getNumeroTelefonico());
             Intent intent = new Intent(this, PersitenciaService.class);
@@ -48,6 +51,7 @@ public class AgregarContactoActivity extends AgregarSuper
             intent.putExtra("Contacto", contacto);
             startService(intent);
         }
+        setResult(contactosSeleccionados.size());
         contactosSeleccionados.clear();
         contactosSeleccionados = null;
         finish();

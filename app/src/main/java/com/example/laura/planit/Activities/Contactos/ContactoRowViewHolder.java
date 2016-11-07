@@ -1,6 +1,7 @@
 package com.example.laura.planit.Activities.Contactos;
 
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,7 +49,9 @@ public class ContactoRowViewHolder extends ElementoRowViewHolder
         super.decorarSeleccionado(seleccionado);
         if(seleccionado)
         {
-            circuloIniciales.setImageDrawable( vista.getResources().getDrawable(R.drawable.check_border_48));
+
+            vista.setBackgroundColor(ContextCompat.getColor(vista.getContext(),R.color.colorSelectedRow));
+            circuloIniciales.setImageDrawable(ContextCompat.getDrawable(vista.getContext(),R.drawable.check_border_48));
         }
         else
         {

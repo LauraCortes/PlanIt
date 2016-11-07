@@ -4,6 +4,7 @@ package com.example.laura.planit.Activities.Contactos;
  * Created by Usuario on 06/11/2016.
  */
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,8 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.PlanIt;
@@ -23,9 +24,14 @@ import java.util.List;
 
 public class ContactosTabFragment extends TabFragment
 {
+
+
+
     public ContactosTabFragment()
     {
         super();
+        AGREGAR_ELEMENTOS=654;
+        msjToastAgregar="Contactos agregados";
     }
 
     @Override
@@ -55,6 +61,7 @@ public class ContactosTabFragment extends TabFragment
     @Override
     protected void lanzarActivityAgregarElemento(View view)
     {
-        ((MainActivity)getActivity()).agregarContactos(view);
+        Intent intent = new Intent(getContext(), AgregarContactoActivity.class);
+        startActivityForResult(intent, AGREGAR_ELEMENTOS);
     }
 }

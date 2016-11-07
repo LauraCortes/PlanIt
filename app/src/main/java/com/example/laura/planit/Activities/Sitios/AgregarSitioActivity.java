@@ -99,6 +99,7 @@ public class AgregarSitioActivity extends AppCompatActivity{
                 intent.putExtra("Sitio", agregado);
                 startService(intent);
                 agregado = null;
+                System.out.println("Sitio agregado");
             }
             finish();
 

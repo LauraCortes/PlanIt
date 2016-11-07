@@ -3,6 +3,7 @@ package com.example.laura.planit.Activities.Contactos;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,8 +65,8 @@ public class AgregarContactoAdapter extends ArrayAdapter<Contacto> {
             @Override
             public void onClick(View v) {
                 activity.seleccionarItem(position);
-                int colorFondo = activity.estaSeleccionado(position)?getContext().getResources().getColor(R.color.colorSelectedRow):Color.TRANSPARENT;
-                Drawable imgn = activity.estaSeleccionado(position)?getContext().getResources().getDrawable(R.drawable.check_border_48):ElementRecyclerViewAdapter.darCirculoIniciales(contacto.getNombre(),position);
+                int colorFondo = activity.estaSeleccionado(position)?ContextCompat.getColor(getContext(),R.color.colorSelectedRow):Color.TRANSPARENT;
+                Drawable imgn = activity.estaSeleccionado(position)? ContextCompat.getDrawable(v.getContext(),R.drawable.check_border_48):ElementRecyclerViewAdapter.darCirculoIniciales(contacto.getNombre(),position);
                 finalHolderContactoAgregar.getIniciales().setImageDrawable(imgn);
                 v.setBackgroundColor(colorFondo);
             }
