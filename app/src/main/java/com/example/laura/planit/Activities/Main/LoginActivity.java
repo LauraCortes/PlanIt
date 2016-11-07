@@ -1,31 +1,30 @@
-package com.example.laura.planit.Activities;
+package com.example.laura.planit.Activities.Main;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.SmsManager;
-import android.util.Log;
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 
 import com.example.laura.planit.Logica.Usuario;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 /**
  * Created by Laura on 12/09/2016.
  */
-public class RegistroActivity extends AppCompatActivity
+public class LoginActivity extends AppCompatActivity
 {
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS=1;
@@ -41,9 +40,11 @@ public class RegistroActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        setSupportActionBar(null);
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro);
+        setSupportActionBar(null);
+        setContentView(R.layout.activity_login);
+        EditText txtPass = (EditText)findViewById(R.id.txtPasswordLogin);
     }
 
     public void registrar(View view)

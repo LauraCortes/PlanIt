@@ -1,6 +1,5 @@
 package com.example.laura.planit.Activities.Main;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -12,8 +11,6 @@ import android.view.View;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
-import com.example.laura.planit.Activities.Eventos.MisEventosTabFragment;
-import com.example.laura.planit.Activities.RegistroActivity;
 import com.example.laura.planit.Activities.Sitios.SitiosTabFragment;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Fragments.TabsFragmenPageAdapter;
@@ -95,7 +92,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void Registrar(View view) {
-        Intent i = new Intent(this, RegistroActivity.class);
+        Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }
 
