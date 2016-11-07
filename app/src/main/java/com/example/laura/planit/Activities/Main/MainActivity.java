@@ -1,5 +1,6 @@
 package com.example.laura.planit.Activities.Main;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -14,6 +15,7 @@ import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
 import com.example.laura.planit.Activities.Eventos.MisEventosTabFragment;
 import com.example.laura.planit.Activities.RegistroActivity;
 import com.example.laura.planit.Activities.Sitios.SitiosTabFragment;
+import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Fragments.TabsFragmenPageAdapter;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Persistencia.DBHandler;
@@ -116,21 +118,20 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        System.out.println(getSupportFragmentManager().getFragments().size());
-        ContactosTabFragment tabContactos = (ContactosTabFragment) getSupportFragmentManager().getFragments().get(TabsFragmenPageAdapter.FRAMGENTO_CONTACTOS_EMERGENCIA);
-        SitiosTabFragment tabSitios = (SitiosTabFragment) getSupportFragmentManager().getFragments().get(TabsFragmenPageAdapter.FRAMGENTO_SITIOS);
-        if(tabContactos.isVisible()  && tabContactos.hayItemsSeleccionados() )
+        boolean ejecutado =false;
+        for(android.support.v4.app.Fragment fragment : getSupportFragmentManager().getFragments())
         {
-            tabContactos.deseleccionar();
+            TabFragment actual = (TabFragment)fragment;
+            if(actual!= null && actual.isVisible() && actual.hayItemsSeleccionados())
+            {
+                actual.deseleccionar();
+                ejecutado=true;
+                break;
+            }
         }
-        else if (tabSitios.isVisible() && tabSitios.hayItemsSeleccionados())
-        {
-            tabSitios.deseleccionar();
-        }
-        else
+        if(!ejecutado)
         {
             super.onBackPressed();
         }
-
     }
 }

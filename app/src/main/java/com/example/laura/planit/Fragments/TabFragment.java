@@ -72,9 +72,8 @@ public abstract class TabFragment extends Fragment
             elementos.remove(pos);
             //Remueve del view
             adapter.notifyItemRemoved(pos);
-            //Saca de la lista a eliminar
-            elementosSeleccionados.remove(Integer.valueOf(pos));
         }
+        elementosSeleccionados.clear();
         cambiarIconoFAB();
     }
 
