@@ -30,13 +30,12 @@ public abstract class TabFragment extends Fragment
     protected FloatingActionButton btnFAB;
     protected RecyclerView recyclerView;
     protected static int AGREGAR_ELEMENTOS =97;
-    protected String msjToastAgregar;
+    protected String msjToastAgregar="Elementos agregados";
 
 
     public TabFragment()
     {
         super();
-        msjToastAgregar="Elementos agregados";
     }
 
 
@@ -134,11 +133,14 @@ public abstract class TabFragment extends Fragment
             // Make sure the request was successful
             if (resultCode != 0)
             {
-                elementos= PlanIt.darInstancia().darContactos();
+                obtenerElementos();
+                System.out.println("Elementos en el tab -> "+elementos.size());
                 adapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(elementos.size()-1);
                 Toast.makeText(getContext(),msjToastAgregar,Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+    public abstract void obtenerElementos();
 }

@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +48,7 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
     @Override
     public SitioRowViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View view = inflater.inflate(R.layout.row_sitio, null);
+        View view = inflater.inflate(R.layout.tab_sitios_row_sitio, null);
         return  new SitioRowViewHolder(view);
     }
 

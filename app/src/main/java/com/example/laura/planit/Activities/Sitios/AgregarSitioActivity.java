@@ -80,6 +80,7 @@ public class AgregarSitioActivity extends AppCompatActivity{
             {
                 Sitio agregado = PlanIt.darInstancia().editarSitio(pos,nombre,barrio,direccion);
                 Toast.makeText(this, "Tu sitio se editó", Toast.LENGTH_SHORT).show();
+                setResult(pos);
                 finish();
                 Intent service = new Intent(this, PersitenciaService.class);
                 service.putExtra("Requerimiento","EditarSitio");
@@ -93,6 +94,7 @@ public class AgregarSitioActivity extends AppCompatActivity{
             {
                 Sitio agregado = PlanIt.darInstancia().agregarSitio(nombre,barrio,direccion);
                 Toast.makeText(this, "Tu sitio se agregó", Toast.LENGTH_SHORT).show();
+                setResult(-1);
                 finish();
                 Intent intent = new Intent(this, PersitenciaService.class);
                 intent.putExtra("Requerimiento","AgregarSitio");

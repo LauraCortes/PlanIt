@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +25,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 /**
  * Created by Laura on 12/09/2016.
  */
-public class RegistroActivity extends Activity{
+public class RegistroActivity extends AppCompatActivity
+{
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS=1;
     private Usuario usuario;
@@ -37,8 +39,9 @@ public class RegistroActivity extends Activity{
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        setSupportActionBar(null);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
     }
@@ -46,8 +49,8 @@ public class RegistroActivity extends Activity{
     public void registrar(View view)
     {
         confirmNumb=(int)Math.random();
-        EditText mEdit   = (EditText)findViewById(R.id.editTextPhoneNumber);
-        EditText mEdit2   = (EditText)findViewById(R.id.editTextName);
+        EditText mEdit   = (EditText)findViewById(R.id.txtCelularLogin);
+        EditText mEdit2   = (EditText)findViewById(R.id.txtPasswordLogin);
 
         usuario = new Usuario(mEdit.getText().toString(),mEdit2.getText().toString() );
 
@@ -67,11 +70,12 @@ public class RegistroActivity extends Activity{
         }
         else
         {
+            /*
             EditText mEdit3 = (EditText) findViewById(R.id.editTextConfirmation);
             mEdit3.setHint(String.valueOf(confirmNumb));
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(usuario.getNumeroTelefonico(), null, "Número de confirmación: "+confirmNumb, null, null);
-
+*/
         }
     }
 
@@ -96,10 +100,10 @@ public class RegistroActivity extends Activity{
             case MY_PERMISSIONS_REQUEST_SEND_SMS: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    EditText mEdit = (EditText) findViewById(R.id.editTextConfirmation);
+                   /* EditText mEdit = (EditText) findViewById(R.id.editTextConfirmation);
                     mEdit.setHint(confirmNumb);
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(usuario.getNumeroTelefonico(), null, "Número de confirmación: "+confirmNumb, null, null);
+                    smsManager.sendTextMessage(usuario.getNumeroTelefonico(), null, "Número de confirmación: "+confirmNumb, null, null);*/
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -115,7 +119,7 @@ public class RegistroActivity extends Activity{
     }
 
     public void confirmar(View view) {
-        EditText mEdit = (EditText) findViewById(R.id.editTextConfirmation);
+       /* EditText mEdit = (EditText) findViewById(R.id.editTextConfirmation);
         if (mEdit.getText().toString().equals(String.valueOf(confirmNumb))) {
             Intent intent = new Intent(this, PersitenciaService.class);
             intent.putExtra("Requerimiento","Registrar");
@@ -125,6 +129,6 @@ public class RegistroActivity extends Activity{
             finish();
         } else {
             mEdit.setHint("Número equivocado");
-        }
+        }*/
     }
 }

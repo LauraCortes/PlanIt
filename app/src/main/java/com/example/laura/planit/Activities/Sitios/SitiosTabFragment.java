@@ -24,7 +24,10 @@ import java.util.List;
  */
 public class SitiosTabFragment extends TabFragment
 {
-    public SitiosTabFragment(){}
+    public SitiosTabFragment(){
+        super();
+        AGREGAR_ELEMENTOS=125;
+    }
 
     @Override
     protected void lanzarActivityAgregarElemento(View view)
@@ -32,7 +35,8 @@ public class SitiosTabFragment extends TabFragment
         Intent i = new Intent(getContext(), AgregarSitioActivity.class);
         i.putExtra("editar", false);
         i.putExtra("titulo", "Agregar sitio favorito");
-        startActivity(i);
+        msjToastAgregar="Sitio agregado";
+        startActivityForResult(i,AGREGAR_ELEMENTOS);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -40,6 +44,7 @@ public class SitiosTabFragment extends TabFragment
         elementosSeleccionados = new HashMap<Integer, Integer>();
         super.onCreateView(inflater,container,savedInstanceState);
         elementos= PlanIt.darInstancia().darSitios();
+        System.out.println(elementos.size());
         adapter=new SitioRecyclerViewAdapter(getContext(), (List<Sitio>)elementos, this);
 
         // Inflate the layout for this fragment
@@ -57,6 +62,28 @@ public class SitiosTabFragment extends TabFragment
         return view;
     }
 
+    @Override
+    public void obtenerElementos()
+    {
+        elementos=PlanIt.darInstancia().darSitios();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(resultCode>=-1)
+        {
+            if(resultCode==-1)
+            {
+                msjToastAgregar="Sitio agregado";
+            }
+            else
+            {
+                msjToastAgregar="Sitio editado";
+            }
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
     /**
     @Override

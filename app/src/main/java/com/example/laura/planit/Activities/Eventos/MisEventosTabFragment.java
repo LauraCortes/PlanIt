@@ -32,6 +32,11 @@ public class MisEventosTabFragment extends TabFragment
     }
 
     @Override
+    public void obtenerElementos() {
+        elementos=PlanIt.darInstancia().darEventos();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         elementosSeleccionados = new HashMap<Integer, Integer>();
