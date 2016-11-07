@@ -13,16 +13,16 @@ import java.util.List;
  * Created by Usuario on 06/11/2016.
  */
 
-abstract class ElementRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+public abstract class ElementRecyclerViewAdapter extends RecyclerView.Adapter<ElementoRowViewHolder>
 {
-    private Context context;
-    List<Object> elementos;
-    TabFragment tabFragment;
+    protected Context context;
+    protected List<? extends Object> elementos;
+    protected TabFragment tabFragment;
     public final  static int[] COLORES = {Color.parseColor("#26532B"), Color.parseColor("#6A0136"),
             Color.parseColor("#D72638"), Color.parseColor("#95C623"), Color.parseColor("#080708")};
 
 
-    public ElementRecyclerViewAdapter(Context context, List<Object> elementos, TabFragment tabFragment)
+    public ElementRecyclerViewAdapter(Context context, List<? extends Object> elementos, TabFragment tabFragment)
     {
         this.elementos =elementos;
         this.context=context;
@@ -133,11 +133,10 @@ abstract class ElementRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     }
 
-    private void seleccionarItem(int position, RecyclerView.ViewHolder elementoRowViewHolder)
+    protected void seleccionarItem(int position, ElementoRowViewHolder elementoRowViewHolder)
     {
-        //TODO
-        // boolean seleccionado = tabFragment.isItemSelected(position);
-        //elementoRowViewHolder.decorarSeleccionado(!seleccionado);
+        boolean seleccionado = tabFragment.isItemSelected(position);
+        elementoRowViewHolder.decorarSeleccionado(!seleccionado);
         tabFragment.seleccionarItem(position);
     }
 

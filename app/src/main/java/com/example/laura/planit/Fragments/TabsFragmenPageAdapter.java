@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
+import com.example.laura.planit.Activities.Contactos.ContactosTabFragmentHerencia;
 
 /**
  * Created by Usuario on 25/09/2016.
@@ -26,7 +27,7 @@ public class TabsFragmenPageAdapter extends FragmentStatePagerAdapter
     {
         switch (position) {
             case 0:
-                ContactosTabFragment tab1 = new ContactosTabFragment();
+                ContactosTabFragmentHerencia tab1 = new ContactosTabFragmentHerencia();
                 return tab1;
             /**
             case 1:

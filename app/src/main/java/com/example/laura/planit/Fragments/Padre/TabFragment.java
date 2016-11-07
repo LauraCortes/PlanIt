@@ -2,13 +2,19 @@ package com.example.laura.planit.Fragments.Padre;
 
 
 import android.content.res.ColorStateList;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.example.laura.planit.Activities.Contactos.ContactRecyclerViewAdapter;
 import com.example.laura.planit.Logica.Contacto;
+import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
 
 import java.util.HashMap;
@@ -19,11 +25,11 @@ import java.util.Map;
  * Created by Usuario on 06/11/2016.
  */
 
-abstract class TabFragment extends Fragment
+public abstract class TabFragment extends Fragment
 {
 
     protected RecyclerView.Adapter adapter;
-    protected List<Object> elementos;
+    protected List<? extends Object> elementos;
     protected HashMap<Integer,Integer> elementosSeleccionados;
     protected FloatingActionButton btnFAB;
     protected RecyclerView recyclerView;
@@ -31,8 +37,8 @@ abstract class TabFragment extends Fragment
 
     public TabFragment()
     {
+        super();
     }
-
 
 
     public void cambiarIconoFAB()
@@ -57,11 +63,11 @@ abstract class TabFragment extends Fragment
         }
         else
         {
-            lanzarActivityAgregarElemento();
+            lanzarActivityAgregarElemento(v);
         }
     }
 
-    abstract void lanzarActivityAgregarElemento();
+    protected abstract void lanzarActivityAgregarElemento(View view);
 
 
     public void eliminarElementosVista(View view)

@@ -10,9 +10,9 @@ import com.example.laura.planit.R;
  * Created by Usuario on 06/11/2016.
  */
 
-abstract class ElementoRowViewHolder extends RecyclerView.ViewHolder
+public abstract class ElementoRowViewHolder extends RecyclerView.ViewHolder
 {
-    View vista;
+    public View vista;
 
     public ElementoRowViewHolder(View itemView)
     {

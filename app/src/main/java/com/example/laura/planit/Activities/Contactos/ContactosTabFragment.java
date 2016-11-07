@@ -48,6 +48,8 @@ public class ContactosTabFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+
+
         super.onCreate(savedInstanceState);
         contactos=PlanIt.darInstancia().darContactos();
         contactosEliminar = new HashMap<Integer, Integer>();
