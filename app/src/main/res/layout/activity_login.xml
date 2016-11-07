@@ -109,6 +109,6 @@
         android:theme="@style/AppTheme"
         android:text="Registrarme"
         android:background="@color/colorAccent"
-        android:onClick="registrar"/>
+        android:onClick="lanzarActivityRegistro"/>
 
 </LinearLayout>

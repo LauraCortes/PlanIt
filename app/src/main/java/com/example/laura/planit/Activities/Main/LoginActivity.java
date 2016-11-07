@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.laura.planit.Logica.Usuario;
 import com.example.laura.planit.R;
@@ -47,6 +49,49 @@ public class LoginActivity extends AppCompatActivity
         EditText txtPass = (EditText)findViewById(R.id.txtPasswordLogin);
     }
 
+    public void lanzarActivityRegistro(View v)
+    {
+        Intent i = new Intent(this, RegistroActivity.class);
+        startActivityForResult(i,RegistroActivity.REGISTRAR_USUARIO);
+    }
+
+    public void login(View v)
+    {
+        String celular = String.valueOf(((TextView)findViewById(R.id.txtCelularLogin)).getText());
+        String pin = String.valueOf(((TextView)findViewById(R.id.txtPasswordLogin)).getText());
+        if(celular.trim().length()==10 && pin.trim().length()==4)
+        {
+            //TODO intentar hacer logueo
+            if(false)
+            {
+                Toast.makeText(this,"La autenticación falló",Toast.LENGTH_SHORT);
+                ((TextView)findViewById(R.id.txtPasswordLogin)).setText("");
+            }
+            else
+            {
+                finish();
+                Intent i = new Intent(this, MainActivity.class);
+                startActivity(i);
+            }
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(requestCode==RegistroActivity.REGISTRAR_USUARIO && resultCode==RegistroActivity.REGISTRO_OK)
+        {
+            super.onActivityResult(requestCode, resultCode, data);
+            finish();
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+        }
+
+    }
+
+    /**
+
     public void registrar(View view)
     {
         confirmNumb=(int)Math.random();
@@ -76,7 +121,7 @@ public class LoginActivity extends AppCompatActivity
             mEdit3.setHint(String.valueOf(confirmNumb));
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(usuario.getNumeroTelefonico(), null, "Número de confirmación: "+confirmNumb, null, null);
-*/
+
         }
     }
 
@@ -104,7 +149,7 @@ public class LoginActivity extends AppCompatActivity
                    /* EditText mEdit = (EditText) findViewById(R.id.editTextConfirmation);
                     mEdit.setHint(confirmNumb);
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(usuario.getNumeroTelefonico(), null, "Número de confirmación: "+confirmNumb, null, null);*/
+                    smsManager.sendTextMessage(usuario.getNumeroTelefonico(), null, "Número de confirmación: "+confirmNumb, null, null);
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -130,6 +175,8 @@ public class LoginActivity extends AppCompatActivity
             finish();
         } else {
             mEdit.setHint("Número equivocado");
-        }*/
+        }
     }
+
+    */
 }
