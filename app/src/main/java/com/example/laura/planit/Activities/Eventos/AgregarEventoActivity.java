@@ -213,11 +213,13 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
         String puntoEncuentro = txtPuntoEncuentro.getText().toString().trim();
         String horaEncuentroString = txtHoraEncuentro.getText().toString().trim();
 
-        if (nombre.isEmpty() || descripcion.isEmpty() || sitioEvento.isEmpty() || fechaString.isEmpty() || puntoEncuentro.isEmpty() || horaEncuentroString.isEmpty()) {
+        if (nombre.isEmpty() || descripcion.isEmpty() || sitioEvento.isEmpty() || fechaString.isEmpty() || puntoEncuentro.isEmpty() || horaEncuentroString.isEmpty())
+        {
             Toast.makeText(this, "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
         } else if (PlanIt.darInstancia().existeEventoNombre(nombre)) {
             Toast.makeText(this, "Ya existe otro evento con ese nombre", Toast.LENGTH_SHORT).show();
-        } else {
+        } else
+        {
             if (editar) {
                 /**
                  Sitio agregado = PlanIt.darInstancia().editarSitio(pos,nombre,barrio,direccion);
@@ -231,7 +233,9 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                  agregado = null;
                  this.nombre=null;
                  **/
-            } else {
+            }
+            else
+            {
                 Evento agregado = null;
                 try {
                     agregado = PlanIt.darInstancia().agregarEvento(nombre, descripcion, sitioEvento, puntoEncuentro, null, timeFormatter.parse(horaEncuentroString), dateFormatter.parse(fechaString), null);
@@ -260,8 +264,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                 }
 
             }
-            Intent i = new Intent(this, MisEventosActivity.class);
-            startActivity(i);
+            finish();
 
         }
 

@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
+import com.example.laura.planit.Fragments.ElementoRowViewHolder;
+import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
@@ -23,16 +26,14 @@ import java.util.List;
 /**
  * Created by Usuario on 16/09/2016.
  */
-public class SitioRecyclerViewAdapter extends RecyclerView.Adapter<SitioRowViewHolder>
+public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
 {
-    Context context;
-    List<Sitio> sitios;
-    SitioRecyclerViewAdapter recycler;
 
-    public SitioRecyclerViewAdapter(Context context, List<Sitio> sitios)
+    private List<Sitio> sitios;
+
+    public SitioRecyclerViewAdapter(Context context, List<Sitio> sitios, TabFragment tabFragment)
     {
-        recycler=this;
-        this.context = context;
+        super(context,sitios,tabFragment);
         this.sitios = sitios;
     }
 
@@ -54,13 +55,16 @@ public class SitioRecyclerViewAdapter extends RecyclerView.Adapter<SitioRowViewH
     }
 
     @Override
-    public void onBindViewHolder(SitioRowViewHolder rowViewHolder, final int position) {
+    public void onBindViewHolder(ElementoRowViewHolder holder, final int position)
+    {
+        SitioRowViewHolder rowViewHolder = (SitioRowViewHolder) holder;
         final Sitio sitio = this.sitios.get(position);
         rowViewHolder.nombreTextView.setText(String.valueOf(sitio.getNombre()));
         rowViewHolder.barrioTextView.setText(String.valueOf(sitio.getBarrio()));
         rowViewHolder.direccionTextView.setText(String.valueOf(sitio.getDirección()));
         rowViewHolder.imagenView.setBackground(ContextCompat.getDrawable(context,R.drawable.home));
         rowViewHolder.vista.setOnLongClickListener(
+                //Desactivar onlongClick y poner botón de editar y de eliminar
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v)
@@ -81,7 +85,7 @@ public class SitioRecyclerViewAdapter extends RecyclerView.Adapter<SitioRowViewH
                                 }
                                 else
                                 {
-                                    recycler.notifyDataSetChanged();
+                                    notifyDataSetChanged();
                                     Intent service = new Intent(context, PersitenciaService.class);
                                     service.putExtra("Requerimiento","EliminarSitio");
                                     service.putExtra("Nombre",PlanIt.darInstancia().darSitios().get(position).getNombre());
@@ -96,6 +100,5 @@ public class SitioRecyclerViewAdapter extends RecyclerView.Adapter<SitioRowViewH
                     }
                 }
         );
-
     }
 }

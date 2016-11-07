@@ -1,14 +1,9 @@
 package com.example.laura.planit.Services;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
-
-import com.example.laura.planit.Activities.Eventos.MisEventosActivity;
-import com.example.laura.planit.Activities.Eventos.TimerActivity;
 
 /**
  * Created by Laura on 18/09/2016.
@@ -33,17 +28,19 @@ public class NotificationService extends Service {
                         .setContentTitle("Timer")
                         .setContentText("Pausar el contador");
 
-        Intent resultIntent = new Intent(this, MisEventosActivity.class);
+        // TODO debe lanzar el activity con la información del evento
+        // Intent resultIntent = new Intent(this, MisEventosActivity.class);
+
 // Because clicking the notification opens a new ("special") activity, there's
 // no need to create an artificial back stack.
-        PendingIntent resultPendingIntent =
+        /*PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         this,
                         0,
                         resultIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
+                );*/
+        /*mBuilder.setContentIntent(resultPendingIntent);
         // Sets an ID for the notification
         int mNotificationId = 001;
         // Gets an instance of the NotificationManager service
@@ -54,8 +51,8 @@ public class NotificationService extends Service {
 
         mBuilder.setAutoCancel(true);
         onDestroy();
-        return super.onStartCommand(intent, flags, startId);
-
+        return super.onStartCommand(intent, flags, startId);*/
+        return START_NOT_STICKY;
     }
 
     @Override

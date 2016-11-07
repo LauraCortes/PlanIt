@@ -33,7 +33,13 @@ import java.util.Map;
 /**
  * Created by Laura on 18/09/2016.
  */
-public class AgregarInvitadosActivity extends AgregarSuper {
+public class AgregarInvitadosActivity extends AgregarSuper
+{
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        titulo="Selecciona tus invitados";
+        super.onCreate(savedInstanceState);
+    }
 
     public void agregar(View view)
     {

@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
-import com.example.laura.planit.Activities.Eventos.MisEventosActivity;
+import com.example.laura.planit.Activities.Eventos.MisEventosTabFragment;
 import com.example.laura.planit.Activities.RegistroActivity;
 import com.example.laura.planit.Activities.Sitios.SitiosTabFragment;
 import com.example.laura.planit.Fragments.TabsFragmenPageAdapter;
@@ -43,8 +43,9 @@ public class MainActivity extends AppCompatActivity
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.addTab(tabs.newTab().setText("EVENTOS").setIcon(R.drawable.calendar_tab));
         //tabs.addTab(tabs.newTab().setText("MOVIMIENTOS").setIcon(R.drawable.movimientos_tab));
+
+        tabs.addTab(tabs.newTab().setText("SITIOS").setIcon(R.drawable.sitios_favoritos_tab));
         tabs.addTab(tabs.newTab().setText("AMIGOS").setIcon(R.drawable.amigos_favoritos_tab));
-        //tabs.addTab(tabs.newTab().setText("SITIOS").setIcon(R.drawable.sitios_favoritos_tab));
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -108,10 +109,6 @@ public class MainActivity extends AppCompatActivity
         startActivity(i);
     }
 
-    public void lanzarEventos(View view)
-    {
-        startActivity(new Intent(this, MisEventosActivity.class));
-    }
 
 
 
@@ -119,14 +116,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        ContactosTabFragment tabContactos = (ContactosTabFragment) getSupportFragmentManager().getFragments().get(0);
-        if(tabContactos.hayItemsSeleccionados())
+        System.out.println(getSupportFragmentManager().getFragments().size());
+        ContactosTabFragment tabContactos = (ContactosTabFragment) getSupportFragmentManager().getFragments().get(TabsFragmenPageAdapter.FRAMGENTO_CONTACTOS_EMERGENCIA);
+        SitiosTabFragment tabSitios = (SitiosTabFragment) getSupportFragmentManager().getFragments().get(TabsFragmenPageAdapter.FRAMGENTO_SITIOS);
+        if(tabContactos.isVisible()  && tabContactos.hayItemsSeleccionados() )
         {
             tabContactos.deseleccionar();
+        }
+        else if (tabSitios.isVisible() && tabSitios.hayItemsSeleccionados())
+        {
+            tabSitios.deseleccionar();
         }
         else
         {
             super.onBackPressed();
         }
+
     }
 }

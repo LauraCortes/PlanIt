@@ -4,19 +4,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
 import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.ElementoRowViewHolder;
+import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.MedioTransporte;
 import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.Sitio;
 import com.example.laura.planit.R;
 
 import java.text.SimpleDateFormat;
@@ -31,7 +29,7 @@ public class EventoRecyclerViewAdapter extends ElementRecyclerViewAdapter
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
 
-    public EventoRecyclerViewAdapter(Context context, List<Evento> eventos, MisEventosTabFragment fragment)
+    public EventoRecyclerViewAdapter(Context context, List<Evento> eventos, TabFragment fragment)
     {
         super(context,eventos,fragment);
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -43,7 +41,7 @@ public class EventoRecyclerViewAdapter extends ElementRecyclerViewAdapter
     public EventoRowViewHolder onCreateViewHolder(ViewGroup viewGroup, int position)
     {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View view = inflater.inflate(R.layout.row_evento, null);
+        View view = inflater.inflate(R.layout.tab_eventos_row_evento, null);
         return  new EventoRowViewHolder(view);
     }
 

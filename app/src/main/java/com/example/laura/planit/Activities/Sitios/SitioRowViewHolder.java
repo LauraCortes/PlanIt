@@ -5,23 +5,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.R;
 
 /**
  * Created by Usuario on 16/09/2016.
  */
-public class SitioRowViewHolder extends RecyclerView.ViewHolder {
-
-
-    ImageView imagenView;
+public class SitioRowViewHolder extends ElementoRowViewHolder
+{   ImageView imagenView;
     TextView nombreTextView;
     TextView barrioTextView;
     TextView direccionTextView;
-    View vista;
 
     public SitioRowViewHolder(View view) {
         super(view);
-        vista=view;
         this.nombreTextView = (TextView) view.findViewById(R.id.nombreSitioFavorito);
         this.imagenView = (ImageView) view.findViewById(R.id.imagenSitioFavorito);
         this.barrioTextView = (TextView) view.findViewById(R.id.barrioSitioFavorito);

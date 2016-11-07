@@ -45,7 +45,7 @@ public class AgregarSitioActivity extends AppCompatActivity{
             }
 
         }
-        getSupportActionBar().setTitle(intent.getStringExtra("titulo"));
+        //getSupportActionBar().setTitle(intent.getStringExtra("titulo"));
         intent=null;
     }
 
@@ -92,8 +92,7 @@ public class AgregarSitioActivity extends AppCompatActivity{
                 startService(intent);
                 agregado = null;
             }
-            Intent i = new Intent(this, SitiosTabFragment.class);
-            startActivity(i);
+            finish();
 
         }
 
