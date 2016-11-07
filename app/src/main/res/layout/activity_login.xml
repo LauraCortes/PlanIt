@@ -74,7 +74,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:text="Iniciar sesi\u00F3n"
-        android:onClick="registrar"
+        android:onClick="login"
         android:background="@color/colorAccent"/>
 
     <LinearLayout
@@ -92,7 +92,8 @@
             android:layout_weight="1.2"
             android:layout_height="0dp"
             android:layout_width="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_horizontal|bottom"
+            android:gravity="bottom"
             android:paddingTop="15dp"
             android:textSize="15dp"
             android:textColor="#FFFFFF"

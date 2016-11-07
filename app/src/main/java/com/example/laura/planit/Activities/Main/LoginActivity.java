@@ -57,22 +57,41 @@ public class LoginActivity extends AppCompatActivity
 
     public void login(View v)
     {
-        String celular = String.valueOf(((TextView)findViewById(R.id.txtCelularLogin)).getText());
-        String pin = String.valueOf(((TextView)findViewById(R.id.txtPasswordLogin)).getText());
-        if(celular.trim().length()==10 && pin.trim().length()==4)
+        TextView txtCelular, txtPin;
+        txtCelular = (TextView)findViewById(R.id.txtCelularLogin);
+        txtPin = (TextView)findViewById(R.id.txtPasswordLogin);
+        String celular = String.valueOf(txtCelular.getText());
+        String pin = String.valueOf(txtPin.getText());
+
+        if(celular.trim().length()==10)
         {
-            //TODO intentar hacer logueo
-            if(false)
+            txtCelular.setError(null);
+            if(pin.trim().length()==4)
             {
-                Toast.makeText(this,"La autenticación falló",Toast.LENGTH_SHORT);
-                ((TextView)findViewById(R.id.txtPasswordLogin)).setText("");
+                //TODO intentar hacer logueo
+                if(false)
+                {
+                    Toast.makeText(this,"La autenticación falló",Toast.LENGTH_SHORT);
+                    txtPin.setText("");
+                }
+                else
+                {
+                    finish();
+                    Intent i = new Intent(this, MainActivity.class);
+                    startActivity(i);
+                }
             }
             else
             {
-                finish();
-                Intent i = new Intent(this, MainActivity.class);
-                startActivity(i);
+                txtPin.requestFocus();
+                txtPin.setError("Pin de 4 dígitos");
             }
+
+        }
+        else
+        {
+            txtCelular.requestFocus();
+            txtCelular.setError("Verifique que sea válido");
         }
 
     }
