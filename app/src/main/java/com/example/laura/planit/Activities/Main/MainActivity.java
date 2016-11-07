@@ -7,11 +7,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.View;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
-import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
 import com.example.laura.planit.Activities.Contactos.ContactosTabFragmentHerencia;
 import com.example.laura.planit.Activities.Eventos.MisEventosActivity;
 import com.example.laura.planit.Activities.RegistroActivity;
@@ -106,7 +104,7 @@ public class MainActivity extends AppCompatActivity
 
     public void contactosEmergencia(View view)
     {
-        Intent i = new Intent(this, ContactosTabFragment.class);
+        Intent i = new Intent(this, ContactosTabFragmentHerencia.class);
         startActivity(i);
     }
 
@@ -116,19 +114,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public boolean onKeyDown(View v, int keyCode, KeyEvent event)
-    {
-        if(keyCode==KeyEvent.KEYCODE_BACK)
-        {
-            System.out.println("ATRÁS ACTIVITY from view class: "+v.getClass().getName());
-            if(v.getClass().equals(ContactosTabFragment.class))
-            {
 
-            }
-        }
-        return super.onKeyDown(keyCode,event);
-
-    }
 
     @Override
     public void onBackPressed()
