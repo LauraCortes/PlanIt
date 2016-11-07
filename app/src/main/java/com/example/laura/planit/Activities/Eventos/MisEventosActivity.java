@@ -21,7 +21,7 @@ public class MisEventosActivity extends AppCompatActivity
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_eventos);
+//        setContentView(R.layout.tab_eventos);
 //        if (PlanIt.darInstancia().darEventos().size() == 0) {
 //            Intent i = new Intent(this, AgregarEventoActivity.class);
 //            i.putExtra("editar", false);

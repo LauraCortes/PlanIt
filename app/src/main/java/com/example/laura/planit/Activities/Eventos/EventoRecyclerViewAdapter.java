@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
+import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
+import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.MedioTransporte;
 import com.example.laura.planit.Logica.PlanIt;
@@ -23,35 +25,19 @@ import java.util.List;
 /**
  * Created by Usuario on 16/09/2016.
  */
-public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowViewHolder>
+public class EventoRecyclerViewAdapter extends ElementRecyclerViewAdapter
 {
-    Context context;
-    List<Evento> eventos;
-    EventoRecyclerViewAdapter recycler;
-    MisEventosTabFragment misEventosTabFragment;
 
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
 
     public EventoRecyclerViewAdapter(Context context, List<Evento> eventos, MisEventosTabFragment fragment)
     {
-        recycler=this;
-        this.context = context;
-        this.eventos = eventos;
+        super(context,eventos,fragment);
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
         timeFormatter = new SimpleDateFormat("hh:mm a");
-        misEventosTabFragment = fragment;
     }
 
-
-    @Override
-    public int getItemCount() {
-        if (eventos == null) {
-            return 0;
-        } else {
-            return eventos.size();
-        }
-    }
 
     @Override
     public EventoRowViewHolder onCreateViewHolder(ViewGroup viewGroup, int position)
@@ -62,9 +48,10 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
     }
 
     @Override
-    public void onBindViewHolder(EventoRowViewHolder rowViewHolder, final int position)
+    public void onBindViewHolder(ElementoRowViewHolder viewHolder, final int position)
     {
-        final Evento evento = this.eventos.get(position);
+        EventoRowViewHolder rowViewHolder = (EventoRowViewHolder)viewHolder;
+        final Evento evento =(Evento) this.elementos.get(position);
         rowViewHolder.lblnombre.setText(evento.getNombreEvento());
         rowViewHolder.lblDescripcion.setText(evento.getDescripcionEvento());
         rowViewHolder.lblFechaEvento.setText(dateFormatter.format(evento.getFechaEvento()));
@@ -117,15 +104,15 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
                                 else if(which==1)
                                 {
                                     PlanIt.darInstancia().eliminarEvento(position);
-                                    recycler.notifyDataSetChanged();
+                                    notifyDataSetChanged();
 
                                     /**
-                                    Intent service = new Intent(context, PersitenciaService.class);
-                                    service.putExtra("Requerimiento","EliminarSitio");
-                                    service.putExtra("Nombre",PlanIt.darInstancia().darSitios().get(position).getNombre());
-                                    context.startService(service);
-                                    PlanIt.darInstancia().eliminarSitio(position);
-                                    Toast.makeText(context, "Sitio eliminado de favoritos", Toast.LENGTH_SHORT).show();
+                                     Intent service = new Intent(context, PersitenciaService.class);
+                                     service.putExtra("Requerimiento","EliminarSitio");
+                                     service.putExtra("Nombre",PlanIt.darInstancia().darSitios().get(position).getNombre());
+                                     context.startService(service);
+                                     PlanIt.darInstancia().eliminarSitio(position);
+                                     Toast.makeText(context, "Sitio eliminado de favoritos", Toast.LENGTH_SHORT).show();
                                      */
                                 }
                             }
@@ -148,6 +135,5 @@ public class EventoRecyclerViewAdapter extends RecyclerView.Adapter<EventoRowVie
                     }
                 }
         );
-
     }
 }

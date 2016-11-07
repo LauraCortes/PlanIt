@@ -6,12 +6,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.R;
 
 /**
  * Created by Usuario on 16/09/2016.
  */
-public class EventoRowViewHolder extends RecyclerView.ViewHolder {
+public class EventoRowViewHolder extends ElementoRowViewHolder
+{
 
     TextView lblnombre;
     TextView lblDescripcion;
@@ -28,11 +30,9 @@ public class EventoRowViewHolder extends RecyclerView.ViewHolder {
     TextView lblInvitados;
     ImageButton btnTimer;
 
-    View vista;
 
     public EventoRowViewHolder(View view) {
         super(view);
-        vista=view;
         lblnombre =(TextView)view.findViewById(R.id.nombreEvento);
         lblDescripcion =(TextView)view.findViewById(R.id.descripcionEvento);
         lblFechaEvento =(TextView)view.findViewById(R.id.fechaEvento);

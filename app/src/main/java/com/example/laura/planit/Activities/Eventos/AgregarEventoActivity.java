@@ -93,7 +93,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
             }
 
         }
-        getSupportActionBar().setTitle(intent.getStringExtra("titulo"));
+        //getSupportActionBar().setTitle(intent.getStringExtra("titulo"));
         intent = null;
 
 
