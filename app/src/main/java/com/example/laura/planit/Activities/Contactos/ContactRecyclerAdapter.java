@@ -1,19 +1,16 @@
 package com.example.laura.planit.Activities.Contactos;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.laura.planit.Fragments.Padre.ElementRecyclerViewAdapter;
-import com.example.laura.planit.Fragments.Padre.ElementoRowViewHolder;
-import com.example.laura.planit.Fragments.Padre.TabFragment;
+import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
+import com.example.laura.planit.Fragments.ElementoRowViewHolder;
+import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Logica.Contacto;
-import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
 
 import java.util.List;
 
@@ -21,9 +18,9 @@ import java.util.List;
  * Created by Usuario on 06/11/2016.
  */
 
-public class ContactRecyclerAdapterHerencia extends ElementRecyclerViewAdapter
+public class ContactRecyclerAdapter extends ElementRecyclerViewAdapter
 {
-    public ContactRecyclerAdapterHerencia(Context context, List<Contacto> elementos, TabFragment tabFragment)
+    public ContactRecyclerAdapter(Context context, List<Contacto> elementos, TabFragment tabFragment)
     {
         super(context, elementos, tabFragment);
     }
@@ -32,8 +29,8 @@ public class ContactRecyclerAdapterHerencia extends ElementRecyclerViewAdapter
     public ElementoRowViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View view = inflater.inflate(R.layout.row_contacto, null);
-        return  new ContactoRowViewHolderHerencia(view);
+        View view = inflater.inflate(R.layout.tab_contactos_row_contacto, null);
+        return  new ContactoRowViewHolder(view);
     }
 
     @Override
@@ -41,7 +38,7 @@ public class ContactRecyclerAdapterHerencia extends ElementRecyclerViewAdapter
     {
         Contacto contacto = (Contacto)elementos.get(position);
         String nombre = contacto.getNombre();
-        final ContactoRowViewHolderHerencia contactoRowViewHolder = (ContactoRowViewHolderHerencia)elementoRowViewHolder;
+        final ContactoRowViewHolder contactoRowViewHolder = (ContactoRowViewHolder)elementoRowViewHolder;
         contactoRowViewHolder.textViewTitle.setText(nombre);
         contactoRowViewHolder.textViewSubtitle.setText(contacto.getNumeroTelefonico());
         Drawable iniciales =darCirculoIniciales(nombre,position);
@@ -49,7 +46,7 @@ public class ContactRecyclerAdapterHerencia extends ElementRecyclerViewAdapter
         contactoRowViewHolder.circuloIniciales.setImageDrawable(iniciales);
         contactoRowViewHolder.decorarFavorito(contacto.isFavorito()==1);
         contactoRowViewHolder.decorarSeleccionado(tabFragment.isItemSelected(position));
-        final ContactoRowViewHolderHerencia finalContactoRowViewHolder = contactoRowViewHolder;
+        final ContactoRowViewHolder finalContactoRowViewHolder = contactoRowViewHolder;
 
         //Marcar contacto como Favorito
         contactoRowViewHolder.favorito.setOnClickListener(new View.OnClickListener()
@@ -76,7 +73,7 @@ public class ContactRecyclerAdapterHerencia extends ElementRecyclerViewAdapter
             @Override
             public void onClick(View v)
             {
-                if(tabFragment.modoEliminar())
+                if(tabFragment.hayItemsSeleccionados())
                 {
                     seleccionarItem(position,contactoRowViewHolder);
                 }

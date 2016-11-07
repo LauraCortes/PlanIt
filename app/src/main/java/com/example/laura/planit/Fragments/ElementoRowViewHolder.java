@@ -1,4 +1,4 @@
-package com.example.laura.planit.Fragments.Padre;
+package com.example.laura.planit.Fragments;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +24,7 @@ public abstract class ElementoRowViewHolder extends RecyclerView.ViewHolder
     {
         if(seleccionado)
         {
+            //TODO acceder a los colores a través de R
             vista.setBackgroundColor(Color.parseColor("#45B29D"));
         }
         else

@@ -1,4 +1,4 @@
-package com.example.laura.planit.Fragments.Padre;
+package com.example.laura.planit.Fragments;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -35,7 +35,7 @@ public abstract class ElementRecyclerViewAdapter extends RecyclerView.Adapter<El
     public ContactoRowViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View view = inflater.inflate(R.layout.row_contacto, null);
+        View view = inflater.inflate(R.layout.tab_contactos_row_contacto, null);
         return  new ContactoRowViewHolder(view);
     }
 
@@ -86,7 +86,7 @@ public abstract class ElementRecyclerViewAdapter extends RecyclerView.Adapter<El
             @Override
             public void onClick(View v)
             {
-                if(tabFragment.modoEliminar())
+                if(tabFragment.hayItemsSeleccionados())
                 {
                     seleccionarItem(position,contactoRowViewHolder);
                 }
@@ -114,7 +114,7 @@ public abstract class ElementRecyclerViewAdapter extends RecyclerView.Adapter<El
         }
     }
 
-    public Drawable darCirculoIniciales(String texto, int pos)
+    public static Drawable darCirculoIniciales(String texto, int pos)
     {
         String[] separaciones = texto.trim().split(" ");
         String iniciales="";

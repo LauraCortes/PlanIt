@@ -1,4 +1,4 @@
-package com.example.laura.planit.Fragments.Padre;
+package com.example.laura.planit.Fragments;
 
 
 import android.content.res.ColorStateList;
@@ -90,7 +90,7 @@ public abstract class TabFragment extends Fragment
         cambiarIconoFAB();
     }
 
-    public boolean modoEliminar()
+    public boolean hayItemsSeleccionados()
     {
         return elementosSeleccionados.size()!=0;
     }
@@ -110,7 +110,6 @@ public abstract class TabFragment extends Fragment
         {
             removerItemEliminar(pos);
         }
-
     }
 
     public void deseleccionar()

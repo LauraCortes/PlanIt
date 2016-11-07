@@ -107,6 +107,18 @@ public class PlanIt {
 
     public List<Contacto> darContactos(){return contactos;}
 
+    public boolean existeContacto(String numero)
+    {
+        for(Contacto actual:contactos)
+        {
+            if(actual.getNumeroTelefonico().equalsIgnoreCase(numero))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void agregarContacto(String nombre, String numero)
     {
         boolean encontro=false;

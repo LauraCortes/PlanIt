@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
-import com.example.laura.planit.Activities.Contactos.ContactosTabFragmentHerencia;
+import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
 import com.example.laura.planit.Activities.Eventos.MisEventosActivity;
 import com.example.laura.planit.Activities.RegistroActivity;
 import com.example.laura.planit.Activities.Sitios.SitiosTabFragment;
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
 
     public void contactosEmergencia(View view)
     {
-        Intent i = new Intent(this, ContactosTabFragmentHerencia.class);
+        Intent i = new Intent(this, ContactosTabFragment.class);
         startActivity(i);
     }
 
@@ -119,8 +119,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        ContactosTabFragmentHerencia tabContactos = (ContactosTabFragmentHerencia) getSupportFragmentManager().getFragments().get(0);
-        if(tabContactos.modoEliminar())
+        ContactosTabFragment tabContactos = (ContactosTabFragment) getSupportFragmentManager().getFragments().get(0);
+        if(tabContactos.hayItemsSeleccionados())
         {
             tabContactos.deseleccionar();
         }

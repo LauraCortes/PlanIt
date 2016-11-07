@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.laura.planit.Activities.Main.MainActivity;
-import com.example.laura.planit.Fragments.Padre.*;
+import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
@@ -21,9 +21,9 @@ import com.example.laura.planit.R;
 import java.util.HashMap;
 import java.util.List;
 
-public class ContactosTabFragmentHerencia extends TabFragment
+public class ContactosTabFragment extends TabFragment
 {
-    public ContactosTabFragmentHerencia()
+    public ContactosTabFragment()
     {
         super();
     }
@@ -35,11 +35,11 @@ public class ContactosTabFragmentHerencia extends TabFragment
         super.onCreate(savedInstanceState);
         elementos= PlanIt.darInstancia().darContactos();
 
-        adapter=new ContactRecyclerAdapterHerencia(getActivity(), (List<Contacto>)elementos,this);
+        adapter=new ContactRecyclerAdapter(getActivity(), (List<Contacto>)elementos,this);
 
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.activity_contactos, container, false);
-        this.recyclerView = (RecyclerView) view.findViewById(android.R.id.list);
+        View view=inflater.inflate(R.layout.tab_contactos, container, false);
+        this.recyclerView = (RecyclerView) view.findViewById(R.id.listViewContactos);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.recyclerView.setAdapter(adapter);
         btnFAB= (FloatingActionButton) view.findViewById(R.id.fabContactos);
