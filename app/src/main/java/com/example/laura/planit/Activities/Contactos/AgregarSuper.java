@@ -13,6 +13,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -27,23 +29,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Created by Usuario on 06/11/2016.
  */
 
-public abstract class AgregarSuper extends ListActivity
+public abstract class AgregarSuper extends AppCompatActivity
 {
     protected static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     protected List<Contacto> contactos;
     protected HashMap<Integer,Contacto> contactosSeleccionados;
     protected ListView listView;
     protected FloatingActionButton btnFAB;
+    protected String titulo;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_contacto);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         leerContactos();
         btnFAB=(FloatingActionButton)findViewById(R.id.btnAgregarContactos);
         listView = (ListView) findViewById(android.R.id.list);
@@ -106,8 +117,10 @@ public abstract class AgregarSuper extends ListActivity
                             mCursor.moveToFirst();
                             do
                             {
-                                String numero =  mCursor.getString(1);
-                                if(!PlanIt.darInstancia().existeContacto(numero))
+                                String numero =  mCursor.getString(1).trim();
+                                numero=numero.replaceAll(" ","");
+                                System.out.println(numero);
+                                if(!PlanIt.darInstancia().existeContacto(numero) && !contactoExistente(numero))
                                 {
                                     contact = new Contacto(mCursor.getString(0), numero);
                                     contactos.add(contact);
@@ -129,6 +142,18 @@ public abstract class AgregarSuper extends ListActivity
                 return;
             }
         }
+    }
+
+    private boolean contactoExistente(String numero)
+    {
+        for(Contacto actual: contactos)
+        {
+            if(actual.getNumeroTelefonico().trim().equalsIgnoreCase(numero))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public abstract void agregar(View view);
@@ -171,8 +196,14 @@ public abstract class AgregarSuper extends ListActivity
                 if (mCursor.getCount() > 0) {
                     mCursor.moveToFirst();
                     do {
-                        contact = new Contacto(mCursor.getString(0), mCursor.getString(1));
-                        contactos.add(contact);
+                        String numero =  mCursor.getString(1).trim();
+                        numero=numero.replaceAll(" ","");
+                        System.out.println(numero);
+                        if(!PlanIt.darInstancia().existeContacto(numero) && !contactoExistente(numero))
+                        {
+                            contact = new Contacto(mCursor.getString(0), numero);
+                            contactos.add(contact);
+                        }
                     }
                     while (mCursor.moveToNext());
                     mCursor.close();

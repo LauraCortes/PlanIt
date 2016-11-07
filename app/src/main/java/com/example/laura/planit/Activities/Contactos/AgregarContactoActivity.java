@@ -33,28 +33,23 @@ import java.util.Map;
  */
 public class AgregarContactoActivity extends AgregarSuper
 {
-
-    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
-    private List<Contacto> contactos;
-    protected HashMap<Integer,Contacto> contactosSeleccionados;
-    private  ListView listView;
-    protected FloatingActionButton btnFAB;
-
-
-
-    public void agregar(View view)
-    {
-        for (Map.Entry<Integer, Contacto> entrada : contactosSeleccionados.entrySet())
-    {
-        Contacto contacto = entrada.getValue();
-        PlanIt.darInstancia().agregarContacto(contacto.getNombre(),contacto.getNumeroTelefonico());
-        Intent intent = new Intent(this, PersitenciaService.class);
-        intent.putExtra("Requerimiento", "AgregarContacto");
-        intent.putExtra("Contacto", contacto);
-        startService(intent);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        titulo="Agregar contactos de emergencia";
+        super.onCreate(savedInstanceState);
     }
+
+    public void agregar(View view) {
+        for (Map.Entry<Integer, Contacto> entrada : contactosSeleccionados.entrySet()) {
+            Contacto contacto = entrada.getValue();
+            PlanIt.darInstancia().agregarContacto(contacto.getNombre(), contacto.getNumeroTelefonico());
+            Intent intent = new Intent(this, PersitenciaService.class);
+            intent.putExtra("Requerimiento", "AgregarContacto");
+            intent.putExtra("Contacto", contacto);
+            startService(intent);
+        }
         contactosSeleccionados.clear();
-        contactosSeleccionados=null;
+        contactosSeleccionados = null;
         finish();
     }
 }
