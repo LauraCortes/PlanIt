@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:descendantFocusability="blocksDescendants"
         android:orientation="horizontal"
         android:padding="10dp">
@@ -19,20 +19,20 @@
             android:layout_height="48dp" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="10dp">
 
             <TextView
-                android:id="@+id/textViewNombre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:inputType="textCapSentences"
-                android:longClickable="false"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
+            android:id="@+id/textViewNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:inputType="textCapSentences"
+            android:longClickable="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
 
         <View
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="fill_parent"
             android:layout_weight="1" />
 
         <LinearLayout
@@ -69,11 +69,11 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="1dp"
+                android:layout_width="0.5dp"
                 android:layout_height="fill_parent"
                 android:layout_gravity="end"
                 android:layout_marginRight="10dp"
-                android:alpha="0.5"
+                android:alpha="0.7"
                 android:background="@color/colorDivider" />
 
             <ImageButton
@@ -84,20 +84,21 @@
                 android:adjustViewBounds="true"
                 android:background="#0000" />
 
-            <ImageButton
+            <!--ImageButton
                 android:id="@+id/btnLlamar"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:layout_gravity="center_vertical"
                 android:adjustViewBounds="true"
                 android:background="#0000"
-                android:src="@drawable/llamar" />
+                android:src="@drawable/llamar" /-->
         </LinearLayout>
 
     </LinearLayout>
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#D3FFFF" />
+        android:layout_height="0.5dp"
+        android:alpha="0.5"
+        android:background="@color/colorDivider" />
 </LinearLayout>

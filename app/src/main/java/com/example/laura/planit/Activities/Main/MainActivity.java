@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
+import com.example.laura.planit.Activities.Contactos.ContactosTabFragmentHerencia;
 import com.example.laura.planit.Activities.Eventos.MisEventosActivity;
 import com.example.laura.planit.Activities.RegistroActivity;
 import com.example.laura.planit.Activities.Sitios.SitiosTabFragment;
@@ -132,10 +133,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        ContactosTabFragment tabContactos = (ContactosTabFragment)getSupportFragmentManager().getFragments().get(0);
+        ContactosTabFragmentHerencia tabContactos = (ContactosTabFragmentHerencia) getSupportFragmentManager().getFragments().get(0);
         if(tabContactos.modoEliminar())
         {
-            tabContactos.deseleccionarOnBack();
+            tabContactos.deseleccionar();
         }
         else
         {
