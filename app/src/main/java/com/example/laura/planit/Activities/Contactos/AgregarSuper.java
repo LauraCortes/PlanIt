@@ -115,7 +115,6 @@ public abstract class AgregarSuper extends AppCompatActivity
                             {
                                 String numero =  mCursor.getString(1).trim();
                                 numero=numero.replaceAll(" ","");
-                                System.out.println(numero);
                                 if(!PlanIt.darInstancia().existeContacto(numero) && !contactoExistente(numero))
                                 {
                                     contact = new Contacto(mCursor.getString(0), numero);
