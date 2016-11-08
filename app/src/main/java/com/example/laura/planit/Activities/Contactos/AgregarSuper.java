@@ -1,7 +1,6 @@
 package com.example.laura.planit.Activities.Contactos;
 
 import android.Manifest;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,18 +15,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -54,7 +50,7 @@ public abstract class AgregarSuper extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_contacto);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_principal));
         leerContactos();
         btnFAB=(FloatingActionButton)findViewById(R.id.btnAgregarContactos);
         listView = (ListView) findViewById(android.R.id.list);

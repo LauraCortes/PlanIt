@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android2="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Activities.Main.MainActivity">
+
+    <!--item
+        android:icon="@drawable/atras_icon"
+        android:title="Atrás"
+        android:orderInCategory="1"
+        android2:showAsAction="ifRoom" /-->
+
+    <item
+        android:icon="@drawable/account"
+        android:title="Mi cuenta"
+        android:orderInCategory="1"
+        android2:showAsAction="ifRoom" />
+
+    <item
+        android:icon="@drawable/logout_icon"
+        android:id="@+id/btn_cerrar_sesion_menu"
+        android:title="Cerrar sesión"
+        android:orderInCategory="2"
+        android2:showAsAction="ifRoom"/>
+
+</menu>

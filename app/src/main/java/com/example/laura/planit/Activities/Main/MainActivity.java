@@ -3,13 +3,23 @@ package com.example.laura.planit.Activities.Main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
@@ -29,6 +39,37 @@ public class MainActivity extends AppCompatActivity
     private DBHandler db ;
     private TabsFragmenPageAdapter tabContactos;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_principal, menu);
+        int actionBarTitleId = Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
+        {
+            TextView title = (TextView) findViewById(actionBarTitleId);
+            if (title != null) {
+                title.setTextColor(Color.WHITE);
+            }
+            else
+            {
+                System.out.println("NO se encontró el title");
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.btn_cerrar_sesion_menu:
+                cerrarSesion();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
 
 
     @Override
@@ -38,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         //Crear el toolbar
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_principal));
 
         // Preparar las pestañas
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
@@ -134,7 +175,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void cerrrarSesion(View v)
+    public void cerrarSesion()
     {
         SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = properties.edit();
@@ -155,4 +196,5 @@ public class MainActivity extends AppCompatActivity
         builder.setPositiveButton("OK",null);
         builder.show();
     }
+
 }

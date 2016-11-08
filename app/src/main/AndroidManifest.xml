@@ -22,7 +22,8 @@
         <activity android:name=".Activities.Main.RegistroActivity"
             android:theme="@style/AppTheme.SplashTheme"/>
         <activity android:name=".Activities.Main.MainActivity"
-            android:theme="@style/AppTheme.SplashTheme"/>
+            android:theme="@style/AppTheme.SplashTheme"
+            android:icon="@drawable/logo_planit"/>
         <activity android:name=".Activities.Sitios.AgregarSitioActivity" />
         <activity android:name=".Activities.Eventos.AgregarEventoActivity" />
         <activity android:name=".Activities.Contactos.AgregarContactoActivity" />
