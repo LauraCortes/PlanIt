@@ -3,7 +3,10 @@ package com.example.laura.planit.Activities.Main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.MessageDigest;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -70,40 +75,61 @@ public class LoginActivity extends AppCompatActivity
             txtCelular.setError(null);
             if(pin.trim().length()==4)
             {
-
-                //public UsuarioFB(String celular, int latitud_actual, int longitud_actual, String nickname, String nombre, String pin, String token) {
-                final UsuarioFB usuario = new UsuarioFB();
-                usuario.setCelular(celular);
-                usuario.setPin(pin);
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(usuario.darRutaElemento());
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener()
+                if(hayConexionInternet())
                 {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot)
+                    //public UsuarioFB(String celular, int latitud_actual, int longitud_actual, String nickname, String nombre, String pin, String token) {
+                    final UsuarioFB usuario = new UsuarioFB();
+                    usuario.setCelular(celular);
+                    usuario.setPin(pin);
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(usuario.darRutaElemento());
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener()
                     {
-                        System.out.println("Se recibió respuesta "+dataSnapshot.exists()+" - pin "+dataSnapshot.child("pin").getValue());
-                        if( dataSnapshot.exists() && dataSnapshot.child("pin").getValue().equals(usuario.cifrar_SHA_256(pin)) )
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot)
                         {
-                            System.out.println("Login correcto "+pin);
-                            ((Activity)loginActivity).finish();
-                            Intent i = new Intent(loginActivity, MainActivity.class);
-                            startActivity(i);
+                            System.out.println("Se recibió respuesta "+dataSnapshot.exists()+" - pin "+dataSnapshot.child("pin").getValue());
+                            if( dataSnapshot.exists() && dataSnapshot.child("pin").getValue().equals(usuario.cifrar_SHA_256(pin)) )
+                            {
+                                ((Activity)loginActivity).finish();
+                                Intent i = new Intent(loginActivity, MainActivity.class);
+                                startActivity(i);
+                            }
+                            else
+                            {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(loginActivity);
+                                builder.setTitle("Error de autenticación");
+                                builder.setMessage("El usuario o contraseña son incorrectos, revise e intente nuevamente");
+                                builder.setCancelable(false);
+                                builder.setPositiveButton("OK",null);
+                                builder.show();
+                                txtPin.setText("");
+                            }
                         }
-                        else
-                        {
-                            Toast.makeText(loginActivity,"La autenticación falló",Toast.LENGTH_SHORT).show();
-                            txtPin.setText("");
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError)
-                    {
-                        System.out.println("ERROR en la conexión "+databaseError.toString());
-                        Toast.makeText(loginActivity,"Error en la conexión con la DB", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError)
+                        {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(loginActivity);
+                            builder.setTitle("Error de conexión");
+                            builder.setMessage("Se produjó un error en la conexión con el servidor de PlanIt:\n"+databaseError.getMessage());
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("OK",null);
+                            builder.show();
+                        }
+                    });
+                }
+                else
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(loginActivity);
+                    builder.setTitle("Error de conexión");
+                    builder.setMessage("Parece que no tienes conexión a internet. Verifica e intenta nuevamente");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("OK",null);
+                    builder.show();
+                }
+
+
             }
             else
             {
@@ -131,6 +157,20 @@ public class LoginActivity extends AppCompatActivity
             startActivity(i);
         }
 
+    }
+
+
+    private boolean hayConexionInternet()
+    {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected())
+        {
+           return true;
+        } else
+        {
+            return false;
+        }
     }
 
 
