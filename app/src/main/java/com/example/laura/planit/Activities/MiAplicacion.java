@@ -14,8 +14,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 public class MiAplicacion extends Application
 {
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
+        setTheme(R.style.AppTheme);
 
         //Garantiza que cuando se lanza la aplicación se carga la info
 

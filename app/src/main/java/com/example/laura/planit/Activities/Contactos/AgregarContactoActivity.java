@@ -35,7 +35,8 @@ import java.util.Map;
 public class AgregarContactoActivity extends AgregarSuper
 {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         titulo="Agregar contactos de emergencia";
         super.onCreate(savedInstanceState);
     }
