@@ -16,12 +16,10 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 
 import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.Usuario;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.NotificationService;
 

@@ -7,8 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.laura.planit.Logica.PlanIt;
+import com.example.laura.planit.Logica.UsuarioFB;
 import com.example.laura.planit.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -20,6 +28,7 @@ public class RegistroActivity extends AppCompatActivity
 {
     TextView txtCelular, txtNombre, txtNickName, txtPin, txtPin2;
     Button btnRegistro;
+
 
     public final static int REGISTRO_OK=1;
     public final static int REGISTRAR_USUARIO=421;
@@ -53,7 +62,6 @@ public class RegistroActivity extends AppCompatActivity
     public void registrarUsuario(View v)
     {
         bindElements();
-        //TODO
         String celular = String.valueOf(txtCelular.getText());
         String nombre = String.valueOf(txtNombre.getText());
         String nick = String.valueOf(txtNickName.getText());
@@ -61,17 +69,6 @@ public class RegistroActivity extends AppCompatActivity
         if(celular.trim().length()!=10)
         {
             txtCelular.setError("El número debe ser válido");
-            txtCelular.requestFocus();
-            return;
-        }
-        else
-        {
-            txtCelular.setError(null);
-        }
-        //Validar si el número no está registrado
-        if( false )
-        {
-            txtCelular.setError("El número ya está en uso");
             txtCelular.requestFocus();
             return;
         }
@@ -111,8 +108,41 @@ public class RegistroActivity extends AppCompatActivity
         else
         {
             //TODO todo está OK, registrar en la DB
-            setResult(REGISTRO_OK);
-            finish();
+            //public UsuarioFB(String celular, int latitud_actual, int longitud_actual, String nickname, String nombre, String pin, String token) {
+            final UsuarioFB nuevoUser = new UsuarioFB(celular,0,0,nick,nombre, UsuarioFB.cifrar_SHA_256(pass),null);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(nuevoUser.darRutaElemento());
+            databaseReference.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    if( dataSnapshot.exists() )
+                    {
+                        txtCelular.setError("El número ya está en uso");
+                        txtCelular.requestFocus();
+                        return;
+                    }
+                    else
+                    {
+                        databaseReference.setValue(nuevoUser);
+                        setResult(REGISTRO_OK);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                    Toast.makeText(getApplicationContext(),"Error en la conexión con la DB", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+
+
         }
     }
+
+
 }

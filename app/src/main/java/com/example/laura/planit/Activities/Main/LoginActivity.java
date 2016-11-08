@@ -1,29 +1,20 @@
 package com.example.laura.planit.Activities.Main;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.laura.planit.Logica.Usuario;
+import com.example.laura.planit.Logica.UsuarioFB;
 import com.example.laura.planit.R;
 
 import java.security.MessageDigest;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 /**
  * Created by Laura on 12/09/2016.
@@ -32,7 +23,7 @@ public class LoginActivity extends AppCompatActivity
 {
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS=1;
-    private Usuario usuario;
+    private UsuarioFB usuarioFB;
 
     private int confirmNumb;
 
@@ -78,7 +69,6 @@ public class LoginActivity extends AppCompatActivity
                 }
                 else
                 {
-                    String password = cifrar_SHA_256(pin);
                     finish();
                     Intent i = new Intent(this, MainActivity.class);
                     startActivity(i);
@@ -112,23 +102,7 @@ public class LoginActivity extends AppCompatActivity
 
     }
 
-    public static String cifrar_SHA_256(String input)
-    {
-        try
-        {
-            input="\\u00F1opil\\u00E2[[!\\u00A1?=%$#{]\\u00E0sdf"+input+"opil\\u00E";
-            MessageDigest mDigest = MessageDigest.getInstance("SHA256");
-            byte[] result = mDigest.digest(input.getBytes());
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < result.length; i++) {
-                sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
-            }
-            return sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
 
     /**
 

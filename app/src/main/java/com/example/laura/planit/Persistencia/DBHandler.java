@@ -10,7 +10,7 @@ import com.example.laura.planit.Logica.Contacto;
 import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.MedioTransporte;
 import com.example.laura.planit.Logica.Sitio;
-import com.example.laura.planit.Logica.Usuario;
+import com.example.laura.planit.Logica.UsuarioFB;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -66,13 +66,13 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     }
 
     //Agregar un usuario
-    public void addUser(Usuario usuario)
+    public void addUser(UsuarioFB usuarioFB)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("PHONE_NUMBER", usuario.getNumeroTelefonico());
-        values.put("NOMBRE", usuario.getNombre());// User Phone Number
+        values.put("PHONE_NUMBER", usuarioFB.getCelular());
+        values.put("NOMBRE", usuarioFB.getNombre());// User Phone Number
         try {
             db.insert(TABLE_USERS, null, values);
             db.close(); // Closing database connection
@@ -85,7 +85,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     }
 
     // Getting one user
-    public Usuario getUser(int id) {
+    public UsuarioFB getUser(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_USERS, new String[]{"PHONE_NUMBER","NOMBRE"}, "PHONE_NUMBER" + "=?",
@@ -93,9 +93,9 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         if (cursor != null)
             cursor.moveToFirst();
 
-        Usuario contact = new Usuario(cursor.getString(0), cursor.getString(1));
+        //UsuarioFB contact = new UsuarioFB(cursor.getString(0), cursor.getString(1));
 
-        return contact;
+        return null;
     }
 
     public void agregarSitio(Sitio nSitio) throws Exception

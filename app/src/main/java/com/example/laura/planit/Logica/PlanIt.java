@@ -1,6 +1,8 @@
 package com.example.laura.planit.Logica;
 
 import com.example.laura.planit.Persistencia.DBHandler;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 import java.util.List;
@@ -8,7 +10,12 @@ import java.util.List;
 /**
  * Created by Usuario on 15/09/2016.
  */
-public class PlanIt {
+public class PlanIt
+{
+    public final static String FIREBASE_URL = "https://planit-c5f71.firebaseio.com/";
+
+
+
     private static PlanIt instancia;
 
     private DBHandler db;
@@ -22,6 +29,7 @@ public class PlanIt {
     public static PlanIt darInstancia() {
         if (instancia == null) {
             instancia = new PlanIt();
+
         }
         return instancia;
     }

@@ -10,7 +10,7 @@ import com.example.laura.planit.Logica.Evento;
 import com.example.laura.planit.Logica.MedioTransporte;
 import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.Sitio;
-import com.example.laura.planit.Logica.Usuario;
+import com.example.laura.planit.Logica.UsuarioFB;
 import com.example.laura.planit.Persistencia.DBHandler;
 
 public class PersitenciaService extends Service {
@@ -32,8 +32,8 @@ public class PersitenciaService extends Service {
         {
 
             if(requerimiento.equals("Registrar")) {
-                Usuario usuario = (Usuario) intent.getExtras().get("Usuario");
-                db.addUser(usuario);
+                UsuarioFB usuarioFB = (UsuarioFB) intent.getExtras().get("Usuario");
+                db.addUser(usuarioFB);
             }
             else if (requerimiento.equals("AgregarContacto"))
             {
