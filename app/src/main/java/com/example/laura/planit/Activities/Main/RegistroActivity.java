@@ -107,12 +107,11 @@ public class RegistroActivity extends AppCompatActivity
         }
         else
         {
-            //TODO todo está OK, registrar en la DB
             //public UsuarioFB(String celular, int latitud_actual, int longitud_actual, String nickname, String nombre, String pin, String token) {
             final UsuarioFB nuevoUser = new UsuarioFB(celular,0,0,nick,nombre, UsuarioFB.cifrar_SHA_256(pass),null);
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(nuevoUser.darRutaElemento());
-            databaseReference.addValueEventListener(new ValueEventListener()
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener()
             {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot)
@@ -120,6 +119,7 @@ public class RegistroActivity extends AppCompatActivity
                     if( dataSnapshot.exists() )
                     {
                         txtCelular.setError("El número ya está en uso");
+                        Toast.makeText(getApplicationContext(),"El número ya está en uso", Toast.LENGTH_SHORT).show();
                         txtCelular.requestFocus();
                         return;
                     }
@@ -137,10 +137,6 @@ public class RegistroActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(),"Error en la conexión con la DB", Toast.LENGTH_SHORT).show();
                 }
             });
-
-
-
-
         }
     }
 

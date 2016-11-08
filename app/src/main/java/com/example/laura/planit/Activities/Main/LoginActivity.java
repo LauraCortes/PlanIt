@@ -1,5 +1,6 @@
 package com.example.laura.planit.Activities.Main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +10,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.Logica.UsuarioFB;
 import com.example.laura.planit.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.MessageDigest;
 
@@ -24,6 +31,7 @@ public class LoginActivity extends AppCompatActivity
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS=1;
     private UsuarioFB usuarioFB;
+    Context loginActivity;
 
     private int confirmNumb;
 
@@ -50,29 +58,52 @@ public class LoginActivity extends AppCompatActivity
 
     public void login(View v)
     {
-        TextView txtCelular, txtPin;
+        final TextView txtCelular, txtPin;
         txtCelular = (TextView)findViewById(R.id.txtCelularLogin);
         txtPin = (TextView)findViewById(R.id.txtPasswordLogin);
         String celular = String.valueOf(txtCelular.getText());
-        String pin = String.valueOf(txtPin.getText());
+        final String pin = String.valueOf(txtPin.getText());
+        loginActivity = this;
 
         if(celular.trim().length()==10)
         {
             txtCelular.setError(null);
             if(pin.trim().length()==4)
             {
-                //TODO intentar hacer logueo
-                if(false)
+
+                //public UsuarioFB(String celular, int latitud_actual, int longitud_actual, String nickname, String nombre, String pin, String token) {
+                final UsuarioFB usuario = new UsuarioFB();
+                usuario.setCelular(celular);
+                usuario.setPin(pin);
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(usuario.darRutaElemento());
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener()
                 {
-                    Toast.makeText(this,"La autenticación falló",Toast.LENGTH_SHORT);
-                    txtPin.setText("");
-                }
-                else
-                {
-                    finish();
-                    Intent i = new Intent(this, MainActivity.class);
-                    startActivity(i);
-                }
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        System.out.println("Se recibió respuesta "+dataSnapshot.exists()+" - pin "+dataSnapshot.child("pin").getValue());
+                        if( dataSnapshot.exists() && dataSnapshot.child("pin").getValue().equals(usuario.cifrar_SHA_256(pin)) )
+                        {
+                            System.out.println("Login correcto "+pin);
+                            ((Activity)loginActivity).finish();
+                            Intent i = new Intent(loginActivity, MainActivity.class);
+                            startActivity(i);
+                        }
+                        else
+                        {
+                            Toast.makeText(loginActivity,"La autenticación falló",Toast.LENGTH_SHORT).show();
+                            txtPin.setText("");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError)
+                    {
+                        System.out.println("ERROR en la conexión "+databaseError.toString());
+                        Toast.makeText(loginActivity,"Error en la conexión con la DB", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
             else
             {
