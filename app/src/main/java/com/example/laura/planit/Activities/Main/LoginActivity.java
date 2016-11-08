@@ -160,7 +160,7 @@ public class LoginActivity extends AppCompatActivity
     }
 
 
-    private boolean hayConexionInternet()
+    public boolean hayConexionInternet()
     {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();

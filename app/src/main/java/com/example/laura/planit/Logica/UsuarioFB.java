@@ -37,10 +37,12 @@ public class UsuarioFB implements Serializable
         this.token = token;
     }
 
+    @Exclude
     public String getCelular() {
         return celular;
     }
 
+    @Exclude
     public void setCelular(String celular) {
         this.celular = celular;
     }

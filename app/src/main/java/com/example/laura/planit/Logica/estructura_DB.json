@@ -88,7 +88,8 @@
       "logitud_actual" : "int_longitud",
       "nickname" : "bd.rangel",
       "nombre" : "Brahian",
-      "token" : "ZXAS::788"
+      "token" : "ZXAS::788",
+      "pin":"password"
     }
   }
 }

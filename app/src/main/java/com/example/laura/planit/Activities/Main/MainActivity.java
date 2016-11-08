@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -130,5 +131,15 @@ public class MainActivity extends AppCompatActivity
         {
             super.onBackPressed();
         }
+    }
+
+    public static void mostrarMensaje(Context contexto, String titutlo, String mensaje)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+        builder.setTitle(titutlo);
+        builder.setMessage(mensaje);
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK",null);
+        builder.show();
     }
 }
