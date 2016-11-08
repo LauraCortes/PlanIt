@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.example.laura.planit.Logica.Usuario;
 import com.example.laura.planit.R;
 
+import java.security.MessageDigest;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
@@ -76,6 +78,7 @@ public class LoginActivity extends AppCompatActivity
                 }
                 else
                 {
+                    String password = cifrar_SHA_256(pin);
                     finish();
                     Intent i = new Intent(this, MainActivity.class);
                     startActivity(i);
@@ -107,6 +110,24 @@ public class LoginActivity extends AppCompatActivity
             startActivity(i);
         }
 
+    }
+
+    public static String cifrar_SHA_256(String input)
+    {
+        try
+        {
+            input="\\u00F1opil\\u00E2[[!\\u00A1?=%$#{]\\u00E0sdf"+input+"opil\\u00E";
+            MessageDigest mDigest = MessageDigest.getInstance("SHA256");
+            byte[] result = mDigest.digest(input.getBytes());
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < result.length; i++) {
+                sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
