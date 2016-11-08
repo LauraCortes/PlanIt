@@ -2,6 +2,7 @@ package com.example.laura.planit.Activities.Main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -131,6 +132,18 @@ public class MainActivity extends AppCompatActivity
         {
             super.onBackPressed();
         }
+    }
+
+    public void cerrrarSesion(View v)
+    {
+        SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = properties.edit();
+        editor.putBoolean(getString(R.string.logueado),false);
+        editor.putString(getString(R.string.usuario),"");
+        editor.commit();
+        finish();
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
     }
 
     public static void mostrarMensaje(Context contexto, String titutlo, String mensaje)
