@@ -114,7 +114,9 @@ public class RegistroActivity extends AppCompatActivity {
                                 }
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-                                    Toast.makeText(getApplicationContext(), "Error en la conexión con la DB", Toast.LENGTH_SHORT).show();
+                                    MainActivity.mostrarMensaje(contexto, "Error de conexión","Se produjó un error en la conexión con el servidor de PlanIt:\n" +
+                                            databaseError.getMessage() );
+                                    System.out.println(databaseError.toString());
                                 }
                             });
                         }

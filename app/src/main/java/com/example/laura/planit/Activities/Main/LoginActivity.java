@@ -97,53 +97,38 @@ public class LoginActivity extends AppCompatActivity
                             }
                             else
                             {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(loginActivity);
-                                builder.setTitle("Error de autenticación");
-                                builder.setMessage("El usuario o contraseña son incorrectos, revise e intente nuevamente");
-                                builder.setCancelable(false);
-                                builder.setPositiveButton("OK",null);
-                                builder.show();
-                                txtPin.setText("");
+                                MainActivity.mostrarMensaje(loginActivity,"Error de autenticación",
+                                        "El usuario o contraseña son incorrectos, revise e intente nuevamente");
                             }
                         }
-
                         @Override
                         public void onCancelled(DatabaseError databaseError)
                         {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(loginActivity);
-                            builder.setTitle("Error de conexión");
-                            builder.setMessage("Se produjó un error en la conexión con el servidor de PlanIt:\n"+databaseError.getMessage());
-                            builder.setCancelable(false);
-                            builder.setPositiveButton("OK",null);
-                            builder.show();
+                            MainActivity.mostrarMensaje(loginActivity, "Error de conexión",
+                                    "Se produjó un error en la conexión con el servidor de PlanIt:\n" +
+                                    databaseError.getMessage() );
+                            System.out.println(databaseError.toString());
                         }
                     });
                 }
                 else
                 {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(loginActivity);
-                    builder.setTitle("Error de conexión");
-                    builder.setMessage("Parece que no tienes conexión a internet. Verifica e intenta nuevamente");
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK",null);
-                    builder.show();
+                    MainActivity.mostrarMensaje(loginActivity,"Error de conexión",
+                            "Parece que no tienes conexión a internet. \n" +
+                            "Verifica e intenta nuevamente");
                 }
-
-
             }
             else
             {
                 txtPin.requestFocus();
                 txtPin.setError("Pin de 4 dígitos");
             }
-
         }
         else
         {
             txtCelular.requestFocus();
             txtCelular.setError("Verifique que sea válido");
         }
-
     }
 
     @Override
@@ -159,7 +144,6 @@ public class LoginActivity extends AppCompatActivity
 
     }
 
-
     public boolean hayConexionInternet()
     {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -172,8 +156,6 @@ public class LoginActivity extends AppCompatActivity
             return false;
         }
     }
-
-
 
     /**
 
