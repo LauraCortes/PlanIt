@@ -3,6 +3,7 @@ package com.example.laura.planit.Activities.Main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -49,6 +50,14 @@ public class LoginActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         setTheme(R.style.AppTheme);
+        SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+        if(properties.getBoolean(getString(R.string.logueado),false))
+        {
+            finish();
+            System.out.println("Usuario logueado");
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+        }
         super.onCreate(savedInstanceState);
         setSupportActionBar(null);
         setContentView(R.layout.activity_login);
@@ -66,7 +75,7 @@ public class LoginActivity extends AppCompatActivity
         final TextView txtCelular, txtPin;
         txtCelular = (TextView)findViewById(R.id.txtCelularLogin);
         txtPin = (TextView)findViewById(R.id.txtPasswordLogin);
-        String celular = String.valueOf(txtCelular.getText());
+        final String celular = String.valueOf(txtCelular.getText());
         final String pin = String.valueOf(txtPin.getText());
         loginActivity = this;
 
@@ -91,6 +100,11 @@ public class LoginActivity extends AppCompatActivity
                             System.out.println("Se recibió respuesta "+dataSnapshot.exists()+" - pin "+dataSnapshot.child("pin").getValue());
                             if( dataSnapshot.exists() && dataSnapshot.child("pin").getValue().equals(usuario.cifrar_SHA_256(pin)) )
                             {
+                                SharedPreferences properties = loginActivity.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = properties.edit();
+                                editor.putBoolean(getString(R.string.logueado),true);
+                                editor.putString(getString(R.string.usuario),celular);
+                                editor.commit();
                                 ((Activity)loginActivity).finish();
                                 Intent i = new Intent(loginActivity, MainActivity.class);
                                 startActivity(i);

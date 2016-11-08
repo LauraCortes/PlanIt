@@ -1,6 +1,7 @@
 package com.example.laura.planit.Activities.Main;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -61,7 +62,7 @@ public class RegistroActivity extends AppCompatActivity {
 
     public void registrarUsuario(View v) {
         bindElements();
-        String celular = String.valueOf(txtCelular.getText());
+        final String celular = String.valueOf(txtCelular.getText());
         String nombre = String.valueOf(txtNombre.getText());
         String nick = String.valueOf(txtNickName.getText());
         String pass = String.valueOf(txtPin.getText());
@@ -106,8 +107,14 @@ public class RegistroActivity extends AppCompatActivity {
                                         MainActivity.mostrarMensaje(contexto,"Error de regisro","El número con el que te estás intentando registrar ya está siendo usado por otro usuario");
                                         txtCelular.requestFocus();
                                         return;
-                                    } else {
+                                    } else
+                                    {
                                         databaseReference.setValue(nuevoUser);
+                                        SharedPreferences properties = contexto.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = properties.edit();
+                                        editor.putBoolean(getString(R.string.logueado),true);
+                                        editor.putString(getString(R.string.usuario),celular);
+                                        editor.commit();
                                         setResult(REGISTRO_OK);
                                         finish();
                                     }
