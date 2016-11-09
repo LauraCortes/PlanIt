@@ -12,9 +12,9 @@ import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity
 import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Fragments.TabFragment;
-import com.example.laura.planit.Logica.Evento;
-import com.example.laura.planit.Logica.MedioTransporte;
-import com.example.laura.planit.Logica.PlanIt;
+import com.example.laura.planit.Modelos.Evento;
+import com.example.laura.planit.Modelos.MedioTransporte;
+import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
 
 import java.text.SimpleDateFormat;

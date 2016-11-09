@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.widget.Toast;
 
-import com.example.laura.planit.Logica.Contacto;
-import com.example.laura.planit.Logica.Evento;
-import com.example.laura.planit.Logica.MedioTransporte;
-import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.Sitio;
-import com.example.laura.planit.Logica.UsuarioFB;
+import com.example.laura.planit.Modelos.Contacto;
+import com.example.laura.planit.Modelos.Evento;
+import com.example.laura.planit.Modelos.MedioTransporte;
+import com.example.laura.planit.Modelos.PlanIt;
+import com.example.laura.planit.Modelos.Sitio;
+import com.example.laura.planit.Modelos.Usuario;
 import com.example.laura.planit.Persistencia.DBHandler;
 
 public class PersitenciaService extends Service {
@@ -32,8 +32,8 @@ public class PersitenciaService extends Service {
         {
 
             if(requerimiento.equals("Registrar")) {
-                UsuarioFB usuarioFB = (UsuarioFB) intent.getExtras().get("Usuario");
-                db.addUser(usuarioFB);
+                Usuario usuario = (Usuario) intent.getExtras().get("Usuario");
+                db.addUser(usuario);
             }
             else if (requerimiento.equals("AgregarContacto"))
             {

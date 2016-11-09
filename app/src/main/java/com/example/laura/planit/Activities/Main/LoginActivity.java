@@ -7,25 +7,19 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.UsuarioFB;
+import com.example.laura.planit.Modelos.PlanIt;
+import com.example.laura.planit.Modelos.Usuario;
 import com.example.laura.planit.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.security.MessageDigest;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -36,7 +30,7 @@ public class LoginActivity extends AppCompatActivity
 {
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS=1;
-    private UsuarioFB usuarioFB;
+    private Usuario usuario;
     Context loginActivity;
 
     private int confirmNumb;
@@ -87,7 +81,7 @@ public class LoginActivity extends AppCompatActivity
                 if(hayConexionInternet())
                 {
                     //public UsuarioFB(String celular, int latitud_actual, int longitud_actual, String nickname, String nombre, String pin, String token) {
-                    final UsuarioFB usuario = new UsuarioFB();
+                    final Usuario usuario = new Usuario();
                     usuario.setCelular(celular);
                     usuario.setPin(pin);
                     FirebaseDatabase database = FirebaseDatabase.getInstance();

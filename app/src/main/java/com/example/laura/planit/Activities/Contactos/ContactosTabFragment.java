@@ -12,11 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.laura.planit.Fragments.TabFragment;
-import com.example.laura.planit.Logica.Contacto;
-import com.example.laura.planit.Logica.PlanIt;
+import com.example.laura.planit.Modelos.Contacto;
+import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
 
 import java.util.HashMap;

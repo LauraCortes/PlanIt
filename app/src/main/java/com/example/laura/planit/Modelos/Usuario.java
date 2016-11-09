@@ -1,4 +1,4 @@
-package com.example.laura.planit.Logica;
+package com.example.laura.planit.Modelos;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -10,7 +10,7 @@ import java.security.MessageDigest;
  * Created by Laura on 14/09/2016.
  */
 @IgnoreExtraProperties
-public class UsuarioFB implements Serializable
+public class Usuario implements Serializable
 {
 
     @Exclude
@@ -23,11 +23,11 @@ public class UsuarioFB implements Serializable
     public String pin;
     public String token;
 
-    public UsuarioFB() {
+    public Usuario() {
         //Default constructor to firebase
     }
 
-    public UsuarioFB(String celular, int latitud_actual, int longitud_actual, String nickname, String nombre, String pin, String token) {
+    public Usuario(String celular, int latitud_actual, int longitud_actual, String nickname, String nombre, String pin, String token) {
         this.celular = celular;
         this.latitud_actual = latitud_actual;
         this.longitud_actual = longitud_actual;
@@ -101,11 +101,6 @@ public class UsuarioFB implements Serializable
         return "/usuarios/"+celular;
     }
 
-    @Exclude
-    public boolean existeUsuario()
-    {
-        return false;
-    }
 
     @Exclude
     public static String cifrar_SHA_256(String input)

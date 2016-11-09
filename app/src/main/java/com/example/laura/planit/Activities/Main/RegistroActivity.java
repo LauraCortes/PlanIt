@@ -8,12 +8,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.UsuarioFB;
+import com.example.laura.planit.Modelos.PlanIt;
+import com.example.laura.planit.Modelos.Usuario;
 import com.example.laura.planit.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -96,7 +94,7 @@ public class RegistroActivity extends AppCompatActivity {
                         else
                         {
                             //public UsuarioFB(String celular, int latitud_actual, int longitud_actual, String nickname, String nombre, String pin, String token) {
-                            final UsuarioFB nuevoUser = new UsuarioFB(celular, 0, 0, nick, nombre, UsuarioFB.cifrar_SHA_256(pass), null);
+                            final Usuario nuevoUser = new Usuario(celular, 0, 0, nick, nombre, Usuario.cifrar_SHA_256(pass), null);
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(nuevoUser.darRutaElemento());
                             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {

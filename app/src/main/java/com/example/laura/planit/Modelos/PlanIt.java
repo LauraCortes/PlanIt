@@ -1,8 +1,6 @@
-package com.example.laura.planit.Logica;
+package com.example.laura.planit.Modelos;
 
 import com.example.laura.planit.Persistencia.DBHandler;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 import java.util.List;
@@ -52,13 +50,14 @@ public class PlanIt
     }
 
     public Sitio agregarSitio(String nNombre, String nBarrio, String nDireccion) {
-        Sitio agregado = new Sitio(nNombre, nBarrio, nDireccion);
+        //Sitio agregado = new Sitio(nNombre, nBarrio, nDireccion);
+        Sitio agregado = new Sitio();
         sitios.add(agregado);
         return agregado;
     }
 
     public Sitio editarSitio(int pos, String nNombre, String nBarrio, String nDireccion) {
-        Sitio agregado = new Sitio(nNombre, nBarrio, nDireccion);
+        Sitio agregado = new Sitio();
         sitios.set(pos, agregado);
         return agregado;
     }

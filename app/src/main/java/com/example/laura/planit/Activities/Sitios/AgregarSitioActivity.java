@@ -2,16 +2,23 @@ package com.example.laura.planit.Activities.Sitios;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.Sitio;
+import com.example.laura.planit.Activities.Main.MainActivity;
+import com.example.laura.planit.Modelos.PlanIt;
+import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -20,10 +27,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  */
 public class AgregarSitioActivity extends AppCompatActivity{
 
-    private EditText txtNombre, txtBarrio, txtDireccion;
+    private EditText txtNombre,txtDireccion;
     private boolean editar;
     private int pos;
     private String nombre;
+    Context contexto;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -32,10 +40,10 @@ public class AgregarSitioActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        contexto=this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_sitios);
         txtNombre=(EditText)findViewById(R.id.txtNombreSitioFavorito);
-        txtBarrio=(EditText)findViewById(R.id.txtBarrioFavorito);
         txtDireccion=(EditText)findViewById(R.id.txtDireccionFavorito);
         Intent intent = getIntent();
         editar = intent.getExtras().getBoolean("editar");
@@ -47,7 +55,6 @@ public class AgregarSitioActivity extends AppCompatActivity{
                 Sitio sitioEditado = PlanIt.darInstancia().darSitios().get(pos);
                 nombre=sitioEditado.getNombre();
                 txtNombre.setText(nombre);
-                txtBarrio.setText(sitioEditado.getBarrio());
                 txtDireccion.setText(sitioEditado.getDirección());
                 sitioEditado=null;
             }
@@ -57,26 +64,49 @@ public class AgregarSitioActivity extends AppCompatActivity{
         intent=null;
     }
 
+    public void agregarSitio(View view) {
+        String nombre, barrio, direccion;
+        nombre = txtNombre.getText().toString().trim();
+        direccion = txtDireccion.getText().toString().trim();
+        if (nombre.isEmpty()) {
+            txtNombre.requestFocus();
+            txtNombre.setError("Debe llenar este campo");
+        } else {
+            txtNombre.setError(null);
+            if (direccion.isEmpty()) {
+                txtDireccion.requestFocus();
+                txtDireccion.setError("Debe llenar este campo");
+            } else
+            {
+                txtDireccion.setError(null);
+                //public Sitio(int latitud, int longitud, String nombre, String dirección) {
+                final Sitio nuevoSitio = new Sitio();
+                nuevoSitio.setDirección(direccion);
+                nuevoSitio.setNombre(nombre);
 
+                SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+                if (properties.getBoolean(getString(R.string.logueado), false))
+                {
+                    String celular = properties.getString(getString(R.string.usuario), "desconocido");
+                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(nuevoSitio.darRutaElemento(celular));
+                    String key =databaseReference.push().getKey();
+                    databaseReference.child(key).setValue(nuevoSitio);
+                    finish();
+                }
+                else
+                {
+                    MainActivity.mostrarMensaje(this, "Error", "Parece que no has iniciado sesión. Intenta cerrar sesión e ingresar de nuevo");
+                }
 
-    public void agregarSitio(View view)
-    {
-        String nombre,barrio,direccion;
-        nombre=txtNombre.getText().toString().trim();
-        barrio=txtBarrio.getText().toString().trim();
-        direccion=txtDireccion.getText().toString().trim();
-        if(nombre.isEmpty()||barrio.isEmpty()||direccion.isEmpty())
-        {
-            Toast.makeText(this, "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
+            }
         }
-        else if (!editar && PlanIt.darInstancia().existeSitio(nombre))
-        {
-            Toast.makeText(this, "Ya existe otro sitio con ese nombre", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+    }
+}
 
-            if(editar)
+        //TODO EDITAR SITIOS
+
+            /*if(editar)
             {
                 Sitio agregado = PlanIt.darInstancia().editarSitio(pos,nombre,barrio,direccion);
                 Toast.makeText(this, "Tu sitio se editó", Toast.LENGTH_SHORT).show();
@@ -103,9 +133,5 @@ public class AgregarSitioActivity extends AppCompatActivity{
                 agregado = null;
                 System.out.println("Sitio agregado");
             }
-            finish();
+            finish();*/
 
-        }
-
-    }
-}

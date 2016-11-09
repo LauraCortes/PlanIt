@@ -9,13 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.laura.planit.Activities.Eventos.EventoRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.TabFragment;
-import com.example.laura.planit.Logica.Evento;
-import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.Sitio;
+import com.example.laura.planit.Modelos.PlanIt;
+import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class SitiosTabFragment extends TabFragment
     {
         elementosSeleccionados = new HashMap<Integer, Integer>();
         super.onCreateView(inflater,container,savedInstanceState);
-        elementos= PlanIt.darInstancia().darSitios();
+        elementos= new ArrayList<Sitio>();
         System.out.println(elementos.size());
         adapter=new SitioRecyclerViewAdapter(getContext(), (List<Sitio>)elementos, this);
 

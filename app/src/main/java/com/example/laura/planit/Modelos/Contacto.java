@@ -1,4 +1,4 @@
-package com.example.laura.planit.Logica;
+package com.example.laura.planit.Modelos;
 
 import java.io.Serializable;
 

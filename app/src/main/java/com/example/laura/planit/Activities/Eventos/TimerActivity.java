@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-import com.example.laura.planit.Logica.PlanIt;
+import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.NotificationService;
 

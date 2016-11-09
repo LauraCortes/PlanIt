@@ -6,11 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.laura.planit.Logica.Contacto;
-import com.example.laura.planit.Logica.Evento;
-import com.example.laura.planit.Logica.MedioTransporte;
-import com.example.laura.planit.Logica.Sitio;
-import com.example.laura.planit.Logica.UsuarioFB;
+import com.example.laura.planit.Modelos.Contacto;
+import com.example.laura.planit.Modelos.Evento;
+import com.example.laura.planit.Modelos.MedioTransporte;
+import com.example.laura.planit.Modelos.Sitio;
+import com.example.laura.planit.Modelos.Usuario;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -66,13 +66,13 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     }
 
     //Agregar un usuario
-    public void addUser(UsuarioFB usuarioFB)
+    public void addUser(Usuario usuario)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("PHONE_NUMBER", usuarioFB.getCelular());
-        values.put("NOMBRE", usuarioFB.getNombre());// User Phone Number
+        values.put("PHONE_NUMBER", usuario.getCelular());
+        values.put("NOMBRE", usuario.getNombre());// User Phone Number
         try {
             db.insert(TABLE_USERS, null, values);
             db.close(); // Closing database connection
@@ -85,7 +85,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
     }
 
     // Getting one user
-    public UsuarioFB getUser(int id) {
+    public Usuario getUser(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_USERS, new String[]{"PHONE_NUMBER","NOMBRE"}, "PHONE_NUMBER" + "=?",
@@ -103,7 +103,6 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("NOMBRE", nSitio.getNombre());
-        values.put("BARRIO", nSitio.getBarrio());
         values.put("DIRECCION", nSitio.getDirección());
         try
         {
@@ -251,7 +250,6 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("NOMBRE", nSitio.getNombre());
-        values.put("BARRIO", nSitio.getBarrio());
         values.put("DIRECCION", nSitio.getDirección());
         try
         {
@@ -285,7 +283,8 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
                 cursor.moveToFirst();
                 do
                 {
-                    Sitio actual= new Sitio(cursor.getString(0), cursor.getString(1),  cursor.getString(2));
+                    //TODO
+                    Sitio actual= new Sitio(cursor.getInt(0), cursor.getInt(1),  cursor.getString(2), cursor.getString(3));
                     resultado.add(actual);
                 }
                 while (cursor.moveToNext());

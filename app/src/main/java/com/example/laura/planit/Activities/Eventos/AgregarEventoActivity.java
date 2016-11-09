@@ -13,10 +13,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.laura.planit.Activities.Contactos.AgregarInvitadosActivity;
-import com.example.laura.planit.Logica.Contacto;
-import com.example.laura.planit.Logica.Evento;
-import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.Sitio;
+import com.example.laura.planit.Modelos.Contacto;
+import com.example.laura.planit.Modelos.Evento;
+import com.example.laura.planit.Modelos.PlanIt;
+import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.MensajesService;
 import com.example.laura.planit.Services.PersitenciaService;

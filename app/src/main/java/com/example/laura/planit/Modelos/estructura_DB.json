@@ -23,10 +23,11 @@
   },
   "lugares_favoritos" : {
     "celular_dueño" : {
-      "direccion" : "direccion",
-      "latitud" : "latitud",
-      "longitud" : "longitud",
-      "nombre" : "nombre"
+      "nombre" : {
+        "direccion" : "direccion",
+        "latitud" : 0,
+        "longitud" : 0
+      }
     }
   },
   "movimientos" : {
@@ -84,12 +85,11 @@
   },
   "usuarios" : {
     "3138238039" : {
-      "latitud_actual" : "int_latitud",
-      "logitud_actual" : "int_longitud",
-      "nickname" : "bd.rangel",
-      "nombre" : "Brahian",
-      "token" : "ZXAS::788",
-      "pin":"password"
+      "latitud_actual" : 0,
+      "longitud_actual" : 0,
+      "nickname" : "bd.rangel ",
+      "nombre" : "Brahian Rangel ",
+      "pin" : "df113405461a484dc87da9283011f4dfb1c24c467325c9133bd70d89ea0b4c88"
     }
   }
 }

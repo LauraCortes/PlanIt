@@ -7,17 +7,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.laura.planit.Logica.Contacto;
-import com.example.laura.planit.R;
+import com.example.laura.planit.Modelos.Contacto;
 
 import java.util.ArrayList;
 

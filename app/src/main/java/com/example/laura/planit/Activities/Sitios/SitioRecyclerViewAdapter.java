@@ -14,8 +14,8 @@ import android.widget.Toast;
 import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Fragments.TabFragment;
-import com.example.laura.planit.Logica.PlanIt;
-import com.example.laura.planit.Logica.Sitio;
+import com.example.laura.planit.Modelos.PlanIt;
+import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
@@ -58,7 +58,7 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
         SitioRowViewHolder rowViewHolder = (SitioRowViewHolder) holder;
         final Sitio sitio = this.sitios.get(position);
         rowViewHolder.nombreTextView.setText(String.valueOf(sitio.getNombre()));
-        rowViewHolder.barrioTextView.setText(String.valueOf(sitio.getBarrio()));
+        //rowViewHolder.barrioTextView.setText(String.valueOf(sitio.getBarrio()));
         rowViewHolder.direccionTextView.setText(String.valueOf(sitio.getDirección()));
         rowViewHolder.imagenView.setBackground(ContextCompat.getDrawable(context,R.drawable.home));
         rowViewHolder.vista.setOnLongClickListener(

@@ -17,8 +17,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 
-import com.example.laura.planit.Logica.Contacto;
-import com.example.laura.planit.Logica.PlanIt;
+import com.example.laura.planit.Modelos.Contacto;
+import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
 
 import java.util.ArrayList;

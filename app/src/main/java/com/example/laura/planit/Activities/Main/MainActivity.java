@@ -5,12 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +21,7 @@ import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
 import com.example.laura.planit.Activities.Sitios.SitiosTabFragment;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Fragments.TabsFragmenPageAdapter;
-import com.example.laura.planit.Logica.PlanIt;
+import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Persistencia.DBHandler;
 import com.example.laura.planit.R;
 
@@ -118,7 +113,7 @@ public class MainActivity extends AppCompatActivity
         db = new DBHandler(this);
         PlanIt mundo = PlanIt.darInstancia();
         mundo.setDB(db);
-        mundo.inicializar();
+//        mundo.inicializar();
         mundo=null;
 
     }

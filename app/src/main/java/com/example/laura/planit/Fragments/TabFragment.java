@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
 
 import java.util.HashMap;

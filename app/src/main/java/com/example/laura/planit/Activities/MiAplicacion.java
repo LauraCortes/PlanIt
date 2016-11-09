@@ -2,7 +2,6 @@ package com.example.laura.planit.Activities;
 
 import android.app.Application;
 
-import com.example.laura.planit.Logica.PlanIt;
 import com.example.laura.planit.R;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;

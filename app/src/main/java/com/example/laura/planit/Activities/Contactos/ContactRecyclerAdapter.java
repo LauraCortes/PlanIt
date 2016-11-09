@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Fragments.TabFragment;
-import com.example.laura.planit.Logica.Contacto;
+import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.R;
 
 import java.util.List;
