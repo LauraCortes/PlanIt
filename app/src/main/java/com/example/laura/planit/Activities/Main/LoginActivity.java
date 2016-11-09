@@ -58,6 +58,11 @@ public class LoginActivity extends AppCompatActivity
         setContentView(R.layout.activity_login);
         EditText txtPass = (EditText)findViewById(R.id.txtPasswordLogin);
         loginActivity=this;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         if(!hayConexionInternet())
         {
             MainActivity.mostrarMensaje(this,"No hay conexión",
@@ -67,7 +72,6 @@ public class LoginActivity extends AppCompatActivity
                             " actualizaremos");
         }
     }
-
 
     public void lanzarActivityRegistro(View v)
     {
@@ -116,6 +120,7 @@ public class LoginActivity extends AppCompatActivity
                             }
                             else
                             {
+                                txtPin.setText("");
                                 String msj="El usuario o contraseña son incorrectos, revisa e intenta nuevamente.\n";
                                 msj+=((!hayConexionInternet())?"Como estás en modo offline es probable" +
                                     " que no se haya actualizado tu contraseña. Si cambiaste tu contraseña recientemente" +

@@ -23,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
@@ -38,7 +39,6 @@ import java.util.Map;
 public class SitiosTabFragment extends TabFragment
 {
 
-    private  List<Sitio> sitios;
     public SitiosTabFragment(){
         super();
         AGREGAR_ELEMENTOS=125;
@@ -54,10 +54,6 @@ public class SitiosTabFragment extends TabFragment
         startActivityForResult(i,AGREGAR_ELEMENTOS);
     }
 
-    public List<Sitio> getSitios()
-    {
-        return sitios;
-    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SharedPreferences properties = getContext().getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
@@ -69,22 +65,23 @@ public class SitiosTabFragment extends TabFragment
             Intent i = new Intent(getContext(), LoginActivity.class);
             startActivity(i);
         }
-        sitios = new ArrayList<Sitio>();
         elementosSeleccionados = new HashMap<Integer, Integer>();
         super.onCreateView(inflater, container, savedInstanceState);
         elementos= new ArrayList<>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child("lugares_favoritos/" + celular);
-        databaseReference.addValueEventListener(
+        databaseReference.keepSynced(true);
+        ValueEventListener valueEventListener = databaseReference.addValueEventListener(
                 new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Map<String, Sitio> map = (HashMap<String, Sitio>) dataSnapshot.getValue();
-                        sitios= new ArrayList<Sitio>(map.values());
-                        elementos=sitios;
-                        ((SitioRecyclerViewAdapter)adapter).cambiarElementos(sitios);
-                        System.out.println("Cambiaron los sitios, hay (adapter) " + adapter.getItemCount() + "-(elementos) "+elementos.size());
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        GenericTypeIndicator<HashMap<String,Sitio>> t = new GenericTypeIndicator<HashMap<String, Sitio>>(){};
+                        HashMap<String, Sitio> map =dataSnapshot.getValue(t);
+                        ArrayList<Sitio> nuevos = new ArrayList(map.values());
+                        ((SitioRecyclerViewAdapter)adapter).swapData(nuevos);
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -93,7 +90,7 @@ public class SitiosTabFragment extends TabFragment
                     }
                 }
         );
-        adapter = new SitioRecyclerViewAdapter(getContext(), (List<Sitio>) elementos, this);
+        adapter = new SitioRecyclerViewAdapter(getContext(), elementos, this);
         System.out.println("Cantidad de objetos en el adapter "+adapter.getItemCount());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.tab_sitios, container, false);

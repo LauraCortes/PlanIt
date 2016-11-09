@@ -16,9 +16,12 @@ import com.example.laura.planit.Activities.Main.LoginActivity;
 import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.R;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Usuario on 06/11/2016.
@@ -28,8 +31,8 @@ public abstract class TabFragment extends Fragment
 {
 
     protected RecyclerView.Adapter adapter;
-    protected List<? extends Object> elementos;
-    protected HashMap<Integer,Integer> elementosSeleccionados;
+    public List elementos;
+    protected HashMap elementosSeleccionados;
     protected FloatingActionButton btnFAB;
     protected RecyclerView recyclerView;
     protected static int AGREGAR_ELEMENTOS =97;
@@ -74,9 +77,13 @@ public abstract class TabFragment extends Fragment
 
     public void eliminarElementosVista(View view)
     {
-        for (Map.Entry<Integer, Integer> entrada : elementosSeleccionados.entrySet())
+        Iterator<Map.Entry<Integer,Integer>> iterator = elementosSeleccionados.entrySet().iterator();
+
+        for (int i=0; iterator.hasNext();i++)
         {
-            int pos = entrada.getKey();
+
+            Map.Entry<Integer, Integer> entrada = iterator.next();
+            int pos = entrada.getKey()+i;
             //TODO -> Eliminar del mundo
             elementos.remove(pos);
             //Remueve del view

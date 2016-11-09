@@ -88,8 +88,31 @@ public class AgregarSitioActivity extends AppCompatActivity{
                 if (properties.getBoolean(getString(R.string.logueado), false))
                 {
                     String celular = properties.getString(getString(R.string.usuario), "desconocido");
-                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
                     final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(nuevoSitio.darRutaElemento(celular));
+                    databaseReference.addListenerForSingleValueEvent(
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.exists())
+                                    {
+                                        MainActivity.mostrarMensaje(contexto,"Sitio existente","Ya existe" +
+                                                " un sitio con este nombre");
+                                    }
+                                    else
+                                    {
+                                        databaseReference.setValue(nuevoSitio);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    MainActivity.mostrarMensaje(contexto,"Error",databaseError.getMessage());
+                                    databaseError.toException().printStackTrace();
+                                }
+                            }
+                    );
+
                     String key =databaseReference.push().getKey();
                     databaseReference.child(key).setValue(nuevoSitio);
                     finish();

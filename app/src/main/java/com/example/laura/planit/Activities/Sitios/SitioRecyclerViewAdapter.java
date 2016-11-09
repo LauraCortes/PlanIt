@@ -19,6 +19,7 @@ import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.PersitenciaService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,17 +29,18 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
 {
 
 
-    public SitioRecyclerViewAdapter(Context context, List<Sitio> sitios, TabFragment tabFragment)
+    public SitioRecyclerViewAdapter(Context context, List sitios, TabFragment tabFragment)
     {
-        super(context,((SitiosTabFragment)tabFragment).getSitios(),tabFragment);
-        System.out.println("FROM ADAPTER: hay "+elementos.size()+" sitios");
-    }
-
-    public void cambiarElementos(List<Sitio> sitios)
-    {
-        elementos = sitios;
+        super(context,sitios,tabFragment);
+        sitios.add(new Sitio(0,0,"prueba1","prueba1"));
         notifyDataSetChanged();
     }
+
+    public void swapData(List sitios)
+    {
+        elementos=sitios;
+    }
+
 
 
     @Override
@@ -53,7 +55,6 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
     {
         SitioRowViewHolder rowViewHolder = (SitioRowViewHolder) holder;
         final Sitio sitio = (Sitio) this.elementos.get(position);
-        System.out.println("Bind del sitio -"+sitio.getNombre());
         rowViewHolder.nombreTextView.setText(String.valueOf(sitio.getNombre()));
         //rowViewHolder.barrioTextView.setText(String.valueOf(sitio.getBarrio()));
         rowViewHolder.direccionTextView.setText(String.valueOf(sitio.getDirección()));

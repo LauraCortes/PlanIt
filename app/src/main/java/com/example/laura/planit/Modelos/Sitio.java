@@ -61,6 +61,6 @@ public class Sitio implements Serializable
     @Exclude
     public String darRutaElemento(String celular)
     {
-        return "/lugares_favoritos/"+celular;
+        return "/lugares_favoritos/"+celular+"/"+nombre;
     }
 }

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,13 +17,13 @@ import java.util.List;
 public abstract class ElementRecyclerViewAdapter extends RecyclerView.Adapter<ElementoRowViewHolder>
 {
     protected Context context;
-    protected List<? extends Object> elementos;
+    protected List elementos;
     protected TabFragment tabFragment;
     public final  static int[] COLORES = {Color.parseColor("#26532B"), Color.parseColor("#6A0136"),
             Color.parseColor("#D72638"), Color.parseColor("#95C623"), Color.parseColor("#080708")};
 
 
-    public ElementRecyclerViewAdapter(Context context, List<? extends Object> elementos, TabFragment tabFragment)
+    public ElementRecyclerViewAdapter(Context context, List elementos, TabFragment tabFragment)
     {
         this.elementos =elementos;
         this.context=context;
