@@ -1,7 +1,9 @@
 package com.example.laura.planit.Fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.laura.planit.Activities.Main.LoginActivity;
+import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.R;
 
 import java.util.HashMap;
@@ -30,6 +34,7 @@ public abstract class TabFragment extends Fragment
     protected RecyclerView recyclerView;
     protected static int AGREGAR_ELEMENTOS =97;
     protected String msjToastAgregar="Elementos agregados";
+    protected String celular;
 
 
     public TabFragment()

@@ -97,6 +97,7 @@ public class RegistroActivity extends AppCompatActivity {
                             final Usuario nuevoUser = new Usuario(celular, 0, 0, nick, nombre, Usuario.cifrar_SHA_256(pass), null);
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(nuevoUser.darRutaElemento());
+                            databaseReference.keepSynced(true);
                             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {

@@ -3,6 +3,7 @@ package com.example.laura.planit.Activities;
 import android.app.Application;
 
 import com.example.laura.planit.R;
+import com.google.firebase.database.FirebaseDatabase;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -18,8 +19,8 @@ public class MiAplicacion extends Application
         super.onCreate();
         setTheme(R.style.AppTheme);
 
-        //Garantiza que cuando se lanza la aplicación se carga la info
-
+        //Activa persistencia en disco
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/DarwinRegular.ttf")

@@ -1,6 +1,8 @@
 package com.example.laura.planit.Activities.Sitios;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,20 +11,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.laura.planit.Activities.Main.LoginActivity;
+import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Fragments.TabFragment;
+import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Laura on 12/09/2016.
  */
 public class SitiosTabFragment extends TabFragment
 {
+
+    private  List<Sitio> sitios;
     public SitiosTabFragment(){
         super();
         AGREGAR_ELEMENTOS=125;
@@ -38,20 +54,53 @@ public class SitiosTabFragment extends TabFragment
         startActivityForResult(i,AGREGAR_ELEMENTOS);
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public List<Sitio> getSitios()
     {
-        elementosSeleccionados = new HashMap<Integer, Integer>();
-        super.onCreateView(inflater,container,savedInstanceState);
-        elementos= new ArrayList<Sitio>();
-        System.out.println(elementos.size());
-        adapter=new SitioRecyclerViewAdapter(getContext(), (List<Sitio>)elementos, this);
+        return sitios;
+    }
 
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SharedPreferences properties = getContext().getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+        if (properties.getBoolean(getString(R.string.logueado), false)) {
+            celular = properties.getString(getString(R.string.usuario), "desconocido");
+        } else {
+            MainActivity.mostrarMensaje(getContext(), "Inicia sesión", "Tu sesión caducó, por favor vuelve a iniciar sesión");
+            getActivity().finish();
+            Intent i = new Intent(getContext(), LoginActivity.class);
+            startActivity(i);
+        }
+        sitios = new ArrayList<Sitio>();
+        elementosSeleccionados = new HashMap<Integer, Integer>();
+        super.onCreateView(inflater, container, savedInstanceState);
+        elementos= new ArrayList<>();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child("lugares_favoritos/" + celular);
+        databaseReference.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Sitio> map = (HashMap<String, Sitio>) dataSnapshot.getValue();
+                        sitios= new ArrayList<Sitio>(map.values());
+                        elementos=sitios;
+                        ((SitioRecyclerViewAdapter)adapter).cambiarElementos(sitios);
+                        System.out.println("Cambiaron los sitios, hay (adapter) " + adapter.getItemCount() + "-(elementos) "+elementos.size());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+        adapter = new SitioRecyclerViewAdapter(getContext(), (List<Sitio>) elementos, this);
+        System.out.println("Cantidad de objetos en el adapter "+adapter.getItemCount());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.tab_sitios, container, false);
         this.recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewSitios);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.recyclerView.setAdapter(adapter);
-        btnFAB= (FloatingActionButton) view.findViewById(R.id.btnAgregarSitios);
+        btnFAB = (FloatingActionButton) view.findViewById(R.id.btnAgregarSitios);
         btnFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +109,39 @@ public class SitiosTabFragment extends TabFragment
         });
         return view;
     }
+        /*databaseReference.addChildEventListener(
+                new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                    {
+                        ((ArrayList<Sitio>)elementos).add(dataSnapshot.getValue(Sitio.class));
+                        adapter.notifyItemInserted(elementos.size()-1);
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        elementos.remove(dataSnapshot.getValue(Sitio.class));
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        )
+*/
+
 
     @Override
     public void obtenerElementos()

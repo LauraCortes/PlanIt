@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -56,7 +57,17 @@ public class LoginActivity extends AppCompatActivity
         setSupportActionBar(null);
         setContentView(R.layout.activity_login);
         EditText txtPass = (EditText)findViewById(R.id.txtPasswordLogin);
+        loginActivity=this;
+        if(!hayConexionInternet())
+        {
+            MainActivity.mostrarMensaje(this,"No hay conexión",
+                    "Parece que no tienes conexión a internet, así que "+
+                            "trabajaremos en modo offline. Es posible que " +
+                            "algunos datos no se encuentren actualizados. Al recuperar conexión los" +
+                            " actualizaremos");
+        }
     }
+
 
     public void lanzarActivityRegistro(View v)
     {
@@ -71,14 +82,13 @@ public class LoginActivity extends AppCompatActivity
         txtPin = (TextView)findViewById(R.id.txtPasswordLogin);
         final String celular = String.valueOf(txtCelular.getText());
         final String pin = String.valueOf(txtPin.getText());
-        loginActivity = this;
 
         if(celular.trim().length()==10)
         {
             txtCelular.setError(null);
             if(pin.trim().length()==4)
             {
-                if(hayConexionInternet())
+                if(true)
                 {
                     //public UsuarioFB(String celular, int latitud_actual, int longitud_actual, String nickname, String nombre, String pin, String token) {
                     final Usuario usuario = new Usuario();
@@ -86,6 +96,7 @@ public class LoginActivity extends AppCompatActivity
                     usuario.setPin(pin);
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(usuario.darRutaElemento());
+                    databaseReference.keepSynced(true);
                     databaseReference.addListenerForSingleValueEvent(new ValueEventListener()
                     {
                         @Override
@@ -105,8 +116,11 @@ public class LoginActivity extends AppCompatActivity
                             }
                             else
                             {
-                                MainActivity.mostrarMensaje(loginActivity,"Error de autenticación",
-                                        "El usuario o contraseña son incorrectos, revise e intente nuevamente");
+                                String msj="El usuario o contraseña son incorrectos, revisa e intenta nuevamente.\n";
+                                msj+=((!hayConexionInternet())?"Como estás en modo offline es probable" +
+                                    " que no se haya actualizado tu contraseña. Si cambiaste tu contraseña recientemente" +
+                                    " intenta ingresar con tu anterior contraseña. \nPero no te preocupes, en cuanto recuperemos la conexión ésta se actualizará":"");
+                                MainActivity.mostrarMensaje(loginActivity,"Error de autenticación",msj);
                             }
                         }
                         @Override
@@ -118,12 +132,6 @@ public class LoginActivity extends AppCompatActivity
                             System.out.println(databaseError.toString());
                         }
                     });
-                }
-                else
-                {
-                    MainActivity.mostrarMensaje(loginActivity,"Error de conexión",
-                            "Parece que no tienes conexión a internet. \n" +
-                            "Verifica e intenta nuevamente");
                 }
             }
             else

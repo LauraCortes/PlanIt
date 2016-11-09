@@ -27,23 +27,19 @@ import java.util.List;
 public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
 {
 
-    private List<Sitio> sitios;
 
     public SitioRecyclerViewAdapter(Context context, List<Sitio> sitios, TabFragment tabFragment)
     {
-        super(context,sitios,tabFragment);
-        this.sitios = sitios;
+        super(context,((SitiosTabFragment)tabFragment).getSitios(),tabFragment);
+        System.out.println("FROM ADAPTER: hay "+elementos.size()+" sitios");
     }
 
-
-    @Override
-    public int getItemCount() {
-        if (sitios == null) {
-            return 0;
-        } else {
-            return sitios.size();
-        }
+    public void cambiarElementos(List<Sitio> sitios)
+    {
+        elementos = sitios;
+        notifyDataSetChanged();
     }
+
 
     @Override
     public SitioRowViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
@@ -56,7 +52,8 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
     public void onBindViewHolder(ElementoRowViewHolder holder, final int position)
     {
         SitioRowViewHolder rowViewHolder = (SitioRowViewHolder) holder;
-        final Sitio sitio = this.sitios.get(position);
+        final Sitio sitio = (Sitio) this.elementos.get(position);
+        System.out.println("Bind del sitio -"+sitio.getNombre());
         rowViewHolder.nombreTextView.setText(String.valueOf(sitio.getNombre()));
         //rowViewHolder.barrioTextView.setText(String.valueOf(sitio.getBarrio()));
         rowViewHolder.direccionTextView.setText(String.valueOf(sitio.getDirección()));
