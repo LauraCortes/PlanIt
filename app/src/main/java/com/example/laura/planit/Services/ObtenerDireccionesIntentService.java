@@ -2,11 +2,14 @@ package com.example.laura.planit.Services;
 
 import android.app.IntentService;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -34,9 +37,9 @@ import static android.content.ContentValues.TAG;
  * Created by Usuario on 10/11/2016.
  */
 
-public class FetchAddressIntentService extends IntentService {
+public class ObtenerDireccionesIntentService extends IntentService {
 
-    public FetchAddressIntentService()
+    public ObtenerDireccionesIntentService()
     {
         super("");
     }
@@ -45,7 +48,7 @@ public class FetchAddressIntentService extends IntentService {
      *
      * @param name Used to name the worker thread, important only for debugging.
      */
-    public FetchAddressIntentService(String name) {
+    public ObtenerDireccionesIntentService(String name) {
         super(name);
     }
 
@@ -57,7 +60,7 @@ public class FetchAddressIntentService extends IntentService {
     {
         System.out.println("Solicitud de servicio para geocodificación");
         final Sitio sitio = (Sitio) intent.getSerializableExtra(Constants.SITIO);
-        if (sitio != null) {
+        if (sitio != null && hayConexionInternet()) {
             System.out.println("Llegó sitio");
             // Get the location passed to this service through an extra.
             Location location = new Location("");
@@ -134,6 +137,19 @@ public class FetchAddressIntentService extends IntentService {
             }
         } else {
             System.out.println("NO SE RECIBIÓ SITIO");
+        }
+    }
+
+    public boolean hayConexionInternet()
+    {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected())
+        {
+            return true;
+        } else
+        {
+            return false;
         }
     }
 

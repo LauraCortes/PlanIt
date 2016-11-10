@@ -25,7 +25,7 @@ import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.Constants;
-import com.example.laura.planit.Services.FetchAddressIntentService;
+import com.example.laura.planit.Services.ObtenerDireccionesIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -198,10 +198,6 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                                     } else
                                     {
                                         databaseReference.setValue(nuevoSitio);
-                                        //Lanzar servicio para obtener dirección
-                                        Intent intent = new Intent(contexto, FetchAddressIntentService.class);
-                                        intent.putExtra(Constants.SITIO, nuevoSitio);
-                                        startService(intent);
                                     }
                                 }
 

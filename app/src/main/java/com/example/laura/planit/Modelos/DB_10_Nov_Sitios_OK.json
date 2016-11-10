@@ -1,0 +1,108 @@
+{
+  "eventos" : {
+    "id_evento_autogenerado" : {
+      "celular_organizador" : 3138238039,
+      "descripcion" : "descripcion",
+      "fecha" : "long_hora_fecha",
+      "lugar" : {
+        "direccion" : "direccion",
+        "latitud" : "int_latitud",
+        "longitud" : "int_longitud",
+        "nombre" : "nombre_lugar"
+      },
+      "lugar_definitivo" : false,
+      "lugar_fijo" : false,
+      "nombre" : "nombre",
+      "nombre_organizador" : "nombre"
+    }
+  },
+  "eventos_usuario" : {
+    "celular" : {
+      "id_evento" : "id_evento"
+    }
+  },
+  "lugares_favoritos" : {
+    "3138238039" : {
+      "Edificio Aulas Uniandes" : {
+        "direccion" : "Calle 19 Bis #1-2 a 1-98, Bogotá",
+        "latitud" : 4.6026496932903855,
+        "longitud" : -74.06635411083698,
+        "nombre" : "Edificio Aulas Uniandes"
+      },
+      "Frisby Andes" : {
+        "direccion" : "Carrera 1 #20a-1 a 20a-33, Bogotá",
+        "latitud" : 4.603469138757202,
+        "longitud" : -74.06617071479559,
+        "nombre" : "Frisby Andes"
+      },
+      "Subway" : {
+        "direccion" : "Diagonal 20 #0-2 a 0-76, Bogotá",
+        "latitud" : 4.6034868510672355,
+        "longitud" : -74.0656728297472,
+        "nombre" : "Subway"
+      }
+    }
+  },
+  "movimientos" : {
+    "celular" : {
+      "hora" : {
+        "descripción" : "llegó a casa:SaC / SaE / LaE /LaC",
+        "id_evento" : "id_evento",
+        "nombre_evento" : "nombre_evento"
+      }
+    }
+  },
+  "participantes_evento" : {
+    "id_evento" : {
+      "celular_participante" : {
+        "camino_casa" : false,
+        "camino_evento" : false,
+        "cancelo" : false,
+        "hora_llegada_propia" : "long_hora",
+        "llego_casa" : false,
+        "llego_evento" : false
+      }
+    }
+  },
+  "regresos" : {
+    "id_evento" : {
+      "celular_dueño" : {
+        "capacidad_extra" : 3,
+        "compartido" : true,
+        "compartido_con" : {
+          "celular" : {
+            "cantidad_personas" : "1/default",
+            "nombre" : "laura"
+          }
+        },
+        "hora_regreso" : "long_hora",
+        "id_destino" : "id_lugar_favorito_destino",
+        "placa" : "placa",
+        "tiempo_regreso" : "tiempo_calculado_api",
+        "tipo" : "taxi/uber/carro/transp_publico"
+      }
+    }
+  },
+  "sondeos" : {
+    "id_evento" : {
+      "cantidad_votantes" : 3,
+      "cerrado" : false,
+      "id_lugar_actual" : "id_lugar_actual",
+      "opciones" : {
+        "id_lugar" : {
+          "votos_contra" : 0,
+          "votos_favor" : 3
+        }
+      }
+    }
+  },
+  "usuarios" : {
+    "3138238039" : {
+      "latitud_actual" : 0,
+      "longitud_actual" : 0,
+      "nickname" : "bd.rangel ",
+      "nombre" : "Brahian Rangel ",
+      "pin" : "df113405461a484dc87da9283011f4dfb1c24c467325c9133bd70d89ea0b4c88"
+    }
+  }
+}

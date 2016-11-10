@@ -12,6 +12,8 @@ import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
+import com.example.laura.planit.Services.Constants;
+import com.example.laura.planit.Services.ObtenerDireccionesIntentService;
 
 import java.util.List;
 
@@ -58,13 +60,16 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
             rowViewHolder.direccionTextView.setText(direccion);
             layoutDireccion.setVisibility(View.VISIBLE);
             layoutGPS.setVisibility(View.GONE);
-            System.out.println("Dirección detectada");
         }
         else
         {
             layoutDireccion.setVisibility(View.GONE);
             layoutGPS.setVisibility(View.VISIBLE);
-            System.out.println("Dirección no encontrada");
+            System.out.println("Service lanzado para obtener dirección");
+            //Lanzar servicio para obtener dirección
+            Intent intent = new Intent(context, ObtenerDireccionesIntentService.class);
+            intent.putExtra(Constants.SITIO, sitio);
+            context.startService(intent);
         }
         boolean seleccionado = tabFragment.isItemSelected(sitio);
         holder.decorarSeleccionado(seleccionado);

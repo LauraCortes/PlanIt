@@ -34,7 +34,7 @@
         <activity android:name=".Activities.Eventos.TimerActivity" />
 
         <service
-            android:name=".Services.FetchAddressIntentService"
+            android:name=".Services.ObtenerDireccionesIntentService"
             android:exported="false"/>
         <service
             android:name=".Services.PersitenciaService"
