@@ -248,18 +248,29 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        if (mapa!=null)
+        if (mapa!=null && !editar)
         {
-            String nombreActual=String.valueOf(txtNombre.getText()).trim();
-            String msj = mLastLocation!=null?"Ubicación actual":
-                    (nombreActual.isEmpty()?"Nuevo sitio":nombreActual);
-            LatLng actual = mLastLocation!=null?new LatLng(mLastLocation.getLatitude(),
-                    mLastLocation.getLongitude()):new LatLng(4.6027453,-74.0654616);
-            defaultMarker=mapa.addMarker(new MarkerOptions()
-                    .draggable(true)
-                    .position(actual)
-                    .title(msj));
-            mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(actual,18));
+            if(!editar)
+            {
+                String nombreActual=String.valueOf(txtNombre.getText()).trim();
+                String msj = mLastLocation!=null?"Ubicación actual":
+                        (nombreActual.isEmpty()?"Nuevo sitio":nombreActual);
+                LatLng actual = mLastLocation!=null?new LatLng(mLastLocation.getLatitude(),
+                        mLastLocation.getLongitude()):new LatLng(4.6027453,-74.0654616);
+                defaultMarker=mapa.addMarker(new MarkerOptions()
+                        .draggable(true)
+                        .position(actual)
+                        .title(msj));
+                mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(actual,18));
+            }
+            else
+            {
+                LatLng actual = new LatLng(mLastLocation.getLatitude(),
+                        mLastLocation.getLongitude());
+                defaultMarker.setTitle(String.valueOf(txtNombre.getText()));
+                mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(actual,18));
+            }
+
         }
     }
 
