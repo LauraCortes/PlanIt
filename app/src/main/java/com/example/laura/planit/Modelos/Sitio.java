@@ -14,16 +14,16 @@ public class Sitio implements Serializable
     public double latitud;
     public double longitud;
     public String nombre;
-    public String dirección;
+    public String direccion;
 
     public Sitio() {
     }
 
-    public Sitio(double latitud, double longitud, String nombre, String dirección) {
+    public Sitio(double latitud, double longitud, String nombre, String direccion) {
         this.latitud = latitud;
         this.longitud = longitud;
         this.nombre = nombre;
-        this.dirección = dirección;
+        this.direccion = direccion;
     }
 
     public double getLatitud() {
@@ -50,17 +50,23 @@ public class Sitio implements Serializable
         this.nombre = nombre;
     }
 
-    public String getDirección() {
-        return latitud+" , "+longitud;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDirección(String dirección) {
-        this.dirección = dirección;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     @Exclude
     public String darRutaElemento(String celular)
     {
         return "/lugares_favoritos/"+celular+"/"+nombre;
+    }
+
+    @Exclude
+    public String getCoordenadas()
+    {
+        return latitud+", "+longitud;
     }
 }

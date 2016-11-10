@@ -1,14 +1,27 @@
 package com.example.laura.planit.Services;
 
 import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.os.ResultReceiver;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.example.laura.planit.Modelos.PlanIt;
+import com.example.laura.planit.Modelos.Sitio;
+import com.example.laura.planit.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +35,11 @@ import static android.content.ContentValues.TAG;
  */
 
 public class FetchAddressIntentService extends IntentService {
+
+    public FetchAddressIntentService()
+    {
+        super("");
+    }
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
@@ -31,66 +49,93 @@ public class FetchAddressIntentService extends IntentService {
         super(name);
     }
 
-    protected ResultReceiver mReceiver;
-
-    private void deliverResultToReceiver(int resultCode, String message) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.RESULT_DATA_KEY, message);
-        mReceiver.send(resultCode, bundle);
-    }
-
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     */
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        String errorMessage = "";
+    protected void onHandleIntent(Intent intent)
+    {
+        System.out.println("Solicitud de servicio para geocodificación");
+        final Sitio sitio = (Sitio) intent.getSerializableExtra(Constants.SITIO);
+        if (sitio != null) {
+            System.out.println("Llegó sitio");
+            // Get the location passed to this service through an extra.
+            Location location = new Location("");
+            location.setLongitude(sitio.getLongitud());
+            location.setLatitude(sitio.getLatitud());
 
-        // Get the location passed to this service through an extra.
-        Location location = intent.getParcelableExtra(
-                Constants.LOCATION_DATA_EXTRA);
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            String errorMessage = "";
 
+            List<Address> addresses = null;
 
-        List<Address> addresses = null;
-
-        try {
-            addresses = geocoder.getFromLocation(
-                    location.getLatitude(),
-                    location.getLongitude(),
-                    // In this sample, get just a single address.
-                    1);
-        } catch (IOException ioException) {
-            // Catch network or other I/O problems.
-            errorMessage = "Servicio no disponible";
-            Log.e(TAG, errorMessage, ioException);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            // Catch invalid latitude or longitude values.
-            errorMessage = "Latitud o longitud inválida";
-            Log.e(TAG, errorMessage + ". " +
-                    "Latitude = " + location.getLatitude() +
-                    ", Longitude = " +
-                    location.getLongitude(), illegalArgumentException);
-        }
-
-        // Handle case where no address was found.
-        if (addresses == null || addresses.size()  == 0) {
-            if (errorMessage.isEmpty()) {
-                errorMessage = "Dirección no encontrada";
-                Log.e(TAG, errorMessage);
+            try {
+                addresses = geocoder.getFromLocation(
+                        location.getLatitude(),
+                        location.getLongitude(),
+                        // In this sample, get just a single address.
+                        1);
+            } catch (IOException ioException) {
+                // Catch network or other I/O problems.
+                errorMessage = "Servicio no disponible";
+                System.out.println(errorMessage);
+            } catch (IllegalArgumentException illegalArgumentException) {
+                // Catch invalid latitude or longitude values.
+                errorMessage = "Latitud o longitud inválida";
+                System.out.println(errorMessage + ". " +
+                        "Latitude = " + location.getLatitude() +
+                        ", Longitude = " +
+                        location.getLongitude());
             }
-            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
+            if (addresses == null || addresses.size() == 0) {
+                if (errorMessage.isEmpty()) {
+                    errorMessage = "Dirección no encontrada";
+                    System.out.println(errorMessage);
+                }
+            } else {
+
+                Address address = addresses.get(0);
+                ArrayList<String> addressFragments = new ArrayList<String>();
+
+                // Fetch the address lines using getAddressLine,
+                // join them, and send them to the thread.
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                    addressFragments.add(address.getAddressLine(i));
+                }
+
+                final String direccionObtenida = TextUtils.join(", ", addressFragments);
+                System.out.println("Dirección obtenida por el service -> " + direccionObtenida);
+
+                SharedPreferences properties = getSharedPreferences(getString(R.string.properties), MODE_PRIVATE);
+                String celular = properties.getString(getString(R.string.usuario), "not found");
+
+                final FirebaseDatabase db = FirebaseDatabase.getInstance();
+                final DatabaseReference ref = db.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(sitio.darRutaElemento(celular));
+                ref.addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    sitio.setDireccion(direccionObtenida);
+                                    ref.setValue(sitio);
+                                    System.out.println("SITIO ACTUALIZADO");
+                                } else {
+                                    System.out.println(ref.toString());
+                                    System.out.println("SITIO no existe");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        }
+                );
+            }
         } else {
-            Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<String>();
-
-            // Fetch the address lines using getAddressLine,
-            // join them, and send them to the thread.
-            for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-            }
-            Log.i(TAG, "Dirección encontrada");
-            deliverResultToReceiver(Constants.SUCCESS_RESULT,
-                    TextUtils.join(System.getProperty("line.separator"),
-                            addressFragments));
+            System.out.println("NO SE RECIBIÓ SITIO");
         }
     }
+
 }
 

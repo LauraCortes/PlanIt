@@ -103,7 +103,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("NOMBRE", nSitio.getNombre());
-        values.put("DIRECCION", nSitio.getDirección());
+        values.put("DIRECCION", nSitio.getDireccion());
         try
         {
             long resultado = db.insert(TABLE_SITIOS_FAVORITOS, null, values);
@@ -250,7 +250,7 @@ public class DBHandler extends SQLiteOpenHelper implements Serializable{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("NOMBRE", nSitio.getNombre());
-        values.put("DIRECCION", nSitio.getDirección());
+        values.put("DIRECCION", nSitio.getDireccion());
         try
         {
             modificaciones= db.update(TABLE_SITIOS_FAVORITOS, values, "NOMBRE='"+nombreSitio+"'",null);

@@ -1,25 +1,18 @@
 package com.example.laura.planit.Activities.Sitios;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Fragments.TabFragment;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,33 +44,58 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
     }
 
     @Override
-    public void onBindViewHolder(ElementoRowViewHolder holder, final int position)
+    public void onBindViewHolder(final ElementoRowViewHolder holder, final int position)
     {
         SitioRowViewHolder rowViewHolder = (SitioRowViewHolder) holder;
         final Sitio sitio = (Sitio) this.elementos.get(position);
-        rowViewHolder.nombreTextView.setText(String.valueOf(sitio.getNombre()));
-        rowViewHolder.direccionTextView.setText(String.valueOf(sitio.getDirección()));
-        rowViewHolder.btn_editar.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(context, AgregarSitioActivity.class);
-                        i.putExtra("editar",true);
-                        i.putExtra("sitio", sitio);
-                        context.startActivity(i);
-                    }
-                }
-        );
+        rowViewHolder.nombreTextView.setText(sitio.getNombre());
+        rowViewHolder.coordenadasTextView.setText(sitio.getCoordenadas());
+        String direccion = (sitio.getDireccion());
+        LinearLayout layoutDireccion = (LinearLayout)rowViewHolder.vista.findViewById(R.id.layout_direccion_sitios);
+        LinearLayout layoutGPS = (LinearLayout)rowViewHolder.vista.findViewById(R.id.layout_gps_sitios);
+        if(direccion!= null && !direccion.trim().isEmpty())
+        {
+            rowViewHolder.direccionTextView.setText(direccion);
+            layoutDireccion.setVisibility(View.VISIBLE);
+            layoutGPS.setVisibility(View.GONE);
+            System.out.println("Dirección detectada");
+        }
+        else
+        {
+            layoutDireccion.setVisibility(View.GONE);
+            layoutGPS.setVisibility(View.VISIBLE);
+            System.out.println("Dirección no encontrada");
+        }
+        boolean seleccionado = tabFragment.isItemSelected(sitio);
+        holder.decorarSeleccionado(seleccionado);
+
         holder.vista.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(context, AgregarSitioActivity.class);
-                        i.putExtra("editar",true);
-                        i.putExtra("sitio", sitio);
-                        context.startActivity(i);
+                        if(tabFragment.hayItemsSeleccionados())
+                        {
+                            seleccionarItem(sitio,holder);
+                        }
+                        else
+                        {
+                            Intent i = new Intent(context, AgregarSitioActivity.class);
+                            i.putExtra("editar",true);
+                            i.putExtra("sitio", sitio);
+                            context.startActivity(i);
+                        }
                     }
                 }
         );
+
+        holder.vista.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v)
+            {
+                seleccionarItem(sitio,holder);
+                //Retorna que sí lo usó->No invoca el clickListener
+                return true;
+            }
+        });
     }
 }

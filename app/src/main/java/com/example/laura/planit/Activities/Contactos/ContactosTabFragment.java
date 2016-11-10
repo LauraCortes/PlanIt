@@ -18,6 +18,7 @@ import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class ContactosTabFragment extends TabFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        elementosSeleccionados = new HashMap<Integer, Integer>();
+        elementosSeleccionados = new ArrayList();
         super.onCreate(savedInstanceState);
         elementos= PlanIt.darInstancia().darContactos();
 

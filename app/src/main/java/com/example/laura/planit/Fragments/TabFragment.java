@@ -32,7 +32,7 @@ public abstract class TabFragment extends Fragment
 
     protected RecyclerView.Adapter adapter;
     public List elementos;
-    protected HashMap elementosSeleccionados;
+    protected List elementosSeleccionados;
     protected FloatingActionButton btnFAB;
     protected RecyclerView recyclerView;
     protected static int AGREGAR_ELEMENTOS =97;
@@ -74,34 +74,29 @@ public abstract class TabFragment extends Fragment
 
     protected abstract void lanzarActivityAgregarElemento(View view);
 
-
+    //TODO convertir a abstract
     public void eliminarElementosVista(View view)
     {
-        Iterator<Map.Entry<Integer,Integer>> iterator = elementosSeleccionados.entrySet().iterator();
+        Iterator iterator = elementosSeleccionados.iterator();
 
         for (int i=0; iterator.hasNext();i++)
         {
-
-            Map.Entry<Integer, Integer> entrada = iterator.next();
-            int pos = entrada.getKey()+i;
             //TODO -> Eliminar del mundo
-            elementos.remove(pos);
-            //Remueve del view
-            adapter.notifyItemRemoved(pos);
+            elementos.remove(iterator.next());
         }
         elementosSeleccionados.clear();
         cambiarIconoFAB();
     }
 
-    public void agregarItemEliminar(int pos)
+    public void agregarItemEliminar(Object nuevo)
     {
-        elementosSeleccionados.put(pos,pos);
+        elementosSeleccionados.add(nuevo);
         cambiarIconoFAB();
     }
 
-    public void removerItemEliminar(int pos)
+    public void removerItemEliminar(Object remover)
     {
-        elementosSeleccionados.remove(pos);
+        elementosSeleccionados.remove(remover);
         cambiarIconoFAB();
     }
 
@@ -110,20 +105,20 @@ public abstract class TabFragment extends Fragment
         return elementosSeleccionados.size()!=0;
     }
 
-    public boolean isItemSelected(int pos)
+    public boolean isItemSelected(Object o)
     {
-        return elementosSeleccionados.containsKey(pos);
+        return elementosSeleccionados.contains(o);
     }
 
-    public void seleccionarItem(int pos)
+    public void seleccionarItem(Object o)
     {
-        if(!isItemSelected(pos))
+        if(!isItemSelected(o))
         {
-            agregarItemEliminar(pos);
+            agregarItemEliminar(o);
         }
         else
         {
-            removerItemEliminar(pos);
+            removerItemEliminar(o);
         }
     }
 
@@ -132,7 +127,6 @@ public abstract class TabFragment extends Fragment
         if (!elementosSeleccionados.isEmpty())
         {
             elementosSeleccionados.clear();
-            adapter.notifyDataSetChanged();
             cambiarIconoFAB();
         }
     }
@@ -144,9 +138,6 @@ public abstract class TabFragment extends Fragment
             // Make sure the request was successful
             if (resultCode != 0)
             {
-                obtenerElementos();
-                System.out.println("Elementos en el tab -> "+elementos.size());
-                adapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(elementos.size()-1);
                 Toast.makeText(getContext(),msjToastAgregar,Toast.LENGTH_SHORT).show();
             }

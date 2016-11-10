@@ -1,4 +1,4 @@
-package com.example.laura.planit.Activities.Contactos;
+package com.example.laura.planit.Activities.Eventos;
 
 import android.Manifest;
 import android.content.Context;
@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 
+import com.example.laura.planit.Activities.Contactos.AgregarContactoAdapter;
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;

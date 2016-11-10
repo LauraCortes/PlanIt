@@ -16,13 +16,12 @@ public class SitioRowViewHolder extends ElementoRowViewHolder
 {
     TextView nombreTextView;
     TextView direccionTextView;
-    ImageButton btn_editar;
-    ImageButton btn_localizar;
+    TextView coordenadasTextView;
 
     public SitioRowViewHolder(View view) {
         super(view);
         this.nombreTextView = (TextView) view.findViewById(R.id.nombreSitioFavorito);
         this.direccionTextView = (TextView) view.findViewById(R.id.direccionSitioFavorito);
-        this.btn_editar=(ImageButton)view.findViewById(R.id.btn_editar_row_sitio);
+        this.coordenadasTextView=(TextView) view.findViewById(R.id.coordenadasSitioFavorito);
     }
 }

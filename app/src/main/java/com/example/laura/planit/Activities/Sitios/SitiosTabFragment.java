@@ -54,6 +54,19 @@ public class SitiosTabFragment extends TabFragment
         startActivityForResult(i,AGREGAR_ELEMENTOS);
     }
 
+    @Override
+    public void eliminarElementosVista(View view)
+    {
+        Iterator iterator = elementosSeleccionados.iterator();
+        for (int i=0; iterator.hasNext();i++)
+        {
+            Sitio actual = (Sitio) iterator.next();
+            FirebaseDatabase.getInstance().getReferenceFromUrl(PlanIt.FIREBASE_URL).child(actual.darRutaElemento(celular)).setValue(null);
+        }
+        elementosSeleccionados.clear();
+        cambiarIconoFAB();
+    }
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SharedPreferences properties = getContext().getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
@@ -65,7 +78,7 @@ public class SitiosTabFragment extends TabFragment
             Intent i = new Intent(getContext(), LoginActivity.class);
             startActivity(i);
         }
-        elementosSeleccionados = new HashMap<Integer, Integer>();
+        elementosSeleccionados = new ArrayList();
         super.onCreateView(inflater, container, savedInstanceState);
         elementos= new ArrayList<>();
 
@@ -77,9 +90,11 @@ public class SitiosTabFragment extends TabFragment
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot)
                     {
+                        System.out.println("Los sitios cambiaron");
                         GenericTypeIndicator<HashMap<String,Sitio>> t = new GenericTypeIndicator<HashMap<String, Sitio>>(){};
                         HashMap<String, Sitio> map =dataSnapshot.getValue(t);
                         ArrayList<Sitio> nuevos = new ArrayList(map.values());
+                        elementos=nuevos;
                         ((SitioRecyclerViewAdapter)adapter).swapData(nuevos);
                         adapter.notifyDataSetChanged();
                     }

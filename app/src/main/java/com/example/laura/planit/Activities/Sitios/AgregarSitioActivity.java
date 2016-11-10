@@ -8,14 +8,10 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -35,7 +31,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
@@ -117,7 +112,7 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
             {
                 sitioEditar=sitio;
                 txtNombre.setText(sitio.getNombre());
-                txtDireccion.setText(sitio.getDirección());
+                txtDireccion.setText(sitio.getCoordenadas());
                 txtDireccion.setEnabled(false);
                 mLastLocation = new Location("");
                 mLastLocation.setLatitude(sitio.getLatitud());
@@ -171,14 +166,14 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                 txtDireccion.setError("Debe llenar este campo");
             } else {
                 txtDireccion.setError(null);
-                //public Sitio(int latitud, int longitud, String nombre, String dirección) {
+                //public Sitio(int latitud, int longitud, String nombre, String direccion) {
                 final Sitio nuevoSitio = new Sitio();
-                nuevoSitio.setDirección(direccion);
+                nuevoSitio.setDireccion(direccion);
                 nuevoSitio.setNombre(nombre);
                 LatLng posicionActual = defaultMarker.getPosition();
                 nuevoSitio.setLatitud(posicionActual.latitude);
                 nuevoSitio.setLongitud(posicionActual.longitude);
-                nuevoSitio.setDirección(direccion);
+                nuevoSitio.setDireccion("");
 
                 SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
                 if (properties.getBoolean(getString(R.string.logueado), false))
@@ -200,8 +195,13 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                                     if (dataSnapshot.exists()) {
                                         MainActivity.mostrarMensaje(contexto, "Sitio existente", "Ya existe" +
                                                 " un sitio con este nombre");
-                                    } else {
+                                    } else
+                                    {
                                         databaseReference.setValue(nuevoSitio);
+                                        //Lanzar servicio para obtener dirección
+                                        Intent intent = new Intent(contexto, FetchAddressIntentService.class);
+                                        intent.putExtra(Constants.SITIO, nuevoSitio);
+                                        startService(intent);
                                     }
                                 }
 

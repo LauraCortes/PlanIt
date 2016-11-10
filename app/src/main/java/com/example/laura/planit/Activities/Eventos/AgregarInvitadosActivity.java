@@ -1,4 +1,4 @@
-package com.example.laura.planit.Activities.Contactos;
+package com.example.laura.planit.Activities.Eventos;
 
 import android.content.Intent;
 import android.os.Bundle;

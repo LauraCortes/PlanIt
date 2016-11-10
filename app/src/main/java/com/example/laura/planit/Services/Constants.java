@@ -1,6 +1,7 @@
 package com.example.laura.planit.Services;
 
 public final class Constants {
+    public final static String SITIO = "sitio";
     public static final int SUCCESS_RESULT = 0;
     public static final int FAILURE_RESULT = 1;
     public static final String PACKAGE_NAME =

@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.laura.planit.Activities.Contactos.AgregarInvitadosActivity;
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.Evento;
 import com.example.laura.planit.Modelos.PlanIt;
