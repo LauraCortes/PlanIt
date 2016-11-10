@@ -3,9 +3,13 @@ package com.example.laura.planit.Activities.Sitios;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -36,6 +40,18 @@ public class AgregarSitioActivity extends AppCompatActivity{
     Context contexto;
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
@@ -47,8 +63,17 @@ public class AgregarSitioActivity extends AppCompatActivity{
         setContentView(R.layout.activity_agregar_sitios);
         txtNombre=(EditText)findViewById(R.id.txtNombreSitioFavorito);
         txtDireccion=(EditText)findViewById(R.id.txtDireccionFavorito);
+
+        //ActionBar
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_agregar_sitio));
         getSupportActionBar().setTitle("Agregar sitio");
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.atras_icon);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+
         Intent intent = getIntent();
         editar = intent.getExtras().getBoolean("editar");
         if(editar)
@@ -58,8 +83,6 @@ public class AgregarSitioActivity extends AppCompatActivity{
                 txtNombre.setText(sitio.getNombre());
                 txtDireccion.setText(sitio.getDirección());
                 getSupportActionBar().setTitle("Edición de sitio");
-                //getSupportActionBar().setHomeButtonEnabled(true);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
             else
             {
