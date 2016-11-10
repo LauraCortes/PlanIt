@@ -56,43 +56,16 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
         SitioRowViewHolder rowViewHolder = (SitioRowViewHolder) holder;
         final Sitio sitio = (Sitio) this.elementos.get(position);
         rowViewHolder.nombreTextView.setText(String.valueOf(sitio.getNombre()));
-        //rowViewHolder.barrioTextView.setText(String.valueOf(sitio.getBarrio()));
         rowViewHolder.direccionTextView.setText(String.valueOf(sitio.getDirección()));
-        rowViewHolder.imagenView.setBackground(ContextCompat.getDrawable(context,R.drawable.home));
-        rowViewHolder.vista.setOnLongClickListener(
-                //Desactivar onlongClick y poner botón de editar y de eliminar
-                new View.OnLongClickListener() {
+        rowViewHolder.btn_editar.setOnClickListener(
+                new View.OnClickListener() {
                     @Override
-                    public boolean onLongClick(View v)
-                    {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(sitio.getNombre());
-                        builder.setItems(new CharSequence[]{"editar", "eliminar"}, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if(which==0)
-                                {
-                                    Intent i = new Intent(context, AgregarSitioActivity.class);
-                                    i.putExtra("editar",true);
-                                    i.putExtra("titulo","Editar sitio favorito");
-                                    i.putExtra("posicion", position);
-                                    context.startActivity(i);
-                                    ((Activity)context).finish();
-                                }
-                                else
-                                {
-                                    notifyDataSetChanged();
-                                    Intent service = new Intent(context, PersitenciaService.class);
-                                    service.putExtra("Requerimiento","EliminarSitio");
-                                    service.putExtra("Nombre",PlanIt.darInstancia().darSitios().get(position).getNombre());
-                                    context.startService(service);
-                                    PlanIt.darInstancia().eliminarSitio(position);
-                                    Toast.makeText(context, "Sitio eliminado de favoritos", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                        builder.show();
-                        return true;
+                    public void onClick(View v) {
+                        Intent i = new Intent(context, AgregarSitioActivity.class);
+                        i.putExtra("editar",true);
+                        i.putExtra("titulo","Editar sitio favorito");
+                        i.putExtra("sitio", sitio);
+                        context.startActivity(i);
                     }
                 }
         );

@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -45,22 +47,30 @@ public class AgregarSitioActivity extends AppCompatActivity{
         setContentView(R.layout.activity_agregar_sitios);
         txtNombre=(EditText)findViewById(R.id.txtNombreSitioFavorito);
         txtDireccion=(EditText)findViewById(R.id.txtDireccionFavorito);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_agregar_sitio));
+        getSupportActionBar().setTitle("Agregar sitio");
         Intent intent = getIntent();
         editar = intent.getExtras().getBoolean("editar");
         if(editar)
         {
-            pos=intent.getIntExtra("posicion",-1);
-            if(pos!=-1)
+            Sitio sitio=(Sitio)intent.getSerializableExtra("sitio");
+            if(sitio!=null) {
+                txtNombre.setText(sitio.getNombre());
+                txtDireccion.setText(sitio.getDirección());
+                getSupportActionBar().setTitle("Edición de sitio");
+                //getSupportActionBar().setHomeButtonEnabled(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+            else
             {
-                Sitio sitioEditado = PlanIt.darInstancia().darSitios().get(pos);
-                nombre=sitioEditado.getNombre();
-                txtNombre.setText(nombre);
-                txtDireccion.setText(sitioEditado.getDirección());
-                sitioEditado=null;
+                finish();
             }
 
         }
-        //getSupportActionBar().setTitle(intent.getStringExtra("titulo"));
+        else
+        {
+
+        }
         intent=null;
     }
 

@@ -38,16 +38,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_principal, menu);
         int actionBarTitleId = Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
-        {
-            TextView title = (TextView) findViewById(actionBarTitleId);
-            if (title != null) {
-                title.setTextColor(Color.WHITE);
-            }
-            else
-            {
-                System.out.println("NO se encontró el title");
-            }
-        }
         return true;
     }
 
