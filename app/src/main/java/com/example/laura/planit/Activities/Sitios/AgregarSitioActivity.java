@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -66,6 +67,7 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
     private Location mLastLocation;
     private GoogleMap mapa;
     private Marker defaultMarker;
+    private Sitio sitioEditar;
 
     public AgregarSitioActivity() {
         super();
@@ -111,7 +113,9 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
         editar = intent.getExtras().getBoolean("editar");
         if (editar) {
             Sitio sitio = (Sitio) intent.getSerializableExtra("sitio");
-            if (sitio != null) {
+            if (sitio != null)
+            {
+                sitioEditar=sitio;
                 txtNombre.setText(sitio.getNombre());
                 txtDireccion.setText(sitio.getDirección());
                 txtDireccion.setEnabled(false);
@@ -179,13 +183,20 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                 SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
                 if (properties.getBoolean(getString(R.string.logueado), false))
                 {
-                    String celular = properties.getString(getString(R.string.usuario), "desconocido");
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    final String celular = properties.getString(getString(R.string.usuario), "desconocido");
+                    final FirebaseDatabase database = FirebaseDatabase.getInstance();
                     final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(nuevoSitio.darRutaElemento(celular));
+                    if(editar)
+                    {
+                        //Elimina el anterior elemento
+                        database.getReferenceFromUrl(PlanIt.FIREBASE_URL).
+                                child(sitioEditar.darRutaElemento(celular)).setValue(null);
+                    }
                     databaseReference.addListenerForSingleValueEvent(
                             new ValueEventListener() {
                                 @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                public void onDataChange(DataSnapshot dataSnapshot)
+                                {
                                     if (dataSnapshot.exists()) {
                                         MainActivity.mostrarMensaje(contexto, "Sitio existente", "Ya existe" +
                                                 " un sitio con este nombre");
@@ -201,9 +212,6 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                                 }
                             }
                     );
-
-                    String key = databaseReference.push().getKey();
-                    databaseReference.child(key).setValue(nuevoSitio);
                     finish();
                 } else {
                     MainActivity.mostrarMensaje(this, "Error", "Parece que no has iniciado sesión. Intenta cerrar sesión e ingresar de nuevo");
@@ -248,7 +256,7 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        if (mapa!=null && !editar)
+        if (mapa!=null)
         {
             if(!editar)
             {
@@ -265,10 +273,19 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
             }
             else
             {
-                LatLng actual = new LatLng(mLastLocation.getLatitude(),
-                        mLastLocation.getLongitude());
-                defaultMarker.setTitle(String.valueOf(txtNombre.getText()));
-                mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(actual,18));
+                if(sitioEditar!=null)
+                {
+                    LatLng actual = new LatLng(sitioEditar.getLatitud(),sitioEditar.getLongitud());
+                    defaultMarker=mapa.addMarker(new MarkerOptions()
+                            .draggable(true)
+                            .position(actual)
+                            .title(String.valueOf(txtNombre.getText())));
+                    mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(actual,18));
+                }
+                else
+                {
+                    System.out.println("Sitio editar es NULO");
+                }
             }
 
         }
