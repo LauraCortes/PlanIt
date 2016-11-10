@@ -14,14 +14,12 @@ import com.example.laura.planit.R;
 public class SitioRowViewHolder extends ElementoRowViewHolder
 {   ImageView imagenView;
     TextView nombreTextView;
-    TextView barrioTextView;
     TextView direccionTextView;
 
     public SitioRowViewHolder(View view) {
         super(view);
         this.nombreTextView = (TextView) view.findViewById(R.id.nombreSitioFavorito);
         this.imagenView = (ImageView) view.findViewById(R.id.imagenSitioFavorito);
-        this.barrioTextView = (TextView) view.findViewById(R.id.barrioSitioFavorito);
         this.direccionTextView = (TextView) view.findViewById(R.id.direccionSitioFavorito);
     }
 }
