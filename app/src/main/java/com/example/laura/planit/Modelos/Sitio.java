@@ -11,34 +11,34 @@ import java.io.Serializable;
 @IgnoreExtraProperties
 public class Sitio implements Serializable
 {
-    public int latitud;
-    public int longitud;
+    public double latitud;
+    public double longitud;
     public String nombre;
     public String dirección;
 
     public Sitio() {
     }
 
-    public Sitio(int latitud, int longitud, String nombre, String dirección) {
+    public Sitio(double latitud, double longitud, String nombre, String dirección) {
         this.latitud = latitud;
         this.longitud = longitud;
         this.nombre = nombre;
         this.dirección = dirección;
     }
 
-    public int getLatitud() {
+    public double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(int latitud) {
+    public void setLatitud(double latitud) {
         this.latitud = latitud;
     }
 
-    public int getLongitud() {
+    public double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(int longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
 
