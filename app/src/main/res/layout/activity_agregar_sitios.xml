@@ -23,17 +23,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/taj_mahal"
-        android:alpha=".20"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="top"
-        app:layout_collapseMode="parallax" />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
@@ -48,52 +37,67 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.5">
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_weight="2">
 
             <EditText
                 android:id="@+id/txtNombreSitioFavorito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:textAlignment="center"
+                android:inputType="textCapSentences"
                 android:hint="Nombre del sitio" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
             android:textAlignment="center"
-            android:text="Mueve el marcador a la posición del sitio"
+            android:text="Ubica el marcador a la posición del sitio"
             android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:textColor="@color/mdtp_transparent_black"
             android:layout_marginBottom="5dp"/>
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             android:name="com.google.android.gms.maps.MapFragment"
             android:id="@+id/map"
-            android:layout_weight="7"
+            android:layout_weight="9"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"/>
+            app:uiZoomControls="true"
+            app:uiZoomGestures="true"
+            app:uiCompass="true" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:paddingTop="5dp"
             android:layout_weight="1">
 
             <TextView
                 android:enabled="false"
-                android:id="@+id/txtDireccionFavorito"
+                android:id="@+id/lblDireccionFavorito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
-                android:hint="Dirección" />
+                android:layout_gravity="top"
+                android:textAlignment="center"
+                android:gravity="top"
+                android:text="Dirección: (No definida)"/>
         </android.support.design.widget.TextInputLayout>
 
         <Button
+            android:id="@+id/btn_agregar_sitio"
             android:theme="@style/AppTheme"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.2"
             android:text="Agregar"
             android:onClick="agregarSitio"
             android:background="@color/colorAccent" />

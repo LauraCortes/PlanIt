@@ -24,6 +24,5 @@ public class SitioRowViewHolder extends ElementoRowViewHolder
         this.nombreTextView = (TextView) view.findViewById(R.id.nombreSitioFavorito);
         this.direccionTextView = (TextView) view.findViewById(R.id.direccionSitioFavorito);
         this.btn_editar=(ImageButton)view.findViewById(R.id.btn_editar_row_sitio);
-        this.btn_localizar=(ImageButton)view.findViewById(R.id.btn_gps_row_sitio);
     }
 }

@@ -34,6 +34,9 @@
         <activity android:name=".Activities.Eventos.TimerActivity" />
 
         <service
+            android:name=".FetchAddressIntentService"
+            android:exported="false"/>
+        <service
             android:name=".Services.PersitenciaService"
             android:enabled="true"
             android:exported="true"></service>

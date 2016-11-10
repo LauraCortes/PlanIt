@@ -5,34 +5,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
+import com.example.laura.planit.Services.Constants;
+import com.example.laura.planit.Services.FetchAddressIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
@@ -44,8 +46,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.BreakIterator;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.example.laura.planit.R.id.map;
@@ -53,21 +53,23 @@ import static com.example.laura.planit.R.id.map;
 /**
  * Created by Laura on 12/09/2016.
  */
-public class AgregarSitioActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
-{
+public class AgregarSitioActivity extends AppCompatActivity implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMapClickListener {
 
     private EditText txtNombre;
-    private TextView txtDireccion;
+    public TextView txtDireccion;
     private boolean editar;
     private int pos;
     private String nombre;
     Context contexto;
     public GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-    private int mLatitude;
-    private int  mLongitude;
     private GoogleMap mapa;
     private Marker defaultMarker;
+
+    public AgregarSitioActivity() {
+        super();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -92,7 +94,7 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_sitios);
         txtNombre = (EditText) findViewById(R.id.txtNombreSitioFavorito);
-        txtDireccion = (TextView) findViewById(R.id.txtDireccionFavorito);
+        txtDireccion = (TextView) findViewById(R.id.lblDireccionFavorito);
 
 
         //ActionBar
@@ -113,6 +115,10 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                 txtNombre.setText(sitio.getNombre());
                 txtDireccion.setText(sitio.getDirección());
                 txtDireccion.setEnabled(false);
+                mLastLocation = new Location("");
+                mLastLocation.setLatitude(sitio.getLatitud());
+                mLastLocation.setLongitude(sitio.getLongitud());
+                ((Button)findViewById(R.id.btn_agregar_sitio)).setText("Guardar");
                 getSupportActionBar().setTitle("Edición de sitio");
             } else {
                 finish();
@@ -165,12 +171,14 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                 final Sitio nuevoSitio = new Sitio();
                 nuevoSitio.setDirección(direccion);
                 nuevoSitio.setNombre(nombre);
-                LatLng posicionActual=defaultMarker.getPosition();
+                LatLng posicionActual = defaultMarker.getPosition();
                 nuevoSitio.setLatitud(posicionActual.latitude);
                 nuevoSitio.setLongitud(posicionActual.longitude);
+                nuevoSitio.setDirección(direccion);
 
                 SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
-                if (properties.getBoolean(getString(R.string.logueado), false)) {
+                if (properties.getBoolean(getString(R.string.logueado), false))
+                {
                     String celular = properties.getString(getString(R.string.usuario), "desconocido");
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(nuevoSitio.darRutaElemento(celular));
@@ -208,7 +216,19 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        mapa=googleMap;
+        mapa = googleMap;
+        mapa.setOnMapClickListener(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mapa.setMyLocationEnabled(true);
 
     }
 
@@ -230,7 +250,6 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                 mGoogleApiClient);
         if (mapa!=null)
         {
-
             String nombreActual=String.valueOf(txtNombre.getText()).trim();
             String msj = mLastLocation!=null?"Ubicación actual":
                     (nombreActual.isEmpty()?"Nuevo sitio":nombreActual);
@@ -242,9 +261,49 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                     .title(msj));
             mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(actual,18));
         }
-
-
     }
+
+
+    /**
+
+     //Convertir coordenadas a direcciones
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        txtDireccion.setText(msg.getData().getString(Constants.RESULT_DATA_KEY));
+        return true;
+    }
+
+    class AddressResultReceiver extends ResultReceiver
+    {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        public String direccion="(No disponible)";
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            // Display the address string
+            // or an error message sent from the intent service.
+            direccion = resultData.getString(Constants.RESULT_DATA_KEY);
+            txtDireccion.setText(direccion);
+
+
+        }
+    }
+
+    private AddressResultReceiver mResultReceiver;
+
+    protected void startIntentServiceGeocodificacion() {
+        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        intent.putExtra(Constants.RECEIVER, mResultReceiver);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
+        startService(intent);
+    }
+    */
+
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -254,6 +313,12 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        defaultMarker.setPosition(latLng);
+        txtDireccion.setText(latLng.latitude+", "+latLng.longitude);
     }
 }
 

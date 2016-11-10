@@ -51,7 +51,7 @@ public class Sitio implements Serializable
     }
 
     public String getDirección() {
-        return dirección;
+        return latitud+" , "+longitud;
     }
 
     public void setDirección(String dirección) {

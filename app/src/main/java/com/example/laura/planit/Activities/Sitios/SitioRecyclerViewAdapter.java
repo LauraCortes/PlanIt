@@ -63,7 +63,17 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
                     public void onClick(View v) {
                         Intent i = new Intent(context, AgregarSitioActivity.class);
                         i.putExtra("editar",true);
-                        i.putExtra("titulo","Editar sitio favorito");
+                        i.putExtra("sitio", sitio);
+                        context.startActivity(i);
+                    }
+                }
+        );
+        holder.vista.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(context, AgregarSitioActivity.class);
+                        i.putExtra("editar",true);
                         i.putExtra("sitio", sitio);
                         context.startActivity(i);
                     }
