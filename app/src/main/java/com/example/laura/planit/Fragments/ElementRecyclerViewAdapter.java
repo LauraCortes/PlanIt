@@ -136,9 +136,8 @@ public abstract class ElementRecyclerViewAdapter extends RecyclerView.Adapter<El
 
     protected void seleccionarItem(Object elemento, ElementoRowViewHolder elementoRowViewHolder)
     {
-        boolean seleccionado = tabFragment.isItemSelected(elemento);
-        elementoRowViewHolder.decorarSeleccionado(!seleccionado);
-        tabFragment.seleccionarItem(elemento);
+        boolean seleccionado = tabFragment.seleccionarItem(elemento);
+        elementoRowViewHolder.decorarSeleccionado(seleccionado);
     }
 
 }

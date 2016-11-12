@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,13 +58,17 @@ public class SitiosTabFragment extends TabFragment
     @Override
     public void eliminarElementosVista(View view)
     {
-        Iterator iterator = elementosSeleccionados.iterator();
-        for (int i=0; iterator.hasNext();i++)
+        for (Sitio actual:(List<Sitio>)elementosSeleccionados)
         {
-            Sitio actual = (Sitio) iterator.next();
-            FirebaseDatabase.getInstance().getReferenceFromUrl(PlanIt.FIREBASE_URL).child(actual.darRutaElemento(celular)).setValue(null);
+            FirebaseDatabase.getInstance().getReferenceFromUrl(PlanIt.FIREBASE_URL).child(actual.darRutaElemento(celular)).removeValue();
+            elementosSeleccionados.remove(actual);
+            if(elementos.size()==1)
+            {
+                ((SitioRecyclerViewAdapter)adapter).swapData(new ArrayList());
+                adapter.notifyItemRemoved(0);
+            }
+            System.out.println("Sitio eliminado "+actual);
         }
-        elementosSeleccionados.clear();
         cambiarIconoFAB();
     }
 
@@ -93,10 +98,13 @@ public class SitiosTabFragment extends TabFragment
                         System.out.println("Los sitios cambiaron");
                         GenericTypeIndicator<HashMap<String,Sitio>> t = new GenericTypeIndicator<HashMap<String, Sitio>>(){};
                         HashMap<String, Sitio> map =dataSnapshot.getValue(t);
-                        ArrayList<Sitio> nuevos = new ArrayList(map.values());
-                        elementos=nuevos;
-                        ((SitioRecyclerViewAdapter)adapter).swapData(nuevos);
-                        adapter.notifyDataSetChanged();
+                        if(map!=null)
+                        {
+                            ArrayList<Sitio> nuevos = new ArrayList(map.values());
+                            elementos=nuevos;
+                            ((SitioRecyclerViewAdapter)adapter).swapData(nuevos);
+                            adapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
@@ -121,45 +129,8 @@ public class SitiosTabFragment extends TabFragment
         });
         return view;
     }
-        /*databaseReference.addChildEventListener(
-                new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
-                    {
-                        ((ArrayList<Sitio>)elementos).add(dataSnapshot.getValue(Sitio.class));
-                        adapter.notifyItemInserted(elementos.size()-1);
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        elementos.remove(dataSnapshot.getValue(Sitio.class));
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                }
-        )
-*/
 
 
-    @Override
-    public void obtenerElementos()
-    {
-        elementos=PlanIt.darInstancia().darSitios();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -177,25 +148,4 @@ public class SitiosTabFragment extends TabFragment
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
-    /**
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.tab_sitios);
-        if (PlanIt.darInstancia().darSitios().size() == 0) {
-            Intent i = new Intent(this, AgregarSitioActivity.class);
-            i.putExtra("editar", false);
-            i.putExtra("titulo", "Agregar primer sitio favorito");
-            finish();
-            startActivity(i);
-        }
-        getSupportActionBar().setTitle("Mis Sitios Favoritos");
-
-
-    }
-
-    */
-
-
 }

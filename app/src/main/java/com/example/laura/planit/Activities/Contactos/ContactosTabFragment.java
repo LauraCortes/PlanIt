@@ -25,12 +25,6 @@ import java.util.List;
 public class ContactosTabFragment extends TabFragment
 {
 
-    @Override
-    public void obtenerElementos()
-    {
-        elementos=PlanIt.darInstancia().darContactos();
-    }
-
     public ContactosTabFragment()
     {
         super();

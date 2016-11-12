@@ -27,8 +27,6 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
     public SitioRecyclerViewAdapter(Context context, List sitios, TabFragment tabFragment)
     {
         super(context,sitios,tabFragment);
-        sitios.add(new Sitio(0,0,"prueba1","prueba1"));
-        notifyDataSetChanged();
     }
 
     public void swapData(List sitios)

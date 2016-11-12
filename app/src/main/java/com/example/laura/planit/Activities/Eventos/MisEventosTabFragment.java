@@ -29,10 +29,6 @@ public class MisEventosTabFragment extends TabFragment
         super();
     }
 
-    @Override
-    public void obtenerElementos() {
-        elementos=PlanIt.darInstancia().darEventos();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
