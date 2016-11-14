@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +14,9 @@ import android.view.ViewGroup;
 import com.example.laura.planit.Activities.Main.LoginActivity;
 import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Fragments.TabFragment;
-import com.example.laura.planit.Modelos.Contacto;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
-import com.google.firebase.database.ChildEventListener;
+import com.example.laura.planit.Services.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,12 +24,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Laura on 12/09/2016.
@@ -60,7 +54,7 @@ public class SitiosTabFragment extends TabFragment
     {
         for (Sitio actual:(List<Sitio>)elementosSeleccionados)
         {
-            FirebaseDatabase.getInstance().getReferenceFromUrl(PlanIt.FIREBASE_URL).child(actual.darRutaElemento(celular)).removeValue();
+            FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL).child(actual.darRutaElemento(celular)).removeValue();
             elementosSeleccionados.remove(actual);
             if(elementos.size()==1)
             {
@@ -88,7 +82,7 @@ public class SitiosTabFragment extends TabFragment
         elementos= new ArrayList<>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child("lugares_favoritos/" + celular);
+        final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child("lugares_favoritos/" + celular);
         databaseReference.keepSynced(true);
         ValueEventListener valueEventListener = databaseReference.addValueEventListener(
                 new ValueEventListener() {

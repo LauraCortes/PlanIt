@@ -27,7 +27,7 @@ public class AgregarContactoAdapter extends ArrayAdapter<Contacto> {
     AgregarSuper activity;
 
 
-    public AgregarContactoAdapter(Context context, List<Contacto> contactos)
+    public AgregarContactoAdapter(Context context, List contactos)
     {
         super(context, 0, contactos);
         activity = (AgregarSuper) context;

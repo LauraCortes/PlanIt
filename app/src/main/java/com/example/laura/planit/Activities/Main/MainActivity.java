@@ -1,11 +1,22 @@
 package com.example.laura.planit.Activities.Main;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
+import android.hardware.SensorManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,25 +25,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
 import com.example.laura.planit.Activities.Sitios.SitiosTabFragment;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Fragments.TabsFragmenPageAdapter;
-import com.example.laura.planit.Modelos.PlanIt;
-import com.example.laura.planit.Persistencia.DBHandler;
 import com.example.laura.planit.R;
+import com.example.laura.planit.Sensores.DetectorAgitacion;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements DetectorAgitacion.OnShakeListener
 {
 
-    //Base de datos
-    private DBHandler db ;
-    private TabsFragmenPageAdapter tabContactos;
+    private boolean activityVisible;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,6 +71,19 @@ public class MainActivity extends AppCompatActivity
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Crea el detector de agitación
+        SensorManager sensorMgr = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        if(sensorMgr!=null)
+        {
+            DetectorAgitacion detector = new DetectorAgitacion(this);
+            sensorMgr.registerListener(detector,sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+        }
+        else
+        {
+            System.out.println("No se pudo inicializar el sensor para detección de agitación");
+        }
+
 
         //Crear el toolbar
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_principal));
@@ -98,47 +120,24 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activityVisible = true;
+    }
 
-        db = new DBHandler(this);
-        PlanIt mundo = PlanIt.darInstancia();
-        mundo.setDB(db);
-//        mundo.inicializar();
-        mundo=null;
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        activityVisible = false;
     }
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
-    public void agregarContactos(View view)
-    {
-        Intent i = new Intent(this, AgregarContactoActivity.class);
-        startActivity(i);
-    }
-
-    public void Registrar(View view) {
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
-    }
-
-    public void lanzarSitios(View view)
-    {
-        Intent i = new Intent(this, SitiosTabFragment.class);
-        startActivity(i);
-    }
-
-    public void contactosEmergencia(View view)
-    {
-        Intent i = new Intent(this, ContactosTabFragment.class);
-        startActivity(i);
-    }
-
-
-
-
 
     @Override
     public void onBackPressed()
@@ -182,4 +181,37 @@ public class MainActivity extends AppCompatActivity
         builder.show();
     }
 
+    @Override
+    public void onShake() {
+
+        if(activityVisible)
+        {
+            Toast.makeText(this,"Shake detected", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Drawable icon = ContextCompat.getDrawable(this,R.drawable.llegada_evento);
+            icon.setBounds(0,0,25,25);
+            Notification notificacion = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.logo_planit)
+                    .setContentTitle("Nombre del evento")
+                    .setContentText("Cuéntale a tus amigos que ya llegaste")
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setAutoCancel(false)
+                    .addAction(R.drawable.check,"Ya llegué",null)
+                    .addAction(R.drawable.close,"Aún no llego",null)
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .build();
+
+            NotificationManager mNotifyMgr=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            //Tono de notificación
+            notificacion.sound=Uri.parse("android.resource://"+ this.getPackageName() + "/" + R.raw.notificacion_llegada);
+            //Vibración
+            long[] vibrate = { 0, 100, 200, 100 };
+            notificacion.vibrate=vibrate;
+            int id_Notificacion_llegada=420;
+            // Builds the notification and issues it.
+            mNotifyMgr.notify(id_Notificacion_llegada, notificacion);
+        }
+    }
 }

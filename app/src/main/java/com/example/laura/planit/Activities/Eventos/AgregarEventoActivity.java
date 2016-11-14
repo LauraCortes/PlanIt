@@ -14,18 +14,16 @@ import android.widget.Toast;
 
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.Evento;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.MensajesService;
-import com.example.laura.planit.Services.PersitenciaService;
+import com.example.laura.planit.Services.Constants;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -90,14 +88,13 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
         Intent intent = getIntent();
         editar = intent.getExtras().getBoolean("editar");
         if (editar) {
-            pos = intent.getIntExtra("posicion", -1);
-            if (pos != -1) {
-                Evento eventoEditado = PlanIt.darInstancia().darEventoPos(pos);
+            Evento eventoEditado = (Evento)intent.getSerializableExtra(Constants.EVENTO);
+            if (eventoEditado!=null)
+            {
                 txtNombre.setText(eventoEditado.getNombreEvento());
                 //......
                 eventoEditado = null;
             }
-
         }
         //getSupportActionBar().setTitle(intent.getStringExtra("titulo"));
         intent = null;
@@ -110,6 +107,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                         builder.setTitle("Sitio del evento");
+                        /**
                         List<Sitio> sitios = PlanIt.darInstancia().darSitios();
                         final CharSequence[] opciones = new CharSequence[sitios.size() + 1];
                         opciones[0] = "Otro";
@@ -129,13 +127,10 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                                 }
                             }
                         });
-                        builder.show();
-
-
+                        builder.show();*/
                     }
                 }
         );
-
         txtPuntoEncuentro.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -143,7 +138,8 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                         builder.setTitle("Punto de encuentro");
-                        List<Sitio> sitios = PlanIt.darInstancia().darSitios();
+                        //Traer sitios de la DB
+                        List<Sitio> sitios = new ArrayList();
                         final CharSequence[] opciones = new CharSequence[sitios.size() + 1];
                         opciones[0] = "Otro";
                         for (int i = 0; i < opciones.length - 1; i++) {
@@ -222,7 +218,10 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
         if (nombre.isEmpty() || descripcion.isEmpty() || sitioEvento.isEmpty() || fechaString.isEmpty() || puntoEncuentro.isEmpty() || horaEncuentroString.isEmpty())
         {
             Toast.makeText(this, "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
-        } else if (PlanIt.darInstancia().existeEventoNombre(nombre)) {
+        } else if (true)
+                //TODO comprobar existencia
+                // PlanIt.darInstancia().existeEventoNombre(nombre))
+        {
             Toast.makeText(this, "Ya existe otro evento con ese nombre", Toast.LENGTH_SHORT).show();
         } else
         {
@@ -244,28 +243,30 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
             {
                 Evento agregado = null;
                 try {
-                    agregado = PlanIt.darInstancia().agregarEvento(nombre, descripcion, sitioEvento, puntoEncuentro, null, timeFormatter.parse(horaEncuentroString), dateFormatter.parse(fechaString), null);
+                    //TODO Agregar evento en la DB
+                    //agregado = PlanIt.darInstancia().agregarEvento(nombre, descripcion, sitioEvento, puntoEncuentro, null, timeFormatter.parse(horaEncuentroString), dateFormatter.parse(fechaString), null);
                     if (puntoEncuentroPos != -1) {
-                        agregado.setPuntoEncuentroObjeto(PlanIt.darInstancia().darSitios().get(puntoEncuentroPos));
+                        //TODO traer sitio seleccionado
+                        // agregado.setPuntoEncuentroObjeto(PlanIt.darInstancia().darSitios().get(puntoEncuentroPos));
+
                     }
                     if (sitioEventoPos != -1) {
-                        agregado.setLugarEventoObjeto(PlanIt.darInstancia().darSitios().get(sitioEventoPos));
+                        //TODO traer de la DB
+                        //agregado.setLugarEventoObjeto(PlanIt.darInstancia().darSitios().get(sitioEventoPos));
                     }
                     agregado.setInvitados(invitados);
-                    Intent intent = new Intent(this, PersitenciaService.class);
-                    intent.putExtra("Requerimiento", "AgregarEvento");
-                    intent.putExtra("Evento", agregado);
-                    startService(intent);
-                    Intent intent2= new Intent(this, MensajesService.class);
+                    //TODO comprobar cuáles contactos no están registrados y enviar SMS
+                    /**Intent intent2= new Intent(this, MensajesService.class);
                     intent2.putExtra("Requerimiento","EnviarALista");
                     intent2.putExtra("Contactos",(Serializable)invitados);
                     intent2.putExtra("Msj","Te estoy invitando al siguiente evento\n "+agregado.toStringSMS()+"\nDescarga PlanIt y accede a la info completa de este envento. Podrás crear los tuyos y maximizar tu seguridad");
                     startService(intent2);
+                     */
                     Toast.makeText(this, "Evento creado", Toast.LENGTH_SHORT).show();
                     finish();
-
                     agregado = null;
-                } catch (ParseException e) {
+                } catch (Exception e)
+                {
                     Toast.makeText(contexto, "Debe seleccionar una fecha y hora correcta", Toast.LENGTH_LONG);
                 }
 

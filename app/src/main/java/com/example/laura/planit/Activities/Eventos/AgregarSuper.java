@@ -19,7 +19,6 @@ import android.widget.ListView;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoAdapter;
 import com.example.laura.planit.Modelos.Contacto;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
 
 import java.util.ArrayList;
@@ -116,7 +115,9 @@ public abstract class AgregarSuper extends AppCompatActivity
                             {
                                 String numero =  mCursor.getString(1).trim();
                                 numero=numero.replaceAll(" ","");
-                                if(!PlanIt.darInstancia().existeContacto(numero) && !contactoExistente(numero))
+                                if(true)
+                                    //TODO validar si el contacto ya está en la lista
+                                    //!PlanIt.darInstancia().existeContacto(numero) && !contactoExistente(numero))
                                 {
                                     contact = new Contacto(mCursor.getString(0), numero);
                                     contactos.add(contact);
@@ -195,7 +196,9 @@ public abstract class AgregarSuper extends AppCompatActivity
                         String numero =  mCursor.getString(1).trim();
                         numero=numero.replaceAll(" ","");
                         System.out.println(numero);
-                        if(!PlanIt.darInstancia().existeContacto(numero) && !contactoExistente(numero))
+                        //TODO Validar si ya está registrado
+                        if(true)
+                                //!PlanIt.darInstancia().existeContacto(numero) && !contactoExistente(numero))
                         {
                             contact = new Contacto(mCursor.getString(0), numero);
                             contactos.add(contact);

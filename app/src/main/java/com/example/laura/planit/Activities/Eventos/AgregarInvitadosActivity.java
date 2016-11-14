@@ -6,10 +6,12 @@ import android.view.View;
 
 
 import com.example.laura.planit.Modelos.Contacto;
+import com.example.laura.planit.Services.Constants;
 
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,15 +27,14 @@ public class AgregarInvitadosActivity extends AgregarSuper
 
     public void agregar(View view)
     {
-        ArrayList<Contacto> invitados = new ArrayList<Contacto>();
+        List<Contacto> invitados = new ArrayList();
         for (Map.Entry<Integer, Contacto> entrada : contactosSeleccionados.entrySet())
         {
             invitados.add(entrada.getValue());
         }
         contactosSeleccionados.clear();
-        contactosSeleccionados=null;
         Intent intent = new Intent();
-        intent.putExtra("Invitados",(Serializable)invitados);
+        intent.putExtra(Constants.INVITADOS_EVENTO,(Serializable)invitados);
         setResult(invitados.size(),intent);
         finish();
     }

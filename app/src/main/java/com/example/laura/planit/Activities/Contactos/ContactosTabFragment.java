@@ -15,11 +15,9 @@ import android.view.ViewGroup;
 
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.Contacto;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ContactosTabFragment extends TabFragment
@@ -37,7 +35,8 @@ public class ContactosTabFragment extends TabFragment
     {
         elementosSeleccionados = new ArrayList();
         super.onCreate(savedInstanceState);
-        elementos= PlanIt.darInstancia().darContactos();
+        //TODO traer los contactos de la db
+        //elementos= PlanIt.darInstancia().darContactos();
 
         adapter=new ContactRecyclerAdapter(getActivity(), (List<Contacto>)elementos,this);
 
