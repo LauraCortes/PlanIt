@@ -11,11 +11,9 @@ import android.view.ViewGroup;
 
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.Evento;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,17 +27,15 @@ public class MisEventosTabFragment extends TabFragment
         super();
     }
 
-    @Override
-    public void obtenerElementos() {
-        elementos=PlanIt.darInstancia().darEventos();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         elementosSeleccionados = new ArrayList();
         super.onCreate(savedInstanceState);
-        elementos= PlanIt.darInstancia().darEventos();
+        elementos= new ArrayList(); //TODO traer de la DB
+                // PlanIt.darInstancia().darEventos();
+
 
         adapter=new EventoRecyclerViewAdapter(getActivity(), (List<Evento>)elementos,this);
 

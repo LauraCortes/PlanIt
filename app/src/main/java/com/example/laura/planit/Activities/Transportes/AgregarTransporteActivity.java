@@ -2,7 +2,6 @@ package com.example.laura.planit.Activities.Transportes;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +12,8 @@ import android.widget.Toast;
 
 import com.example.laura.planit.Modelos.Evento;
 import com.example.laura.planit.Modelos.MedioTransporte;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -101,8 +98,8 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
         txtHoraRegreso=(EditText)findViewById(R.id.txtHoraRegreso);
         txtFechaRegreso=(EditText)findViewById(R.id.txtFechaRegreso);
         txtTiempoRegreso=(EditText)findViewById(R.id.txtTiempoRegreso);
-
-        txtFechaRegreso.setText(dateFormatter.format(PlanIt.darInstancia().darEventoPos(pos).getFechaEvento()));
+        //TODO traer fecha del evento
+        txtFechaRegreso.setText(dateFormatter.format(System.currentTimeMillis()));
 
         getSupportActionBar().setTitle("Regreso del evento");
 
@@ -113,7 +110,8 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                         builder.setTitle("Sitio de regreso");
-                        List<Sitio> sitios = PlanIt.darInstancia().darSitios();
+                        //TODO traer sitios
+                        List<Sitio> sitios = new ArrayList<Sitio>();
                         final CharSequence[] opciones = new CharSequence[sitios.size() + 1];
                         opciones[0] = "Otro";
                         for (int i = 0; i < opciones.length - 1; i++) {
@@ -244,15 +242,11 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                     horaRegreso.setYear(fechaRegreso.getYear());
                     horaRegreso.setDate(fechaRegreso.getDate());
                     medio.setHoraRegreso(horaRegreso);
-                    Evento evento = PlanIt.darInstancia().darEventoPos(pos);
+                    //TODO traer evento;
+                    Evento evento = new Evento();//PlanIt.darInstancia().darEventoPos(pos);
                     evento.setMedioRegreso(medio);
                     Toast.makeText(this,"Regreso configurado",Toast.LENGTH_SHORT).show();
                     finish();
-                    Intent service = new Intent(this, PersitenciaService.class);
-                    service.putExtra("Requerimiento","AgregarRegresoSitio");
-                    service.putExtra("Medio", medio);
-                    service.putExtra("Nombre",evento.getNombreEvento());
-                    startService(service);
                 }
                 catch (Exception e)
                 {

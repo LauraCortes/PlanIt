@@ -69,4 +69,10 @@ public class Sitio implements Serializable
     {
         return latitud+", "+longitud;
     }
+
+    @Exclude
+    public String toString()
+    {
+        return nombre+" : "+direccion;
+    }
 }

@@ -21,11 +21,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.laura.planit.Activities.Main.MainActivity;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.Constants;
-import com.example.laura.planit.Services.ObtenerDireccionesIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -180,11 +178,11 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                 {
                     final String celular = properties.getString(getString(R.string.usuario), "desconocido");
                     final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(nuevoSitio.darRutaElemento(celular));
+                    final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(nuevoSitio.darRutaElemento(celular));
                     if(editar)
                     {
                         //Elimina el anterior elemento
-                        database.getReferenceFromUrl(PlanIt.FIREBASE_URL).
+                        database.getReferenceFromUrl(Constants.FIREBASE_URL).
                                 child(sitioEditar.darRutaElemento(celular)).setValue(null);
                     }
                     databaseReference.addListenerForSingleValueEvent(

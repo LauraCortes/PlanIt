@@ -1,7 +1,6 @@
 package com.example.laura.planit.Services;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,14 +9,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.v4.os.ResultReceiver;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.google.firebase.database.DataSnapshot;
@@ -30,8 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Usuario on 10/11/2016.
@@ -113,7 +104,7 @@ public class ObtenerDireccionesIntentService extends IntentService {
                 String celular = properties.getString(getString(R.string.usuario), "not found");
 
                 final FirebaseDatabase db = FirebaseDatabase.getInstance();
-                final DatabaseReference ref = db.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(sitio.darRutaElemento(celular));
+                final DatabaseReference ref = db.getReferenceFromUrl(Constants.FIREBASE_URL).child(sitio.darRutaElemento(celular));
                 ref.addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override

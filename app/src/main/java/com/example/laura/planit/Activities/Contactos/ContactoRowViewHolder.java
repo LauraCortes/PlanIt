@@ -49,7 +49,6 @@ public class ContactoRowViewHolder extends ElementoRowViewHolder
         super.decorarSeleccionado(seleccionado);
         if(seleccionado)
         {
-
             vista.setBackgroundColor(ContextCompat.getColor(vista.getContext(),R.color.colorSelectedRow));
             circuloIniciales.setImageDrawable(ContextCompat.getDrawable(vista.getContext(),R.drawable.check_border_48));
         }

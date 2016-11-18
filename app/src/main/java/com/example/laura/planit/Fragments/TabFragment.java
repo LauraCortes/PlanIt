@@ -110,15 +110,23 @@ public abstract class TabFragment extends Fragment
         return elementosSeleccionados.contains(o);
     }
 
-    public void seleccionarItem(Object o)
+    /**
+     *
+     * @param o Objeto a agregar
+     * @return si el objeto ahora está seleccionado o no
+     */
+    public boolean seleccionarItem(Object o)
     {
         if(!isItemSelected(o))
         {
             agregarItemEliminar(o);
+            System.out.println("Objeto añadido: "+o);
+            return true;
         }
         else
         {
             removerItemEliminar(o);
+            return false;
         }
     }
 
@@ -127,6 +135,7 @@ public abstract class TabFragment extends Fragment
         if (!elementosSeleccionados.isEmpty())
         {
             elementosSeleccionados.clear();
+            adapter.notifyDataSetChanged();
             cambiarIconoFAB();
         }
     }
@@ -143,6 +152,4 @@ public abstract class TabFragment extends Fragment
             }
         }
     }
-
-    public abstract void obtenerElementos();
 }

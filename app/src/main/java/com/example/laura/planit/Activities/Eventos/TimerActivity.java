@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.NotificationService;
 
@@ -102,8 +101,9 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         else
         {
             SmsManager smsManager = SmsManager.getDefault();
-            if(PlanIt.darInstancia().darContactos()!=null)
-            smsManager.sendTextMessage(PlanIt.darInstancia().darContactos().get(0).getNumeroTelefonico(), null, "Número de confirmación:", null, null);
+            //TODO
+            // if(PlanIt.darInstancia().darContactos()!=null)
+            //smsManager.sendTextMessage(PlanIt.darInstancia().darContactos().get(0).getNumeroTelefonico(), null, "Número de confirmación:", null, null);
 
         }
     }
@@ -130,8 +130,9 @@ public class TimerActivity extends Activity implements View.OnClickListener {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     SmsManager smsManager = SmsManager.getDefault();
-                    if(PlanIt.darInstancia().darContactos()!=null)
-                    smsManager.sendTextMessage(PlanIt.darInstancia().darContactos().get(0).getNumeroTelefonico(), null, "El usuario no responde", null, null);
+                    //TODO
+                    //if(PlanIt.darInstancia().darContactos()!=null)
+                    //smsManager.sendTextMessage(PlanIt.darInstancia().darContactos().get(0).getNumeroTelefonico(), null, "El usuario no responde", null, null);
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.

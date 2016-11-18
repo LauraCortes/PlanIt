@@ -8,14 +8,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Usuario;
 import com.example.laura.planit.R;
+import com.example.laura.planit.Services.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -99,7 +98,7 @@ public class LoginActivity extends AppCompatActivity
                     usuario.setCelular(celular);
                     usuario.setPin(pin);
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(usuario.darRutaElemento());
+                    final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(usuario.darRutaElemento());
                     databaseReference.keepSynced(true);
                     databaseReference.addListenerForSingleValueEvent(new ValueEventListener()
                     {

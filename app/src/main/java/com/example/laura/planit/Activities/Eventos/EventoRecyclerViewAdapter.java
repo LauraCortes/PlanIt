@@ -14,7 +14,6 @@ import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.Evento;
 import com.example.laura.planit.Modelos.MedioTransporte;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
 
 import java.text.SimpleDateFormat;
@@ -101,7 +100,8 @@ public class EventoRecyclerViewAdapter extends ElementRecyclerViewAdapter
                                 }
                                 else if(which==1)
                                 {
-                                    PlanIt.darInstancia().eliminarEvento(position);
+                                    //TODO eliminar evento
+                                    //PlanIt.darInstancia().eliminarEvento(position);
                                     notifyDataSetChanged();
 
                                     /**
@@ -125,8 +125,8 @@ public class EventoRecyclerViewAdapter extends ElementRecyclerViewAdapter
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO Aquí poner el método que necesitas del mundo.
-                        int tiempo= PlanIt.darInstancia().darEventoPos(position).getMedioRegreso().getTiempoAproximado();
+                        //TODO arreglar que sea automático
+                        int tiempo= 0;//PlanIt.darInstancia().darEventoPos(position).getMedioRegreso().getTiempoAproximado();
                         Intent intent= new Intent(context, TimerActivity.class);
                         intent.putExtra("Tiempo",tiempo);
                         context.startActivity(intent);

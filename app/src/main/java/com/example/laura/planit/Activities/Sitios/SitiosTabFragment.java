@@ -14,11 +14,9 @@ import android.view.ViewGroup;
 import com.example.laura.planit.Activities.Main.LoginActivity;
 import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Fragments.TabFragment;
-import com.example.laura.planit.Modelos.Contacto;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
-import com.google.firebase.database.ChildEventListener;
+import com.example.laura.planit.Services.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,12 +24,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Laura on 12/09/2016.
@@ -57,13 +52,17 @@ public class SitiosTabFragment extends TabFragment
     @Override
     public void eliminarElementosVista(View view)
     {
-        Iterator iterator = elementosSeleccionados.iterator();
-        for (int i=0; iterator.hasNext();i++)
+        for (Sitio actual:(List<Sitio>)elementosSeleccionados)
         {
-            Sitio actual = (Sitio) iterator.next();
-            FirebaseDatabase.getInstance().getReferenceFromUrl(PlanIt.FIREBASE_URL).child(actual.darRutaElemento(celular)).setValue(null);
+            FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL).child(actual.darRutaElemento(celular)).removeValue();
+            elementosSeleccionados.remove(actual);
+            if(elementos.size()==1)
+            {
+                ((SitioRecyclerViewAdapter)adapter).swapData(new ArrayList());
+                adapter.notifyItemRemoved(0);
+            }
+            System.out.println("Sitio eliminado "+actual);
         }
-        elementosSeleccionados.clear();
         cambiarIconoFAB();
     }
 
@@ -83,7 +82,7 @@ public class SitiosTabFragment extends TabFragment
         elementos= new ArrayList<>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child("lugares_favoritos/" + celular);
+        final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child("lugares_favoritos/" + celular);
         databaseReference.keepSynced(true);
         ValueEventListener valueEventListener = databaseReference.addValueEventListener(
                 new ValueEventListener() {
@@ -93,10 +92,13 @@ public class SitiosTabFragment extends TabFragment
                         System.out.println("Los sitios cambiaron");
                         GenericTypeIndicator<HashMap<String,Sitio>> t = new GenericTypeIndicator<HashMap<String, Sitio>>(){};
                         HashMap<String, Sitio> map =dataSnapshot.getValue(t);
-                        ArrayList<Sitio> nuevos = new ArrayList(map.values());
-                        elementos=nuevos;
-                        ((SitioRecyclerViewAdapter)adapter).swapData(nuevos);
-                        adapter.notifyDataSetChanged();
+                        if(map!=null)
+                        {
+                            ArrayList<Sitio> nuevos = new ArrayList(map.values());
+                            elementos=nuevos;
+                            ((SitioRecyclerViewAdapter)adapter).swapData(nuevos);
+                            adapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
@@ -121,45 +123,8 @@ public class SitiosTabFragment extends TabFragment
         });
         return view;
     }
-        /*databaseReference.addChildEventListener(
-                new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
-                    {
-                        ((ArrayList<Sitio>)elementos).add(dataSnapshot.getValue(Sitio.class));
-                        adapter.notifyItemInserted(elementos.size()-1);
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        elementos.remove(dataSnapshot.getValue(Sitio.class));
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                }
-        )
-*/
 
 
-    @Override
-    public void obtenerElementos()
-    {
-        elementos=PlanIt.darInstancia().darSitios();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -177,25 +142,4 @@ public class SitiosTabFragment extends TabFragment
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
-    /**
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.tab_sitios);
-        if (PlanIt.darInstancia().darSitios().size() == 0) {
-            Intent i = new Intent(this, AgregarSitioActivity.class);
-            i.putExtra("editar", false);
-            i.putExtra("titulo", "Agregar primer sitio favorito");
-            finish();
-            startActivity(i);
-        }
-        getSupportActionBar().setTitle("Mis Sitios Favoritos");
-
-
-    }
-
-    */
-
-
 }
