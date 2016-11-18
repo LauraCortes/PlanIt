@@ -1,5 +1,7 @@
 package com.example.laura.planit.Modelos;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 
 /**
@@ -43,4 +45,11 @@ public class Contacto implements Serializable
     public void setFavorito(int favorito) {
         this.favorito = favorito;
     }
+
+    @Exclude
+    public String darRutaElemento(String celular)
+    {
+        return "/contacto_emergencia/"+celular+"/"+numeroTelefonico;
+    }
+
 }
