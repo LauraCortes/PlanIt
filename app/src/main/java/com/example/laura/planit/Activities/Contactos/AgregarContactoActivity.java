@@ -1,7 +1,6 @@
 package com.example.laura.planit.Activities.Contactos;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +8,8 @@ import android.view.View;
 import com.example.laura.planit.Activities.Eventos.AgregarSuper;
 import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Modelos.Contacto;
-import com.example.laura.planit.Modelos.PlanIt;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.PersitenciaService;
+import com.example.laura.planit.Services.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,15 +42,15 @@ public class AgregarContactoActivity extends AgregarSuper
             {
                 final String celular = properties.getString(getString(R.string.usuario), "desconocido");
                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                final DatabaseReference databaseReference = database.getReferenceFromUrl(PlanIt.FIREBASE_URL).child(contacto.darRutaElemento(celular));
+                final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(contacto.darRutaElemento(celular));
                 databaseReference.addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot)
                             {
                                 if (dataSnapshot.exists()) {
-                                    MainActivity.mostrarMensaje(contexto, "Sitio existente", "Ya existe" +
-                                            " un sitio con este nombre");
+                                    MainActivity.mostrarMensaje(contexto, "Contacto existente", "Ya existe" +
+                                            " un contacto con este numero");
                                 } else
                                 {
                                     databaseReference.setValue(contacto);
@@ -68,12 +66,11 @@ public class AgregarContactoActivity extends AgregarSuper
                 );
                 finish();
             } else {
-                MainActivity.mostrarMensaje(this, "Error", "Parece que no has iniciado sesión. Intenta cerrar sesión e ingresar de nuevo");
+                MainActivity.mostrarMensaje(this, "Error", "Parece que no has iniciado sesi?n. Intenta cerrar sesi?n e ingresar de nuevo");
             }
-        }
         setResult(contactosSeleccionados.size());
         contactosSeleccionados.clear();
-        contactosSeleccionados = null;
         finish();
     }
+}
 }
