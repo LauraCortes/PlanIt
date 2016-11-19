@@ -16,6 +16,9 @@ public class Contacto implements Serializable
     //0= false, 1=true
     private int favorito;
 
+    public Contacto()
+    {}
+
     public Contacto(String nombre, String numeroTelefonico) {
         this.nombre = nombre;
         this.numeroTelefonico = numeroTelefonico;

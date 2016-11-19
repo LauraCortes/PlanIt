@@ -24,7 +24,10 @@ public class ContactRecyclerAdapter extends ElementRecyclerViewAdapter
     {
         super(context, elementos, tabFragment);
     }
-
+    public void swapData(List contactos)
+    {
+        elementos=contactos;
+    }
     @Override
     public ElementoRowViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType)
     {
