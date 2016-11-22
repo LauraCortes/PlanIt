@@ -2,19 +2,18 @@ package com.example.laura.planit.Activities.Eventos;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.Evento;
-import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.Constants;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -23,7 +22,6 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -36,8 +34,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class AgregarEventoActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     //Atributos interfaz
-    EditText txtNombre, txtDescripcion, txtLugar, txtPuntoEncuentro;
-    EditText txtFechaEncuentro, txtHoraEncuentro;
+    EditText txtNombre, txtDescripcion;
+    EditText txtFechaEvento, txtHoraEvento;
+    CheckedTextView cbxVotarSitio;
+    AppCompatButton btnSitio;
+    Button btnContinuar;
 
     int INVITAR_AMIGOS=1;
 
@@ -73,10 +74,8 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
         txtNombre = (EditText) findViewById(R.id.txtNombreEvento);
         txtDescripcion = (EditText) findViewById(R.id.txtDescripcionEvento);
-        txtLugar = (EditText) findViewById(R.id.txtLugarEvento);
-        txtPuntoEncuentro = (EditText) findViewById(R.id.txtPuntoEncuentroEvento);
-        txtFechaEncuentro = (EditText) findViewById(R.id.txtFechaEncuentro);
-        txtHoraEncuentro = (EditText) findViewById(R.id.txtHoraEncuentro);
+        txtFechaEvento = (EditText) findViewById(R.id.txtFechaEvento);
+        txtHoraEvento = (EditText) findViewById(R.id.txtFechaEvento);
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
         timeFormatter = new SimpleDateFormat("hh:mm a");
@@ -85,94 +84,18 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
         horaRegreso = false;
         contexto = this;
 
-        Intent intent = getIntent();
-        editar = intent.getExtras().getBoolean("editar");
-        if (editar) {
-            Evento eventoEditado = (Evento)intent.getSerializableExtra(Constants.EVENTO);
-            if (eventoEditado!=null)
-            {
-                txtNombre.setText(eventoEditado.getNombreEvento());
-                //......
-                eventoEditado = null;
-            }
-        }
+//        Intent intent = getIntent();
+//        editar = intent.getExtras().getBoolean("editar");
+//        if (editar) {
+//            Evento eventoEditado = (Evento)intent.getSerializableExtra(Constants.EVENTO);
+//            if (eventoEditado!=null)
+//            {
+//                txtNombre.setText(eventoEditado.getNombreEvento());
+//                //......
+//                eventoEditado = null;
+//            }
+//        }
         //getSupportActionBar().setTitle(intent.getStringExtra("titulo"));
-        intent = null;
-
-
-        txtLugar.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
-                        builder.setTitle("Sitio del evento");
-                        /**
-                        List<Sitio> sitios = PlanIt.darInstancia().darSitios();
-                        final CharSequence[] opciones = new CharSequence[sitios.size() + 1];
-                        opciones[0] = "Otro";
-                        for (int i = 0; i < opciones.length - 1; i++) {
-                            Sitio sitio = sitios.get(i);
-                            opciones[i + 1] = sitio.toString();
-                        }
-                        builder.setItems(opciones, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (which == 0) {
-                                    txtLugar.setText("");
-                                    sitioEventoPos = -1;
-                                } else {
-                                    txtLugar.setText(opciones[which]);
-                                    sitioEventoPos = which - 1;
-                                }
-                            }
-                        });
-                        builder.show();*/
-                    }
-                }
-        );
-        txtPuntoEncuentro.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
-                        builder.setTitle("Punto de encuentro");
-                        //Traer sitios de la DB
-                        List<Sitio> sitios = new ArrayList();
-                        final CharSequence[] opciones = new CharSequence[sitios.size() + 1];
-                        opciones[0] = "Otro";
-                        for (int i = 0; i < opciones.length - 1; i++) {
-                            Sitio sitio = sitios.get(i);
-                            opciones[i + 1] = sitio.toString();
-                        }
-                        builder.setItems(opciones, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (which == 0) {
-                                    txtPuntoEncuentro.setText("");
-                                    puntoEncuentroPos = -1;
-                                } else {
-                                    txtPuntoEncuentro.setText(opciones[which]);
-                                    puntoEncuentroPos = which - 1;
-                                }
-                            }
-                        });
-                        builder.show();
-
-
-                    }
-                }
-        );
-
-        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.agregarInvitados);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                agregarInvitados(v);
-            }
-        });
-
     }
 
     public void definirFechaEncuentro(View view) {
@@ -208,12 +131,12 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     }
 
     public void agregarEvento(View view) {
-        String nombre = txtNombre.getText().toString().trim();
+      /*  String nombre = txtNombre.getText().toString().trim();
         String descripcion = txtDescripcion.getText().toString().trim();
         String sitioEvento = txtLugar.getText().toString().trim();
-        String fechaString = txtFechaEncuentro.getText().toString().trim();
+        String fechaString = txtFechaEvento.getText().toString().trim();
         String puntoEncuentro = txtPuntoEncuentro.getText().toString().trim();
-        String horaEncuentroString = txtHoraEncuentro.getText().toString().trim();
+        String horaEncuentroString = txtHoraEvento.getText().toString().trim();
 
         if (nombre.isEmpty() || descripcion.isEmpty() || sitioEvento.isEmpty() || fechaString.isEmpty() || puntoEncuentro.isEmpty() || horaEncuentroString.isEmpty())
         {
@@ -226,7 +149,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
         } else
         {
             if (editar) {
-                /**
+                *//**
                  Sitio agregado = PlanIt.darInstancia().editarSitio(pos,nombre,barrio,direccion);
                  Toast.makeText(this, "Tu sitio se editó", Toast.LENGTH_SHORT).show();
                  finish();
@@ -237,7 +160,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                  startService(service);
                  agregado = null;
                  this.nombre=null;
-                 **/
+                 **//*
             }
             else
             {
@@ -256,12 +179,12 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                     }
                     agregado.setInvitados(invitados);
                     //TODO comprobar cuáles contactos no están registrados y enviar SMS
-                    /**Intent intent2= new Intent(this, MensajesService.class);
+                    *//**Intent intent2= new Intent(this, MensajesService.class);
                     intent2.putExtra("Requerimiento","EnviarALista");
                     intent2.putExtra("Contactos",(Serializable)invitados);
                     intent2.putExtra("Msj","Te estoy invitando al siguiente evento\n "+agregado.toStringSMS()+"\nDescarga PlanIt y accede a la info completa de este envento. Podrás crear los tuyos y maximizar tu seguridad");
                     startService(intent2);
-                     */
+                     *//*
                     Toast.makeText(this, "Evento creado", Toast.LENGTH_SHORT).show();
                     finish();
                     agregado = null;
@@ -273,7 +196,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
             }
             finish();
 
-        }
+        }*/
 
     }
 
@@ -282,7 +205,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         Calendar newDate = Calendar.getInstance();
         newDate.set(year, monthOfYear, dayOfMonth);
-        txtFechaEncuentro.setText(dateFormatter.format(newDate.getTime()));
+        txtFechaEvento.setText(dateFormatter.format(newDate.getTime()));
 
     }
 
@@ -290,7 +213,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
         Calendar newDate = Calendar.getInstance();
         newDate.set(0, 0, 0, hourOfDay, minute);
-        txtHoraEncuentro.setText(timeFormatter.format(newDate.getTime()));
+        txtHoraEvento.setText(timeFormatter.format(newDate.getTime()));
     }
 
     public void agregarInvitados(View view) {
