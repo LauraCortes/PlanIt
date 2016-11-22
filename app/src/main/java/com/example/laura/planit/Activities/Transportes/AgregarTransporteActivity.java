@@ -244,8 +244,8 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                     medio.setHoraRegreso(horaRegreso);
                     //TODO traer evento;
                     Evento evento = new Evento();//PlanIt.darInstancia().darEventoPos(pos);
-                    evento.setMedioRegreso(medio);
-                    Toast.makeText(this,"Regreso configurado",Toast.LENGTH_SHORT).show();
+//                    evento.setMedioRegreso(medio);
+//                    Toast.makeText(this,"Regreso configurado",Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 catch (Exception e)

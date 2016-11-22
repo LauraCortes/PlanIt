@@ -106,9 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="32dp"
-                        android:clickable="true"
                         android:hint="Fecha"
-                        android:onClick="definirFechaEncuentro"
                         android:textAlignment="center" />
 
                 </LinearLayout>
@@ -135,9 +133,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="32dp"
-                        android:clickable="true"
                         android:hint="Hora"
-                        android:onClick="definirHoraEncuentro"
                         android:textAlignment="center" />
                 </LinearLayout>
 
@@ -198,6 +194,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/layout_votar_sitio"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1.5"
@@ -216,6 +213,8 @@
                         android:text="Selecciona un sitio"
                         android:padding="10dp"
                         android:textSize="15dp"
+                        android:lines="2"
+                        android:maxWidth="190dp"
                         android:id="@+id/lbl_sitio_evento"/>
                     <Button
                         android:id="@+id/btn_seleccionar_sitio_evento"
@@ -224,6 +223,7 @@
                         android:padding="10dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
+                        android:onClick="definirSitioEvento"
                         android:layout_height="wrap_content"/>
 
                     <View
@@ -238,11 +238,12 @@
 
 
             <Button
-                android:id="@+id/btn_continuar"
+                android:id="@+id/btn_continuar_Agregar_Evento"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:layout_margin="@dimen/card_margin"
+                android:onClick="continuar"
                 android:background="@color/colorAccent"
                 android:text="Agregar invitados"
                 android:theme="@style/AppTheme" />
