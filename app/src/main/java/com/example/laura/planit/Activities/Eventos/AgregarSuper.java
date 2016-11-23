@@ -206,7 +206,7 @@ public abstract class AgregarSuper extends AppCompatActivity
                     }
                     while (mCursor.moveToNext());
                     mCursor.close();
-                    
+
                 }
             }
             contact = null;
