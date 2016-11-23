@@ -37,7 +37,6 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,7 +58,9 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     CheckBox cbxVotarSitio;
     Button btnSitio;
     Button btnContinuar;
+
     int INVITAR_AMIGOS = 1;
+    int CREAR_ENCUESTA_LUGARES=23;
 
     Context contexto;
 
@@ -71,6 +72,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     private String nombreOrganizador;
 
     private String key_evento;
+    private boolean encuesta_creada;
 
     //Atributos para soporte a edición-----
     boolean editar;
@@ -102,6 +104,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_evento);
+        encuesta_creada=false;
 
         //ToolBar
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_agregar_evento));
@@ -313,8 +316,16 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
             nuevoEvento.setLugar_fijo(lugarFijo);
             nuevoEvento.setLugar_definitivo(lugarFijo);
 
-
-
+            if(cbxVotarSitio.isChecked() && !encuesta_creada)
+            {
+                Intent intent = new Intent(this, CrearEncuestaLugaresActivity.class);
+                startActivityForResult(intent, CREAR_ENCUESTA_LUGARES);
+            }
+            else
+            {
+                Intent intent = new Intent(this, AgregarInvitadosActivity.class);
+                startActivityForResult(intent, INVITAR_AMIGOS);
+            }
 
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -345,12 +356,6 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
         fechaEvento.set(fechaEvento.get(Calendar.YEAR), fechaEvento.get(Calendar.MONTH),
                 fechaEvento.get(Calendar.DATE), hourOfDay, minute);
         txtHoraEvento.setText(timeFormatter.format(fechaEvento.getTime()));
-    }
-
-    public void agregarInvitados(View view) {
-        Intent intent = new Intent(this, AgregarInvitadosActivity.class);
-        intent.putExtra("Invitados", (Serializable) invitados);
-        startActivityForResult(intent, INVITAR_AMIGOS);
     }
 
     @Override

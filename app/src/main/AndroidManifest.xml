@@ -30,6 +30,7 @@
         <activity android:name=".Activities.Eventos.AgregarEventoActivity" />
         <activity android:name=".Activities.Contactos.AgregarContactoActivity" />
         <activity android:name=".Activities.Eventos.AgregarInvitadosActivity" />
+        <activity android:name=".Activities.Eventos.CrearEncuestaLugaresActivity" />
         <activity android:name=".Activities.Transportes.AgregarTransporteActivity" />
         <activity android:name=".Activities.Eventos.TimerActivity" />
 
