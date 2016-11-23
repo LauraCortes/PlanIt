@@ -13,7 +13,6 @@ import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.Evento;
-import com.example.laura.planit.Modelos.MedioTransporte;
 import com.example.laura.planit.R;
 
 import java.text.SimpleDateFormat;

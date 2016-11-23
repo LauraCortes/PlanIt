@@ -2,7 +2,9 @@ package com.example.laura.planit.Activities.Transportes;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,10 +12,18 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.example.laura.planit.Activities.Main.MainActivity;
+import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.Evento;
-import com.example.laura.planit.Modelos.MedioTransporte;
+import com.example.laura.planit.Modelos.Regreso;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
+import com.example.laura.planit.Services.Constants;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -31,10 +41,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  */
 public class AgregarTransporteActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener
 {
-    RadioButton radioTaxi, radioUber, radioBus, radioCarro;
-    List<RadioButton> radios;
-    EditText txtSitioRegreso, txtHoraRegreso, txtFechaRegreso, txtTiempoRegreso;
-    Context contexto;
+    private RadioButton radioTaxi, radioUber, radioBus, radioCarro;
+    private List<RadioButton> radios;
+    private EditText txtSitioRegreso, txtHoraRegreso, txtFechaRegreso, txtTiempoRegreso, txtCupos;
+    private Context contexto;
 
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
@@ -96,9 +106,9 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
 
         txtSitioRegreso=(EditText)findViewById(R.id.txtSitioRegreso);
         txtHoraRegreso=(EditText)findViewById(R.id.txtHoraRegreso);
+        txtCupos=(EditText)findViewById(R.id.txtCupos);
         txtFechaRegreso=(EditText)findViewById(R.id.txtFechaRegreso);
         txtTiempoRegreso=(EditText)findViewById(R.id.txtTiempoRegreso);
-        //TODO traer fecha del evento
         txtFechaRegreso.setText(dateFormatter.format(System.currentTimeMillis()));
 
         getSupportActionBar().setTitle("Regreso del evento");
@@ -194,14 +204,12 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
 
     public void agregarRegreso(View view)
     {
-
-        MedioTransporte medio = new MedioTransporte();
         String nombre="";
-        String hora,fecha,tiempo,lugar;
-        hora=txtHoraRegreso.getText().toString().trim();
-        fecha=txtFechaRegreso.getText().toString().trim();
-        tiempo=txtTiempoRegreso.getText().toString().trim();
-        lugar=txtSitioRegreso.getText().toString().trim();
+        String hora=txtHoraRegreso.getText().toString().trim();
+        String fecha=txtFechaRegreso.getText().toString().trim();
+        String tiempo=txtTiempoRegreso.getText().toString().trim();
+        String lugar=txtSitioRegreso.getText().toString().trim();
+        String cupos= txtCupos.getText().toString().trim();
         boolean continuar=true;
         if(radioCarro.isChecked())
         {
@@ -232,19 +240,46 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
             }
             else
             {
-                medio.setNombre(nombre);
-                medio.setDireccionRegreso(lugar);
                 try{
-                    medio.setTiempoAproximado(Integer.parseInt(tiempo));
                     Date fechaRegreso =(Date) dateFormatter.parse(fecha);
                     Date horaRegreso=(Date)timeFormatter.parse(hora);
                     horaRegreso.setMonth(fechaRegreso.getMonth());
                     horaRegreso.setYear(fechaRegreso.getYear());
                     horaRegreso.setDate(fechaRegreso.getDate());
-                    medio.setHoraRegreso(horaRegreso);
-                    //TODO traer evento;
-                    Evento evento = new Evento();//PlanIt.darInstancia().darEventoPos(pos);
-                    evento.setMedioRegreso(medio);
+                    SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+                    if (properties.getBoolean(getString(R.string.logueado), false))
+                    {
+                        final String celular = properties.getString(getString(R.string.usuario), "desconocido");
+                        //TODO Sitio!!!
+                        final Regreso regreso = new Regreso(celular,horaRegreso,nombre, Integer.valueOf(cupos),null, Integer.valueOf(tiempo));
+                        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        //TODO ID_EVENTO
+                        final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(regreso.darRutaElemento(""));
+                        databaseReference.addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot)
+                                    {
+                                        if (dataSnapshot.exists()) {
+                                            MainActivity.mostrarMensaje(contexto, "Retorno existente", "Ya existe" +
+                                                    " un retorno con este numero");
+                                        } else
+                                        {
+                                            databaseReference.setValue(regreso);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        MainActivity.mostrarMensaje(contexto, "Error", databaseError.getMessage());
+                                        databaseError.toException().printStackTrace();
+                                    }
+                                }
+                        );
+                        finish();
+                    } else {
+                        MainActivity.mostrarMensaje(this, "Error", "Parece que no has iniciado sesi?n. Intenta cerrar sesi?n e ingresar de nuevo");
+                    }
                     Toast.makeText(this,"Regreso configurado",Toast.LENGTH_SHORT).show();
                     finish();
                 }
