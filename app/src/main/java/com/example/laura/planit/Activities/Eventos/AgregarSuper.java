@@ -49,14 +49,6 @@ public abstract class AgregarSuper extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agregar_contacto);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_principal));
-        leerContactos();
-        btnFAB=(FloatingActionButton)findViewById(R.id.btnAgregarSitios);
-        listView = (ListView) findViewById(android.R.id.list);
-        listView.setAdapter(new AgregarContactoAdapter(this, contactos));
-        contactosSeleccionados = new HashMap<Integer, Contacto>();
-        cambiarIconoFAB();
     }
 
     public void seleccionarItem(int pos)
@@ -141,7 +133,7 @@ public abstract class AgregarSuper extends AppCompatActivity
         }
     }
 
-    private boolean contactoExistente(String numero)
+    protected boolean contactoExistente(String numero)
     {
         for(Contacto actual: contactos)
         {
@@ -155,7 +147,7 @@ public abstract class AgregarSuper extends AppCompatActivity
 
     public abstract void agregar(View view);
 
-    private void showSnackBar() {
+    protected void showSnackBar() {
         Snackbar.make(findViewById(R.id.relativeLayout),"Activar envío sms",Snackbar.LENGTH_LONG)
                 .setAction("Settings", new View.OnClickListener() {
                     @Override public void onClick(View view){
@@ -169,7 +161,7 @@ public abstract class AgregarSuper extends AppCompatActivity
         startActivity(intent);
     }
 
-    private void leerContactos()
+    protected void leerContactos()
     {
         contactos = new ArrayList<Contacto>();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
@@ -195,10 +187,8 @@ public abstract class AgregarSuper extends AppCompatActivity
                     do {
                         String numero =  mCursor.getString(1).trim();
                         numero=numero.replaceAll(" ","");
-                        System.out.println(numero);
-                        //TODO Validar si ya está registrado
-                        if(true)
-                                //!PlanIt.darInstancia().existeContacto(numero) && !contactoExistente(numero))
+
+                        if(!contactoExistente(numero))
                         {
                             contact = new Contacto(mCursor.getString(0), numero);
                             contactos.add(contact);

@@ -14,7 +14,7 @@ public class Contacto implements Serializable
     private String nombre;
 
     //0= false, 1=true
-    private int favorito;
+    private boolean favorito;
 
     public Contacto()
     {}
@@ -22,7 +22,7 @@ public class Contacto implements Serializable
     public Contacto(String nombre, String numeroTelefonico) {
         this.nombre = nombre;
         this.numeroTelefonico = numeroTelefonico;
-        this.favorito =0;
+        this.favorito =false;
     }
 
     public String getNumeroTelefonico() {
@@ -41,11 +41,11 @@ public class Contacto implements Serializable
         this.nombre = nombre;
     }
 
-    public int isFavorito() {
+    public boolean isFavorito() {
         return favorito;
     }
 
-    public void setFavorito(int favorito) {
+    public void setFavorito(boolean favorito) {
         this.favorito = favorito;
     }
 

@@ -3,7 +3,10 @@ package com.example.laura.planit.Activities.Contactos;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ListView;
 
 import com.example.laura.planit.Activities.Eventos.AgregarSuper;
 import com.example.laura.planit.Activities.Main.MainActivity;
@@ -16,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -30,6 +34,15 @@ public class AgregarContactoActivity extends AgregarSuper
         contexto = this;
         titulo="Agregar contactos de emergencia";
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_agregar_contacto);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_principal));
+        leerContactos();
+        btnFAB=(FloatingActionButton)findViewById(R.id.btnAgregarSitios);
+        listView = (ListView) findViewById(android.R.id.list);
+        listView.setAdapter(new AgregarContactoAdapter(this, contactos));
+        contactosSeleccionados = new HashMap<Integer, Contacto>();
+        cambiarIconoFAB();
     }
 
     public void agregar(View view)

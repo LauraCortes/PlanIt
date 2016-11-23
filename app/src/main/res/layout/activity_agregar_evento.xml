@@ -181,6 +181,7 @@
                         android:checked="false"/>
 
                     <TextView
+                        android:id="@+id/lblVotacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="¿Someter lugar a votación?"
@@ -211,11 +212,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Selecciona un sitio"
-                        android:padding="10dp"
+                        android:paddingRight="10dp"
                         android:textSize="15dp"
                         android:lines="2"
-                        android:maxWidth="190dp"
-                        android:id="@+id/lbl_sitio_evento"/>
+                        android:maxWidth="200dp"
+                        android:id="@+id/lbl_sitio_evento"
+                        android:gravity="center_vertical" />
                     <Button
                         android:id="@+id/btn_seleccionar_sitio_evento"
                         android:text="seleccionar"

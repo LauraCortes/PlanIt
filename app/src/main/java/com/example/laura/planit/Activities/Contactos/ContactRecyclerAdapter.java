@@ -58,7 +58,7 @@ public class ContactRecyclerAdapter extends ElementRecyclerViewAdapter
         Drawable iniciales =darCirculoIniciales(nombre,position);
         contactoRowViewHolder.imgCirculo=iniciales;
         contactoRowViewHolder.circuloIniciales.setImageDrawable(iniciales);
-        contactoRowViewHolder.decorarFavorito(contacto.isFavorito()==1);
+        contactoRowViewHolder.decorarFavorito(contacto.isFavorito());
         contactoRowViewHolder.decorarSeleccionado(tabFragment.isItemSelected(position));
         final ContactoRowViewHolder finalContactoRowViewHolder = contactoRowViewHolder;
 
@@ -73,18 +73,17 @@ public class ContactRecyclerAdapter extends ElementRecyclerViewAdapter
                 String celular = properties.getString(context.getResources().getString(R.string.usuario), "desconocido");
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(contacto.darRutaElemento(celular));
-                databaseReference.keepSynced(true);
-                if(contactoFavorito.isFavorito()==0)
+                if(contactoFavorito.isFavorito())
                 {
                     finalContactoRowViewHolder.decorarFavorito(true);
-                    contactoFavorito.setFavorito(1);
-                    databaseReference.child("favorito").setValue(1);
+                    contactoFavorito.setFavorito(true);
+                    databaseReference.child("favorito").setValue(true);
                 }
                 else
                 {
                     finalContactoRowViewHolder.decorarFavorito(false);
-                    contactoFavorito.setFavorito(0);
-                    databaseReference.child("favorito").setValue(0);
+                    contactoFavorito.setFavorito(false);
+                    databaseReference.child("favorito").setValue(false);
                 }
             }
         });

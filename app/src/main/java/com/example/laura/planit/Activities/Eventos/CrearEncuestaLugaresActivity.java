@@ -193,7 +193,7 @@ public class CrearEncuestaLugaresActivity extends AppCompatActivity
                 sitiosArray.add(entrada.getValue());
             }
             Intent i = new Intent();
-            i.putExtra(Constants.EXTRA_SITIOS_EVENTO, sitiosSeleccionados);
+            i.putExtra(Constants.EXTRA_SITIOS_EVENTO, (Serializable) sitiosArray);
             i.putExtra(Constants.INVITADOS_EVENTO,data.getSerializableExtra(Constants.INVITADOS_EVENTO));
             setResult(RESULT_OK, i);
             finish();

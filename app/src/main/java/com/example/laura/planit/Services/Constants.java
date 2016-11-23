@@ -19,4 +19,8 @@ public final class Constants
     public final static String URL_USUARIOS ="usuarios/";
     public final static String URL_EVENTOS="eventos/";
     public final static String EXTRA_SITIOS_EVENTO="extras sitio evento";
+    public final static String URL_PARTICIPANTES_EVENTO="participantes_evento/";
+    public final static String URL_MIS_EVENTOS="mis_eventos/";
+    public final static String URL_INVITACIONES_EVENTO="invitaciones/";
+    public final static String URL_SONDEOS="sondeos/";
 }

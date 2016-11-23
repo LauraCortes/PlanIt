@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +26,10 @@ import android.widget.Toast;
 
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.Evento;
+import com.example.laura.planit.Modelos.ParticipanteEvento;
+import com.example.laura.planit.Modelos.ResumenEvento;
 import com.example.laura.planit.Modelos.Sitio;
+import com.example.laura.planit.Modelos.SondeoLugares;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.Constants;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -55,12 +61,13 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     EditText txtNombre, txtDescripcion;
     EditText txtFechaEvento, txtHoraEvento;
     TextView lblSitio;
+    TextView lblVotacion;
     CheckBox cbxVotarSitio;
     Button btnSitio;
     Button btnContinuar;
 
     public static int INVITAR_AMIGOS = 1;
-    int CREAR_ENCUESTA_LUGARES=23;
+    int CREAR_ENCUESTA_LUGARES = 23;
 
     Context contexto;
 
@@ -85,6 +92,8 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     private List<Sitio> sitios;
     private List<Sitio> sitiosEncuesta;
 
+    private Evento nuevoEvento;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -105,7 +114,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_evento);
-        encuesta_creada=false;
+        encuesta_creada = false;
 
         //ToolBar
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_agregar_evento));
@@ -122,7 +131,8 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
         cbxVotarSitio = (CheckBox) findViewById(R.id.cbxVotarSitio);
         btnContinuar = (Button) findViewById(R.id.btn_continuar_Agregar_Evento);
         btnSitio = (Button) findViewById(R.id.btn_seleccionar_sitio_evento);
-        lblSitio =(TextView)findViewById(R.id.lbl_sitio_evento);
+        lblSitio = (TextView) findViewById(R.id.lbl_sitio_evento);
+        lblVotacion = (TextView) findViewById(R.id.lblVotacion);
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
         timeFormatter = new SimpleDateFormat("hh:mm a");
@@ -167,13 +177,18 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         LinearLayout layout = (LinearLayout) ((View) (buttonView.getParent().getParent())).findViewById(R.id.layout_votar_sitio);
+                        int colorLetra;
                         if (isChecked) {
                             layout.setVisibility(View.GONE);
                             btnContinuar.setText("Elegir sitios de votación");
+                            colorLetra = ContextCompat.getColor(contexto, R.color.colorAccent);
+
                         } else {
                             layout.setVisibility(View.VISIBLE);
                             btnContinuar.setText("Agregar invitados");
+                            colorLetra = ContextCompat.getColor(contexto, R.color.colorSecondaryText);
                         }
+                        lblVotacion.setTextColor(colorLetra);
                     }
                 }
         );
@@ -203,14 +218,13 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                 }
         );
 
-        DatabaseReference databaseReferenceInfoUsuario=database.getReferenceFromUrl(Constants.FIREBASE_URL).child((Constants.URL_USUARIOS +celular+"nombre"));
+        DatabaseReference databaseReferenceInfoUsuario = database.getReferenceFromUrl(Constants.FIREBASE_URL).child((Constants.URL_USUARIOS + celular + "/nombre"));
         databaseReferenceInfoUsuario.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists())
-                        {
-                            nombreOrganizador=(String)dataSnapshot.getValue();
+                        if (dataSnapshot.exists()) {
+                            nombreOrganizador = (String) dataSnapshot.getValue();
                         }
                     }
 
@@ -220,22 +234,6 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                     }
                 }
         );
-
-
-
-
-//        Intent intent = getIntent();
-//        editar = intent.getExtras().getBoolean("editar");
-//        if (editar) {
-//            Evento eventoEditado = (Evento)intent.getSerializableExtra(Constants.EVENTO);
-//            if (eventoEditado!=null)
-//            {
-//                txtNombre.setText(eventoEditado.getNombreEvento());
-//                //......
-//                eventoEditado = null;
-//            }
-//        }
-        //getSupportActionBar().setTitle(intent.getStringExtra("titulo"));
     }
 
     public void definirFechaEncuentro(View view) {
@@ -304,38 +302,26 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
             Toast.makeText(this, "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
         } else if (fechaEvento.getTimeInMillis() < System.currentTimeMillis()) {
             Toast.makeText(this, "La fecha debe ser posterior a la fecha actual", Toast.LENGTH_SHORT).show();
-        } else
-        {
-            Evento nuevoEvento = new Evento();
+        } else {
+            nuevoEvento = new Evento();
             nuevoEvento.setNombre(nombre);
             nuevoEvento.setDescripcion(descripcion);
             nuevoEvento.setFecha(fechaEvento.getTimeInMillis());
-            nuevoEvento.setLugar(sitioEvento);
             nuevoEvento.setCelular_organizador(celular);
             nuevoEvento.setNombre_organizador(nombreOrganizador);
             boolean lugarFijo = !cbxVotarSitio.isChecked();
             nuevoEvento.setLugar_fijo(lugarFijo);
             nuevoEvento.setLugar_definitivo(lugarFijo);
 
-            if(cbxVotarSitio.isChecked() && !encuesta_creada)
-            {
+            if (cbxVotarSitio.isChecked() && !encuesta_creada) {
                 Intent intent = new Intent(this, CrearEncuestaLugaresActivity.class);
                 startActivityForResult(intent, CREAR_ENCUESTA_LUGARES);
-            }
-            else
-            {
+            } else {
+                nuevoEvento.setLugar(sitioEvento);
                 Intent intent = new Intent(this, AgregarInvitadosActivity.class);
                 startActivityForResult(intent, INVITAR_AMIGOS);
             }
-
-
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_EVENTOS);
-            key_evento = databaseReference.push().getKey();
-
-
         }
-
     }
 
 
@@ -361,31 +347,50 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (requestCode == INVITAR_AMIGOS) {
-            // Make sure the request was successful
-            if (resultCode==RESULT_OK) {
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == INVITAR_AMIGOS) {
                 invitados = (List<Contacto>) data.getExtras().get("Invitados");
-                Toast.makeText(this, "Invitados: " + invitados.size(), Toast.LENGTH_LONG);
-            } else {
-                Toast.makeText(this, "Algo salió mal al seleccionar los invitados", Toast.LENGTH_LONG);
+            } else if (requestCode == CREAR_ENCUESTA_LUGARES) {
+                sitiosEncuesta = (List<Sitio>) data.getSerializableExtra(Constants.EXTRA_SITIOS_EVENTO);
+                invitados = (List<Contacto>) data.getSerializableExtra(Constants.INVITADOS_EVENTO);
             }
-        }
-        else if (requestCode==CREAR_ENCUESTA_LUGARES)
-        {
-            if(resultCode==RESULT_OK)
+            nuevoEvento.setCantidad_invitados(invitados.size());
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference dbReference = database.getReferenceFromUrl(Constants.FIREBASE_URL);
+            key_evento = dbReference.child(Constants.URL_EVENTOS).push().getKey();
+
+            Map<String, Object> childUpdates = new HashMap<>();
+            //Agrega el evento en la tabla principal
+            childUpdates.put(Constants.URL_EVENTOS+key_evento,nuevoEvento.toMap());
+
+            ResumenEvento resumen = new ResumenEvento(nuevoEvento.getNombre(),nombreOrganizador,fechaEvento.getTimeInMillis(),key_evento);
+            Map resumenMap = resumen.toMap();
+            //Agrega un resumen en mis Eventos
+            childUpdates.put(Constants.URL_MIS_EVENTOS+celular+"/"+key_evento,resumenMap);
+
+            for(Contacto invitadoActual : invitados)
             {
-                sitiosEncuesta = (List<Sitio>)data.getSerializableExtra(Constants.EXTRA_SITIOS_EVENTO);
-                invitados = (List<Contacto>)data.getSerializableExtra(Constants.INVITADOS_EVENTO);
-                System.out.println("Cantidad de sitios para la encuesta "+sitiosEncuesta.size());
-                Intent intent = new Intent(this, AgregarInvitadosActivity.class);
-                startActivityForResult(intent, INVITAR_AMIGOS);
+                ParticipanteEvento nuevoParticipante = new ParticipanteEvento(invitadoActual.getNombre());
+                //Agrega cada participante al evento
+                childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO+key_evento+"/"+invitadoActual.getNumeroTelefonico(),nuevoParticipante.toMap());
+                //Agrega un resumen en invitación a cada contacto
+                childUpdates.put(Constants.URL_INVITACIONES_EVENTO+invitadoActual.getNumeroTelefonico()+"/"+key_evento,resumenMap);
             }
-            else
+
+            if(sitiosEncuesta!=null)
             {
-                Toast.makeText(contexto,"Algo salió mal al seleccionar los sitios",Toast.LENGTH_SHORT).show();
+                //Crea la encuesta
+                SondeoLugares sondeo = new SondeoLugares(invitados.size(),sitiosEncuesta);
+                childUpdates.put(Constants.URL_SONDEOS+key_evento,sondeo.toMap());
             }
+
+            dbReference.updateChildren(childUpdates);
+            finish();
+        } else {
+            Toast.makeText(this, "Algo salió mal al seleccionar los invitados", Toast.LENGTH_LONG);
         }
+
 
     }
 

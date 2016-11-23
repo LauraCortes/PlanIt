@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,25 +21,28 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lista_contactos"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/buttonInvitar"
-        android:layout_marginBottom="35dp"
-        android:focusable="false"/>
-
-    <Button
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Crear evento"
-        android:id="@+id/buttonInvitar"
-        android:drawableRight="@drawable/enviar"
-        android:paddingRight="30dp"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorAccent"
-        android:onClick="agregar"/>
+        android:layout_height="match_parent">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lista_contactos_evento"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:focusable="false"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:id="@+id/buttonInvitarEvento"
+            android:src="@drawable/enviar"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorAccent"
+            android:onClick="agregar"/>
+
+    </FrameLayout>
 
 </LinearLayout>

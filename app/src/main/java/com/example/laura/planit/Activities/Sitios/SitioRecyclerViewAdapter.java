@@ -63,8 +63,8 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
         {
             layoutDireccion.setVisibility(View.GONE);
             layoutGPS.setVisibility(View.VISIBLE);
-            System.out.println("Service lanzado para obtener dirección");
-            //Lanzar servicio para obtener dirección
+            System.out.println("Service lanzado para obtener direccion");
+            //Lanzar servicio para obtener direccion
             Intent intent = new Intent(context, ObtenerDireccionesIntentService.class);
             intent.putExtra(Constants.SITIO, sitio);
             context.startService(intent);
