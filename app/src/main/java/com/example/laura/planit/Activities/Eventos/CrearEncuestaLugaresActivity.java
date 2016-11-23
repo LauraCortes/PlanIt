@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -39,9 +40,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -55,7 +58,7 @@ public class CrearEncuestaLugaresActivity extends AppCompatActivity
     private Context contexto;
     protected HashMap<String, Sitio> sitiosSeleccionados;
     protected RecyclerView listView;
-    protected FloatingActionButton btnFAB;
+    protected Button btnFAB;
     private SitioEncuestaRecyclerViewAdapter adapter;
 
     @Override
@@ -88,7 +91,7 @@ public class CrearEncuestaLugaresActivity extends AppCompatActivity
 
         leerSitios();
 
-        btnFAB = (FloatingActionButton) findViewById(R.id.btnAgregarEncuesta);
+        btnFAB = (Button) findViewById(R.id.btnAgregarEncuesta);
         adapter = new SitioEncuestaRecyclerViewAdapter(sitios, contexto, this);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -117,7 +120,7 @@ public class CrearEncuestaLugaresActivity extends AppCompatActivity
     }
 
     public void cambiarIconoFAB() {
-        if (sitiosSeleccionados.size() != 0) {
+        if (sitiosSeleccionados.size() > 0) {
             btnFAB.setVisibility(View.VISIBLE);
         } else {
             btnFAB.setVisibility(View.GONE);
@@ -125,11 +128,11 @@ public class CrearEncuestaLugaresActivity extends AppCompatActivity
     }
 
     public void agregar(View view) {
-        if (sitiosSeleccionados.size() > 1) {
-            Intent i = new Intent();
-            i.putExtra(Constants.EXTRA_SITIOS_EVENTO, sitiosSeleccionados);
-            setResult(RESULT_OK, i);
-            finish();
+        if (sitiosSeleccionados.size() > 1)
+        {
+            Intent intent = new Intent(this, AgregarInvitadosActivity.class);
+            startActivityForResult(intent, AgregarEventoActivity.INVITAR_AMIGOS);
+
         } else {
             Toast.makeText(contexto, "Debe seleccionar más de un sitio para que los participantes " +
                     "voten", Toast.LENGTH_SHORT).show();
@@ -177,5 +180,23 @@ public class CrearEncuestaLugaresActivity extends AppCompatActivity
         i.putExtra("editar", false);
         i.putExtra("titulo", "Agregar sitio favorito");
         contexto.startActivity(i);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(resultCode==RESULT_OK )
+        {
+            List<Sitio> sitiosArray = new ArrayList();
+            for (Map.Entry<String, Sitio> entrada : sitiosSeleccionados.entrySet())
+            {
+                sitiosArray.add(entrada.getValue());
+            }
+            Intent i = new Intent();
+            i.putExtra(Constants.EXTRA_SITIOS_EVENTO, sitiosSeleccionados);
+            i.putExtra(Constants.INVITADOS_EVENTO,data.getSerializableExtra(Constants.INVITADOS_EVENTO));
+            setResult(RESULT_OK, i);
+            finish();
+        }
     }
 }

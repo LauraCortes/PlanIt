@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Activities.Eventos.AgregarInvitadosActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_agregar_invitados"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:elevation="4dp"
+            android:titleTextColor="@color/mdtp_white"
+            app:titleTextColor="@color/mdtp_white" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <ListView
         android:layout_width="wrap_content"
@@ -16,12 +32,14 @@
         android:focusable="false"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Invitar"
+        android:text="Crear evento"
         android:id="@+id/buttonInvitar"
-        android:layout_alignParentBottom="true"
+        android:drawableRight="@drawable/enviar"
+        android:paddingRight="30dp"
         android:layout_centerHorizontal="true"
         android:background="@color/colorAccent"
         android:onClick="agregar"/>
-</RelativeLayout>
+
+</LinearLayout>

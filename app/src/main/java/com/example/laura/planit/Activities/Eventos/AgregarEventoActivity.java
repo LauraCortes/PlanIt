@@ -59,7 +59,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     Button btnSitio;
     Button btnContinuar;
 
-    int INVITAR_AMIGOS = 1;
+    public static int INVITAR_AMIGOS = 1;
     int CREAR_ENCUESTA_LUGARES=23;
 
     Context contexto;
@@ -83,6 +83,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
     private List<Contacto> invitados;
     private List<Sitio> sitios;
+    private List<Sitio> sitiosEncuesta;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -363,13 +364,29 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
         // Check which request we're responding to
         if (requestCode == INVITAR_AMIGOS) {
             // Make sure the request was successful
-            if (resultCode != 0) {
+            if (resultCode==RESULT_OK) {
                 invitados = (List<Contacto>) data.getExtras().get("Invitados");
                 Toast.makeText(this, "Invitados: " + invitados.size(), Toast.LENGTH_LONG);
             } else {
-                Toast.makeText(this, "Debes seleccionar algunos invitados", Toast.LENGTH_LONG);
+                Toast.makeText(this, "Algo salió mal al seleccionar los invitados", Toast.LENGTH_LONG);
             }
         }
+        else if (requestCode==CREAR_ENCUESTA_LUGARES)
+        {
+            if(resultCode==RESULT_OK)
+            {
+                sitiosEncuesta = (List<Sitio>)data.getSerializableExtra(Constants.EXTRA_SITIOS_EVENTO);
+                invitados = (List<Contacto>)data.getSerializableExtra(Constants.INVITADOS_EVENTO);
+                System.out.println("Cantidad de sitios para la encuesta "+sitiosEncuesta.size());
+                Intent intent = new Intent(this, AgregarInvitadosActivity.class);
+                startActivityForResult(intent, INVITAR_AMIGOS);
+            }
+            else
+            {
+                Toast.makeText(contexto,"Algo salió mal al seleccionar los sitios",Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
 
