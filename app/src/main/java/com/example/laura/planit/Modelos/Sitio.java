@@ -4,6 +4,8 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Usuario on 15/09/2016.
@@ -74,5 +76,15 @@ public class Sitio implements Serializable
     public String toString()
     {
         return nombre+" : "+direccion;
+    }
+
+    public Map<String, Object> toMap() {
+
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("latitud",latitud);
+        result.put("longitud",longitud);
+        result.put("nombre",nombre);
+        result.put("direccion",direccion);
+        return result;
     }
 }

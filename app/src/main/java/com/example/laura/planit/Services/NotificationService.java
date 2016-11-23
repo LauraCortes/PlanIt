@@ -1,5 +1,6 @@
 package com.example.laura.planit.Services;
 
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -8,9 +9,16 @@ import android.support.v4.app.NotificationCompat;
 /**
  * Created by Laura on 18/09/2016.
  */
-public class NotificationService extends Service {
+public class NotificationService extends IntentService
+{
 
-    public NotificationService() {
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     *
+     * @param name Used to name the worker thread, important only for debugging.
+     */
+    public NotificationService(String name) {
+        super(name);
     }
 
     @Override
@@ -20,8 +28,23 @@ public class NotificationService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent)
     {
+        //TODO Traer los eventos que no han transcurrido
+
+
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(android.R.drawable.ic_dialog_alert)
@@ -52,17 +75,5 @@ public class NotificationService extends Service {
         mBuilder.setAutoCancel(true);
         onDestroy();
         return super.onStartCommand(intent, flags, startId);*/
-        return START_NOT_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

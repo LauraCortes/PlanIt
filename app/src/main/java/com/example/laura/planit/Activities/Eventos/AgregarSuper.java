@@ -52,7 +52,7 @@ public abstract class AgregarSuper extends AppCompatActivity
         setContentView(R.layout.activity_agregar_contacto);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_principal));
         leerContactos();
-        btnFAB=(FloatingActionButton)findViewById(R.id.btnAgregarContactos);
+        btnFAB=(FloatingActionButton)findViewById(R.id.btnAgregarSitios);
         listView = (ListView) findViewById(android.R.id.list);
         listView.setAdapter(new AgregarContactoAdapter(this, contactos));
         contactosSeleccionados = new HashMap<Integer, Contacto>();
@@ -206,6 +206,7 @@ public abstract class AgregarSuper extends AppCompatActivity
                     }
                     while (mCursor.moveToNext());
                     mCursor.close();
+
                 }
             }
             contact = null;

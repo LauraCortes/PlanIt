@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setAutoCancel(false)
                     .addAction(R.drawable.check,"Ya llegué",null)
-                    .addAction(R.drawable.close,"Aún no llego",null)
+                    .addAction(R.drawable.close,"Posponer",null)
                     .setPriority(Notification.PRIORITY_MAX)
                     .build();
 

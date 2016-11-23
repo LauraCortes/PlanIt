@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,8 +12,6 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.laura.planit.Activities.Main.MainActivity;
-import com.example.laura.planit.Modelos.Contacto;
-import com.example.laura.planit.Modelos.Evento;
 import com.example.laura.planit.Modelos.Regreso;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
@@ -281,6 +278,7 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                         MainActivity.mostrarMensaje(this, "Error", "Parece que no has iniciado sesi?n. Intenta cerrar sesi?n e ingresar de nuevo");
                     }
                     Toast.makeText(this,"Regreso configurado",Toast.LENGTH_SHORT).show();
+
                     finish();
                 }
                 catch (Exception e)

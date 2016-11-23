@@ -16,6 +16,7 @@ import com.example.laura.planit.Modelos.Evento;
 import com.example.laura.planit.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,46 +49,45 @@ public class EventoRecyclerViewAdapter extends ElementRecyclerViewAdapter
     {
         EventoRowViewHolder rowViewHolder = (EventoRowViewHolder)viewHolder;
         final Evento evento =(Evento) this.elementos.get(position);
-        rowViewHolder.lblnombre.setText(evento.getNombreEvento());
-        rowViewHolder.lblDescripcion.setText(evento.getDescripcionEvento());
-        rowViewHolder.lblFechaEvento.setText(dateFormatter.format(evento.getFechaEvento()));
-        rowViewHolder.lblLugarEvento.setText(evento.getLugar());
-        rowViewHolder.lblLugarEncuentro.setText(evento.getPuntoEncuentro());
-        rowViewHolder.lblHoraEncuentro.setText(timeFormatter.format(evento.getHoraEncuentro()));
+        rowViewHolder.lblnombre.setText(evento.getNombre());
+        rowViewHolder.lblDescripcion.setText(evento.getDescripcion());
+        rowViewHolder.lblFechaEvento.setText(dateFormatter.format(new Date(evento.getFecha())));
+        rowViewHolder.lblLugarEvento.setText(""+evento.getLugar());
+        rowViewHolder.lblHoraEncuentro.setText(timeFormatter.format(new Date(evento.getFecha())));
 
-        List invitados = evento.getInvitados();
-        if(invitados==null || invitados.size()==0)
+        int invitados = evento.getCantidad_invitados();
+        if(invitados==0)
         {
             rowViewHolder.lblInvitados.setText("   Aún no has invitado a nadie a tu evento");
         }
         else
         {
-            rowViewHolder.lblInvitados.setText("  "+invitados.size()+" amigos en el evento");
+            rowViewHolder.lblInvitados.setText("  "+invitados+" amigos en el evento");
         }
-        if(evento.getMedioRegreso()==null||evento.getMedioRegreso().getNombre()==null)
-        {
-            rowViewHolder.medioNOSeleccionado.setVisibility(View.VISIBLE);
-            rowViewHolder.medioTransporteSeleccionado.setVisibility(View.GONE);
-            rowViewHolder.btnTimer.setVisibility(View.GONE);
-        }
-        else
-        {
-            MedioTransporte medio = evento.getMedioRegreso();
-            rowViewHolder.lblhoraIda.setText(timeFormatter.format(medio.getHoraRegreso()));
-            rowViewHolder.lbltiempoAproximado.setText(""+medio.getTiempoAproximado());
-            rowViewHolder.lblmedioTransporte.setText(medio.getNombre());
-            rowViewHolder.medioNOSeleccionado.setVisibility(View.GONE);
-            rowViewHolder.medioTransporteSeleccionado.setVisibility(View.VISIBLE);
-            rowViewHolder.btnTimer.setVisibility(View.VISIBLE);
-            rowViewHolder.lbldestinoRegreso.setText(medio.getDireccionRegreso());
-        }
+//        if(evento.getMedioRegreso()==null||evento.getMedioRegreso().getNombre()==null)
+//        {
+//            rowViewHolder.medioNOSeleccionado.setVisibility(View.VISIBLE);
+//            rowViewHolder.medioTransporteSeleccionado.setVisibility(View.GONE);
+//            rowViewHolder.btnTimer.setVisibility(View.GONE);
+//        }
+//        else
+//        {
+//            MedioTransporte medio = evento.getMedioRegreso();
+//            rowViewHolder.lblhoraIda.setText(timeFormatter.format(medio.getHoraRegreso()));
+//            rowViewHolder.lbltiempoAproximado.setText(""+medio.getTiempoAproximado());
+//            rowViewHolder.lblmedioTransporte.setText(medio.getNombre());
+//            rowViewHolder.medioNOSeleccionado.setVisibility(View.GONE);
+//            rowViewHolder.medioTransporteSeleccionado.setVisibility(View.VISIBLE);
+//            rowViewHolder.btnTimer.setVisibility(View.VISIBLE);
+//            rowViewHolder.lbldestinoRegreso.setText(medio.getDireccionRegreso());
+//        }
 
         rowViewHolder.vista.setOnLongClickListener(
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(evento.getNombreEvento());
+                        builder.setTitle(evento.getNombre());
                         builder.setItems(new CharSequence[]{"Configurar regreso","Eliminar"}, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
