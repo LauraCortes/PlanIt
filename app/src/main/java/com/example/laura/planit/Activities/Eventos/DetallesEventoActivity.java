@@ -141,8 +141,11 @@ public class DetallesEventoActivity extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot)
                     {
-                        evento = dataSnapshot.getValue(Evento.class);
-                        bind();
+                        if(dataSnapshot.exists())
+                        {
+                            evento = dataSnapshot.getValue(Evento.class);
+                            bind();
+                        }
                     }
 
                     @Override

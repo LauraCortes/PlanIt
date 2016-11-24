@@ -95,14 +95,13 @@
 
         <TextView
             android:id="@+id/detalles_fecha_evento"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:gravity="center_vertical"
              />
 
-        <include layout="@layout/vacio"/>
 
         <ImageView
             android:layout_width="15dp"
@@ -114,13 +113,12 @@
 
         <TextView
             android:id="@+id/detalles_hora_evento"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
              />
 
-        <include layout="@layout/vacio"/>
 
     </LinearLayout>
 

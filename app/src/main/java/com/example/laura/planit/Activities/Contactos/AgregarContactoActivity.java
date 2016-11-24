@@ -52,6 +52,7 @@ public class AgregarContactoActivity extends AgregarSuper
         setContentView(R.layout.activity_agregar_contacto);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_agregar_contacto));
+        getSupportActionBar().setTitle("Agregar contactos de emergencia");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.atras_icon);
