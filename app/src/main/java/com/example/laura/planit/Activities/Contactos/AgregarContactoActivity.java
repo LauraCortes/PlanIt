@@ -47,25 +47,18 @@ public class AgregarContactoActivity extends AgregarSuper
 
     public void agregar(View view)
     {
-        for (Map.Entry<Integer, Contacto> entrada : contactosSeleccionados.entrySet())
-        {
+        for (Map.Entry<Integer, Contacto> entrada : contactosSeleccionados.entrySet()) {
             final Contacto contacto = entrada.getValue();
             SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
-            if (properties.getBoolean(getString(R.string.logueado), false))
-            {
+            if (properties.getBoolean(getString(R.string.logueado), false)) {
                 final String celular = properties.getString(getString(R.string.usuario), "desconocido");
                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
                 final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(contacto.darRutaElemento(celular));
                 databaseReference.addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot)
-                            {
-                                if (dataSnapshot.exists()) {
-                                    MainActivity.mostrarMensaje(contexto, "Contacto existente", "Ya existe" +
-                                            " un contacto con este numero");
-                                } else
-                                {
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (!dataSnapshot.exists()) {
                                     databaseReference.setValue(contacto);
                                 }
                             }
@@ -81,9 +74,9 @@ public class AgregarContactoActivity extends AgregarSuper
             } else {
                 MainActivity.mostrarMensaje(this, "Error", "Parece que no has iniciado sesi?n. Intenta cerrar sesi?n e ingresar de nuevo");
             }
+        }
         setResult(contactosSeleccionados.size());
         contactosSeleccionados.clear();
         finish();
-    }
 }
 }

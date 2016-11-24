@@ -68,7 +68,7 @@ public class ContactRecyclerAdapter extends ElementRecyclerViewAdapter
                 String celular = properties.getString(context.getResources().getString(R.string.usuario), "desconocido");
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(contacto.darRutaElemento(celular));
-                if(contactoFavorito.isFavorito())
+                if(!contactoFavorito.isFavorito())
                 {
                     finalContactoRowViewHolder.decorarFavorito(true);
                     contactoFavorito.setFavorito(true);
@@ -90,7 +90,7 @@ public class ContactRecyclerAdapter extends ElementRecyclerViewAdapter
             {
                 if(tabFragment.hayItemsSeleccionados())
                 {
-                    seleccionarItem(position,contactoRowViewHolder);
+                    seleccionarItem(contacto,contactoRowViewHolder);
                 }
             }
         });
@@ -99,7 +99,7 @@ public class ContactRecyclerAdapter extends ElementRecyclerViewAdapter
             @Override
             public boolean onLongClick(View v)
             {
-                seleccionarItem(position,contactoRowViewHolder);
+                seleccionarItem(contacto,contactoRowViewHolder);
                 //Retorna que sí lo usó->No invoca el clickListener
                 return true;
             }
