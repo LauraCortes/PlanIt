@@ -18,7 +18,7 @@
             android:layout_marginRight="@dimen/card_margin"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:src="@drawable/evento_icon" />
+            android:src="@drawable/invitacion_evento_icon" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="2"
+                android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -39,7 +40,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:textSize="25sp" />
+                    android:text="Example"
+                    android:textSize="23sp" />
 
                 <View
                     android:layout_width="0dp"
@@ -49,14 +51,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout_direccion_sitios"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1.5"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="20dp"
+                    android:layout_width="18dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:scaleType="centerInside"
@@ -66,15 +67,16 @@
                     android:id="@+id/fechaEvento"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="3"
+                    android:text="example"
                     android:lines="1"
                     android:paddingRight="15dp"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:gravity="center_vertical" />
 
                 <ImageView
-                    android:layout_width="20dp"
+                    android:layout_width="18dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:scaleType="centerInside"
@@ -93,7 +95,35 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/admin" />
+
+                <TextView
+                    android:id="@+id/lblOrganizador"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="3"
+                    android:lines="1"
+                    android:paddingRight="15dp"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
         </LinearLayout>
+
+
 
     </LinearLayout>
 

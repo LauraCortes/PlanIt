@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 
-import com.example.laura.planit.Activities.Eventos.AgregarSuper;
+import com.example.laura.planit.Fragments.AgregarSuper;
 import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.R;

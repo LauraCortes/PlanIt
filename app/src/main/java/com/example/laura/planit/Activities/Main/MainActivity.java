@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
 
         // Preparar las pestañas
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
-        tabs.addTab(tabs.newTab().setText("EVENTOS").setIcon(R.drawable.calendar_tab));
+        tabs.addTab(tabs.newTab().setText("MIS EVENTOS").setIcon(R.drawable.calendar_tab));
+        tabs.addTab(tabs.newTab().setText("INVITACIONES").setIcon(R.drawable.calendar_tab));
         //tabs.addTab(tabs.newTab().setText("MOVIMIENTOS").setIcon(R.drawable.movimientos_tab));
 
         tabs.addTab(tabs.newTab().setText("SITIOS").setIcon(R.drawable.sitios_favoritos_tab));

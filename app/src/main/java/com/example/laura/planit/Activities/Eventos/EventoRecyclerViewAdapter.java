@@ -40,7 +40,7 @@ public class EventoRecyclerViewAdapter extends ElementRecyclerViewAdapter
     public EventoRowViewHolder onCreateViewHolder(ViewGroup viewGroup, int position)
     {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View view = inflater.inflate(R.layout.tab_eventos_row_evento, null);
+        View view = inflater.inflate(R.layout.tab_invitaciones_row_evento, null);
         return  new EventoRowViewHolder(view);
     }
 

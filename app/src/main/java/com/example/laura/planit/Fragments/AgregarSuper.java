@@ -1,4 +1,4 @@
-package com.example.laura.planit.Activities.Eventos;
+package com.example.laura.planit.Fragments;
 
 import android.Manifest;
 import android.content.Context;

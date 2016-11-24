@@ -3,8 +3,10 @@ package com.example.laura.planit.Activities.Eventos;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,11 +15,9 @@ import android.view.ViewGroup;
 
 import com.example.laura.planit.Activities.Main.LoginActivity;
 import com.example.laura.planit.Activities.Main.MainActivity;
-import com.example.laura.planit.Activities.Sitios.SitioRecyclerViewAdapter;
+import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.TabFragment;
-import com.example.laura.planit.Modelos.Evento;
 import com.example.laura.planit.Modelos.ResumenEvento;
-import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.Constants;
 import com.google.firebase.database.DataSnapshot;
@@ -35,9 +35,9 @@ import java.util.List;
  * Created by Usuario on 02/11/2016.
  */
 
-public class MisEventosTabFragment extends TabFragment
+public class InvitacionesTabFragment extends TabFragment
 {
-    public  MisEventosTabFragment()
+    public InvitacionesTabFragment()
     {
         super();
     }
@@ -59,14 +59,15 @@ public class MisEventosTabFragment extends TabFragment
         elementosSeleccionados = new ArrayList();
         super.onCreate(savedInstanceState);
         elementos= new ArrayList();
-        adapter=new MiEventoRecyclerViewAdapter(getActivity(), (List<ResumenEvento>)elementos,this);
+        adapter=new InvitacionRecyclerViewAdapter(getActivity(), (List<ResumenEvento>)elementos,this);
 
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.tab_eventos, container, false);
-        this.recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewEventos);
+        View view=inflater.inflate(R.layout.tab_invitaciones, container, false);
+        this.recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewInvitacionesEventos);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.recyclerView.setAdapter(adapter);
-        btnFAB= (FloatingActionButton) view.findViewById(R.id.fabAgregarEventos);
+        btnFAB= (FloatingActionButton) view.findViewById(R.id.fabEliminarInvitacion);
+        btnFAB.setVisibility(View.GONE);
         btnFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,11 +76,9 @@ public class MisEventosTabFragment extends TabFragment
         });
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_MIS_EVENTOS + celular);
+        final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_INVITACIONES_EVENTO + celular);
         databaseReference.keepSynced(true);
         databaseReference.orderByChild("fecha");
-        //TODO - hacer que desde la DB solo se puedan leer las últimas 36 horas;
-        long ultimas36Horas = System.currentTimeMillis()-(129600000);
         databaseReference.addValueEventListener(
                 new ValueEventListener() {
                     @Override
@@ -89,10 +88,9 @@ public class MisEventosTabFragment extends TabFragment
                         HashMap<String, ResumenEvento> map =dataSnapshot.getValue(t);
                         if(map!=null)
                         {
-                            System.out.println("Llegó info de los eventos");
                             ArrayList<ResumenEvento> nuevos = new ArrayList(map.values());
                             elementos=nuevos;
-                            ((MiEventoRecyclerViewAdapter)adapter).swapData(nuevos);
+                            ((ElementRecyclerViewAdapter)adapter).swapData(nuevos);
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -110,10 +108,21 @@ public class MisEventosTabFragment extends TabFragment
     @Override
     protected void lanzarActivityAgregarElemento(View view)
     {
-        Intent i = new Intent(getContext(), AgregarEventoActivity.class);
-        i.putExtra("editar", false);
-        i.putExtra("titulo", "Agregar evento");
-        startActivity(i);
+        //Esta acción nunca se lanzará
+    }
+
+    public void cambiarIconoFAB()
+    {
+        super.cambiarIconoFAB();
+        if(elementosSeleccionados.size()!=0)
+        {
+            btnFAB.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            btnFAB.setVisibility(View.GONE);
+        }
+
     }
 
 

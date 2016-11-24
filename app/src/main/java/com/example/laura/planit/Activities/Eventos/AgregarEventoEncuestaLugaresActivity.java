@@ -1,19 +1,10 @@
 package com.example.laura.planit.Activities.Eventos;
 
-import android.Manifest;
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,14 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.laura.planit.Activities.Contactos.AgregarContactoAdapter;
 import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
 import com.example.laura.planit.Activities.Sitios.SitioEncuestaRecyclerViewAdapter;
-import com.example.laura.planit.Activities.Sitios.SitioRecyclerViewAdapter;
-import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.Constants;
@@ -52,7 +39,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by Usuario on 22/11/2016.
  */
 
-public class CrearEncuestaLugaresActivity extends AppCompatActivity
+public class AgregarEventoEncuestaLugaresActivity extends AppCompatActivity
 {
     private List<Sitio> sitios;
     private Context contexto;
@@ -130,7 +117,7 @@ public class CrearEncuestaLugaresActivity extends AppCompatActivity
     public void agregar(View view) {
         if (sitiosSeleccionados.size() > 1)
         {
-            Intent intent = new Intent(this, AgregarInvitadosActivity.class);
+            Intent intent = new Intent(this, AgregarEventoInvitadosActivity.class);
             startActivityForResult(intent, AgregarEventoActivity.INVITAR_AMIGOS);
 
         } else {

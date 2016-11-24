@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoAdapter;
+import com.example.laura.planit.Fragments.AgregarSuper;
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Services.Constants;
@@ -27,7 +28,7 @@ import java.util.Map;
 /**
  * Created by Laura on 18/09/2016.
  */
-public class AgregarInvitadosActivity extends AgregarSuper
+public class AgregarEventoInvitadosActivity extends AgregarSuper
 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

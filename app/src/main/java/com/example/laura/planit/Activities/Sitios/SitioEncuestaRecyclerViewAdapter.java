@@ -1,14 +1,13 @@
 package com.example.laura.planit.Activities.Sitios;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.example.laura.planit.Activities.Eventos.CrearEncuestaLugaresActivity;
+import com.example.laura.planit.Activities.Eventos.AgregarEventoEncuestaLugaresActivity;
 import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
@@ -22,14 +21,14 @@ public class SitioEncuestaRecyclerViewAdapter extends RecyclerView.Adapter<Eleme
 {
     private List<Sitio> elementos;
     protected Context context;
-    protected CrearEncuestaLugaresActivity activity;
+    protected AgregarEventoEncuestaLugaresActivity activity;
 
     public void swapData(List sitios)
     {
         elementos=sitios;
     }
 
-    public SitioEncuestaRecyclerViewAdapter(List<Sitio> elementos, Context context, CrearEncuestaLugaresActivity activity) {
+    public SitioEncuestaRecyclerViewAdapter(List<Sitio> elementos, Context context, AgregarEventoEncuestaLugaresActivity activity) {
         this.elementos = elementos;
         this.context = context;
         this.activity = activity;

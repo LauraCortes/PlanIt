@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -314,11 +312,11 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
             nuevoEvento.setLugar_definitivo(lugarFijo);
 
             if (cbxVotarSitio.isChecked() && !encuesta_creada) {
-                Intent intent = new Intent(this, CrearEncuestaLugaresActivity.class);
+                Intent intent = new Intent(this, AgregarEventoEncuestaLugaresActivity.class);
                 startActivityForResult(intent, CREAR_ENCUESTA_LUGARES);
             } else {
                 nuevoEvento.setLugar(sitioEvento);
-                Intent intent = new Intent(this, AgregarInvitadosActivity.class);
+                Intent intent = new Intent(this, AgregarEventoInvitadosActivity.class);
                 startActivityForResult(intent, INVITAR_AMIGOS);
             }
         }
