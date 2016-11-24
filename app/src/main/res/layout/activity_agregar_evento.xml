@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:theme="@style/AppTheme"
-    tools:context=".Activities.Eventos.AgregarEventoActivity">
+    tools:context=".Activities.Eventos.DetallesEventoActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

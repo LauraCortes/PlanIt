@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/card_margin"
+    android:paddingRight="@dimen/card_margin">
+
+
+    <TextView
+        android:id="@+id/detalles_nombre_evento"
+        fontPath="@string/fuenteNegrita"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="Titulo"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/detalles_descripcion_evento"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:gravity="center_vertical"
+        android:paddingTop="15dp"
+        android:text="Descripcion"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3.5"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorDivider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Realización:" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_weight="1.3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/imagenlugar24p" />
+
+            <TextView
+                android:id="@+id/lugarEvento"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:lines="2"
+                android:text="Lugar - evento" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/card_margin"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/fecha_evento" />
+
+            <TextView
+                android:id="@+id/detalles_fecha_evento"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="fecha" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/card_margin"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/clock24p" />
+
+            <TextView
+                android:id="@+id/detalles_hora_evento"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="hora" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorDivider" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/invitados" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:text="Asistentes" />
+
+        <TextView
+            android:id="@+id/detalles_cantidad_invitados"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="cuantos" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btn_ver_invitados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="VER" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorDivider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Regreso a casa" />
+
+
+        <TextView
+            android:id="@+id/lbl_detalles_reg_no_def"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="(No definido)" />
+
+        <include layout="@layout/vacio"/>
+
+        <Button
+            android:id="@+id/btn_detalles_compartido"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:text="comparten"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/detalles_detalles_regreso"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/taxi24p" />
+
+            <TextView
+                android:id="@+id/lbl_detalles_medio_regreso"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Taxi|uber..."
+                android:gravity="center_vertical"/>
+
+            <include layout="@layout/vacio"/>
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/clock24p" />
+
+            <TextView
+                android:id="@+id/lbl_detalles_hora_regreso"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="10pm"
+                android:gravity="center_vertical"/>
+
+            <include layout="@layout/vacio"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/imagenlugar24p" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Destino"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/lblDestinoRegreso"
+                android:layout_width="wrap_content"
+                android:lines="3"
+                android:gravity="center_vertical"
+                android:text="Dirección......"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/hourglass" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Tiempo aprox. de regreso (min)"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/lbl_detalles_tiempo_regreso"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="35"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/admin" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Con "
+                android:layout_marginRight="5dp"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/lbl_detalles_duenio_regreso"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Dueño del regreso"
+                android:gravity="center_vertical"/>
+
+            <include layout="@layout/vacio"/>
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/phone" />
+
+            <TextView
+                android:id="@+id/lbl_detalles_celular_duenio_regreso"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="3138238039"
+                android:gravity="center_vertical"/>
+
+            <include layout="@layout/vacio"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/card_margin"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btn_detalles_crear_regreso"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
+            android:text="Crear transporte" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btn_detalles_seleccionar_regreso"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="Seleccionar transporte" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="btn_detalles_regresar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="aceptar"
+        android:layout_weight="1"/>
+
+</LinearLayout>

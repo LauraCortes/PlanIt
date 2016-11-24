@@ -28,6 +28,7 @@
             android:icon="@drawable/logo_planit"/>
         <activity android:name=".Activities.Sitios.AgregarSitioActivity" />
         <activity android:name=".Activities.Eventos.AgregarEventoActivity" />
+        <activity android:name=".Activities.Eventos.DetallesEventoActivity" />
         <activity android:name=".Activities.Contactos.AgregarContactoActivity" />
         <activity android:name=".Activities.Eventos.AgregarEventoInvitadosActivity" />
         <activity android:name=".Activities.Eventos.AgregarEventoEncuestaLugaresActivity" />
