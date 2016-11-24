@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppTheme"
-    fontPath="@string/fuenteNormal"
     tools:context=".Activities.Sitios.AgregarSitioActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -23,85 +22,90 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:layout_weight="2">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
 
-            <EditText
-                android:id="@+id/txtNombreSitioFavorito"
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textStyle="bold"
-                android:textAllCaps="false"
-                android:textAlignment="center"
-                android:inputType="textCapSentences"
-                android:hint="Nombre del sitio" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_height="0dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_weight="2">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:textAlignment="center"
-            android:text="Ubica el marcador a la posición del sitio"
-            android:layout_gravity="bottom"
-            android:gravity="bottom"
-            android:textColor="@color/mdtp_transparent_black"
-            android:layout_marginBottom="5dp"/>
-
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            android:name="com.google.android.gms.maps.MapFragment"
-            android:id="@+id/map"
-            android:layout_weight="9"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:uiZoomControls="true"
-            app:uiZoomGestures="true"
-            app:uiCompass="true" />
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:paddingTop="5dp"
-            android:layout_weight="1">
+                <EditText
+                    android:id="@+id/txtNombreSitioFavorito"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    android:textAlignment="center"
+                    android:inputType="textCapSentences"
+                    android:hint="Nombre del sitio" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
-                android:enabled="false"
-                android:id="@+id/lblDireccionFavorito"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapWords"
-                android:layout_gravity="top"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
                 android:textAlignment="center"
-                android:gravity="top"
-                android:text="Dirección: (No definida)"/>
-        </android.support.design.widget.TextInputLayout>
+                android:text="Ubica el marcador a la posición del sitio"
+                android:layout_gravity="bottom"
+                android:gravity="bottom"
+                android:textColor="@color/mdtp_transparent_black"
+                android:layout_marginBottom="5dp"/>
 
-        <Button
-            android:id="@+id/btn_agregar_sitio"
-            android:theme="@style/AppTheme"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.2"
-            android:text="Agregar"
-            android:onClick="agregarSitio"
-            android:background="@color/colorAccent" />
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                app:uiZoomControls="true"
+                app:uiZoomGestures="true"
+                app:uiCompass="true" />
 
-    </LinearLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingTop="5dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:enabled="false"
+                    android:id="@+id/lblDireccionFavorito"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:layout_gravity="top"
+                    android:textAlignment="center"
+                    android:gravity="top"
+                    android:text="Dirección: (No definida)"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_agregar_sitio"
+                android:theme="@style/AppTheme"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:text="Agregar"
+                android:onClick="agregarSitio"
+                android:background="@color/colorAccent" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

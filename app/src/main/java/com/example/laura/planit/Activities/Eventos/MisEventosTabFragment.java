@@ -86,7 +86,6 @@ public class MisEventosTabFragment extends TabFragment
                         HashMap<String, ResumenEvento> map =dataSnapshot.getValue(t);
                         if(map!=null)
                         {
-                            System.out.println("Llegó info de los eventos");
                             ArrayList<ResumenEvento> nuevos = new ArrayList(map.values());
                             elementos=nuevos;
                             ((MiEventoRecyclerViewAdapter)adapter).swapData(nuevos);
