@@ -12,6 +12,7 @@ import android.text.Layout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -167,6 +168,8 @@ public class DetallesEventoActivity extends AppCompatActivity
 
     private void bind()
     {
+        FrameLayout cargando = (FrameLayout)findViewById(R.id.imgn_cargando);
+        cargando.setVisibility(View.GONE);
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
 
