@@ -1,11 +1,13 @@
 package com.example.laura.planit.Activities.Eventos;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Layout;
@@ -19,17 +21,28 @@ import android.widget.TextView;
 import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Activities.Main.MainActivity;
+import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
 import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
 import com.example.laura.planit.Modelos.Evento;
+import com.example.laura.planit.Modelos.OpcionSondeo;
 import com.example.laura.planit.Modelos.Sitio;
+import com.example.laura.planit.Modelos.SondeoLugares;
 import com.example.laura.planit.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -41,6 +54,9 @@ public class DetallesEventoActivity extends AppCompatActivity
     private Evento evento;
     private String id_evento;
     private String celular;
+
+    private List<OpcionSondeo> opcionesVotacion=new ArrayList<>();
+    private OpcionSondeo votada;
 
     Context contexto;
 
@@ -125,10 +141,11 @@ public class DetallesEventoActivity extends AppCompatActivity
             SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
             if (properties.getBoolean(getString(R.string.logueado), false))
             {
-                celular = properties.getString(getString(R.string.usuario), "desconocido");
+                celular = properties.getString(getString(R.string.usuario), Constants.DESCONOCIDO);
                 if(!celular.equals(Constants.DESCONOCIDO))
                 {
                     leerEventoDB();
+                    prepararVotacion();
                 }
                 else
                 {
@@ -215,4 +232,160 @@ public class DetallesEventoActivity extends AppCompatActivity
         Intent intent = new Intent(contexto, AgregarTransporteActivity.class);
         startActivity(intent);
     }
+
+    private void prepararVotacion()
+    {
+        final DatabaseReference refVotacion = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_SONDEOS+id_evento);
+        refVotacion.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    SondeoLugares sondeo = dataSnapshot.getValue(SondeoLugares.class);
+                    if(sondeo!=null)
+                    {
+
+                        /**
+                        GenericTypeIndicator<Map<String,OpcionSondeo>> opciones = new GenericTypeIndicator<Map<String,OpcionSondeo>>(){};
+                        Collection<OpcionSondeo> opcionesCollection = dataSnapshot.child("opciones").getValue(opciones).values();
+                         */
+                        Collection<OpcionSondeo> opcionesCollection = sondeo.getOpciones().values();
+                        int i=0;
+                        for(OpcionSondeo opcion : opcionesCollection)
+                        {
+                            opcionesVotacion.add(opcion);
+                            i++;
+                        }
+
+                        boolean opcionesNulas = opcionesVotacion==null;
+                        System.out.println(opcionesNulas+" *******+ OPCIONES DE VOTACIÓN LLEGARON "+opcionesVotacion.size());
+                        if(sondeo.isCerrado() ||  (sondeo.getVotaron()!=null && sondeo.getVotaron().contains(celular)))
+                        {
+                            btnVotar.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            btnVotar.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    else
+                    {
+                        btnVotar.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void votar(View v)
+    {
+        String[] opciones = new String[opcionesVotacion.size()];
+        int i=0;
+        for(OpcionSondeo opcionActual:opcionesVotacion)
+        {
+            opciones[i]=opcionActual.toString();
+            i++;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+        builder.setTitle("Vota por el lugar del evento");
+        builder.setCancelable(true);
+        builder.setNegativeButton("Cancelar", null);
+        builder.setItems(opciones,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        votada = opcionesVotacion.get(which);
+                        ejecutarVoto();
+                        //btnVotar.setVisibility(View.GONE);
+                        //Debería sobrar pues se actualiza con el otro listener
+                    }
+                });
+        builder.show();
+    }
+
+    private void ejecutarVoto()
+    {
+        final DatabaseReference refVotacion = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_SONDEOS+id_evento);
+        refVotacion.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+
+                SondeoLugares sondeo = mutableData.getValue(SondeoLugares.class);
+                if (sondeo == null) {
+                    return Transaction.success(mutableData);
+                }
+                else
+                {
+                    sondeo.votosActuales++;
+                    for(OpcionSondeo opcionDB : sondeo.getOpciones().values())
+                    {
+                        if(opcionDB.lugar==votada.getLugar())
+                        {
+                            opcionDB.votosFavor++;
+                            boolean ganadora=true;
+                            for(OpcionSondeo otraOpcion : sondeo.getOpciones().values())
+                            {
+                                //Determina si es la que gana
+                                if(otraOpcion!=opcionDB && !(opcionDB.votosFavor>=(otraOpcion.votosFavor+(sondeo.cantidadVotantes-sondeo.votosActuales))))
+                                {
+                                    ganadora=false;
+                                    break;
+                                }
+                            }
+                            sondeo.cerrado=ganadora;
+
+                            DatabaseReference refEvento =  FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL)
+                                    .child(Constants.URL_EVENTOS+id_evento);
+                            //Si es la ganadora pone el sitio en el evento
+                            if(ganadora)
+                            {
+                                refEvento.child("lugar_definitivo").setValue(true);
+                                refEvento.child("lugar").setValue(votada.getLugar());
+                            }
+                            else
+                            {
+                                //Pone el de mayor votación
+                                OpcionSondeo mayorVotacion=null;
+                                for(OpcionSondeo actual:sondeo.getOpciones().values())
+                                {
+                                    if(mayorVotacion==null)
+                                    {
+                                        mayorVotacion=actual;
+                                    }
+                                    else if(actual.votosFavor>actual.votosFavor)
+                                    {
+                                        mayorVotacion=actual;
+                                    }
+                                }
+                                refEvento.child("lugar").setValue(mayorVotacion.lugar);
+                            }
+
+                            sondeo.votaron.add(celular);
+                            break;
+                        }
+                    }
+                }
+                mutableData.setValue(sondeo);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                if(databaseError!=null)
+                {
+                    databaseError.toException().printStackTrace();
+                }
+            }
+        });
+    }
+
+
+
 }

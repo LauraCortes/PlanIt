@@ -104,7 +104,7 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
 
 
         Intent intent = getIntent();
-        editar = intent.getExtras().getBoolean("editar");
+        editar = intent.getBooleanExtra("editar",false);
         if (editar) {
             Sitio sitio = (Sitio) intent.getSerializableExtra("sitio");
             if (sitio != null)
@@ -239,6 +239,7 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                                 }
                             }
                     );
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     MainActivity.mostrarMensaje(this, "Error", "Parece que no has iniciado sesión. Intenta cerrar sesión e ingresar de nuevo");

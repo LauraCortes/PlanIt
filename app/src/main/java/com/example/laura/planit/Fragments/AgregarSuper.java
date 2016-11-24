@@ -111,6 +111,9 @@ public abstract class AgregarSuper extends AppCompatActivity
                             {
                                 String numero =  mCursor.getString(1).trim();
                                 numero=numero.replaceAll(" ","");
+                                numero=numero.replaceAll("(","");
+                                numero=numero.replaceAll(")","");
+                                numero=numero.replaceAll("-","");
                                 if(!contactoExistente(numero))
                                 {
                                     contact = new Contacto(mCursor.getString(0), numero);

@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.Evento;
 import com.example.laura.planit.Modelos.ParticipanteEvento;
@@ -66,6 +67,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
     public static int INVITAR_AMIGOS = 1;
     int CREAR_ENCUESTA_LUGARES = 23;
+    int CREAR_LUGAR=12;
 
     Context contexto;
 
@@ -89,6 +91,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     private List<Contacto> invitados;
     private List<Sitio> sitios;
     private List<Sitio> sitiosEncuesta;
+    private String[] itemsSeleccionarSitio;
 
     private Evento nuevoEvento;
 
@@ -194,16 +197,21 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_LUGARES_FAVORITOS + celular);
-        databaseReference.addListenerForSingleValueEvent(
+        databaseReference.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         GenericTypeIndicator<HashMap<String, Sitio>> t = new GenericTypeIndicator<HashMap<String, Sitio>>() {
                         };
                         HashMap<String, Sitio> map = dataSnapshot.getValue(t);
-                        if (map != null) {
+                        if (map != null)
+                        {
                             ArrayList<Sitio> nuevos = new ArrayList(map.values());
                             sitios = nuevos;
+                            itemsSeleccionarSitio = new String[sitios.size()];
+                            for (int i = 0; i < itemsSeleccionarSitio.length; i++) {
+                                itemsSeleccionarSitio[i] = sitios.get(i).toString();
+                            }
                         } else {
                             sitios = new ArrayList<Sitio>();
                         }
@@ -250,16 +258,19 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
 
     public void definirSitioEvento(View view) {
-        String[] items = new String[sitios.size()];
-        for (int i = 0; i < items.length; i++) {
-            items[i] = sitios.get(i).toString();
-        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
         builder.setTitle("Selecciona el lugar");
-        builder.setCancelable(false);
+        builder.setCancelable(true);
         builder.setNegativeButton("Cancelar", null);
-        builder.setItems(items,
+        builder.setPositiveButton("Nuevo sitio", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intentAgregarSitio = new Intent(contexto, AgregarSitioActivity.class);
+                startActivityForResult (intentAgregarSitio,CREAR_LUGAR);
+            }
+        });
+        builder.setItems(itemsSeleccionarSitio,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -346,49 +357,59 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == INVITAR_AMIGOS) {
-                invitados = (List<Contacto>) data.getExtras().get("Invitados");
-            } else if (requestCode == CREAR_ENCUESTA_LUGARES) {
-                sitiosEncuesta = (List<Sitio>) data.getSerializableExtra(Constants.EXTRA_SITIOS_EVENTO);
-                invitados = (List<Contacto>) data.getSerializableExtra(Constants.INVITADOS_EVENTO);
-            }
-            nuevoEvento.setCantidad_invitados(invitados.size()+1);
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference dbReference = database.getReferenceFromUrl(Constants.FIREBASE_URL);
-            key_evento = dbReference.child(Constants.URL_EVENTOS).push().getKey();
-
-            Map<String, Object> childUpdates = new HashMap<>();
-            //Agrega el evento en la tabla principal
-            childUpdates.put(Constants.URL_EVENTOS+key_evento,nuevoEvento.toMap());
-
-            ResumenEvento resumen = new ResumenEvento(nuevoEvento.getNombre(),nombreOrganizador,fechaEvento.getTimeInMillis(),key_evento);
-            Map resumenMap = resumen.toMap();
-            //Agrega un resumen en mis Eventos
-            childUpdates.put(Constants.URL_MIS_EVENTOS+celular+"/"+key_evento,resumenMap);
-
-            //Agrega al administrador como participante
-            ParticipanteEvento nuevoParticipante = new ParticipanteEvento(nombreOrganizador);
-            childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO+key_evento+"/"+celular,nuevoParticipante.toMap());
-
-            for(Contacto invitadoActual : invitados)
+        if (resultCode == RESULT_OK)
+        {
+            if(requestCode==CREAR_LUGAR)
             {
-                nuevoParticipante = new ParticipanteEvento(invitadoActual.getNombre());
-                //Agrega cada participante al evento
-                childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO+key_evento+"/"+invitadoActual.getNumeroTelefonico(),nuevoParticipante.toMap());
-                //Agrega un resumen en invitación a cada contacto
-                childUpdates.put(Constants.URL_INVITACIONES_EVENTO+invitadoActual.getNumeroTelefonico()+"/"+key_evento,resumenMap);
+                //TODO
+               //Lanzar popUp o seleccionar sitio
             }
-
-            if(sitiosEncuesta!=null)
+            else
             {
-                //Crea la encuesta
-                SondeoLugares sondeo = new SondeoLugares(invitados.size(),sitiosEncuesta);
-                childUpdates.put(Constants.URL_SONDEOS+key_evento,sondeo.toMap());
+                if (requestCode == INVITAR_AMIGOS) {
+                    invitados = (List<Contacto>) data.getExtras().get("Invitados");
+                } else if (requestCode == CREAR_ENCUESTA_LUGARES) {
+                    sitiosEncuesta = (List<Sitio>) data.getSerializableExtra(Constants.EXTRA_SITIOS_EVENTO);
+                    invitados = (List<Contacto>) data.getSerializableExtra(Constants.INVITADOS_EVENTO);
+                }
+                nuevoEvento.setCantidad_invitados(invitados.size()+1);
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference dbReference = database.getReferenceFromUrl(Constants.FIREBASE_URL);
+                key_evento = dbReference.child(Constants.URL_EVENTOS).push().getKey();
+
+                Map<String, Object> childUpdates = new HashMap<>();
+                //Agrega el evento en la tabla principal
+                childUpdates.put(Constants.URL_EVENTOS+key_evento,nuevoEvento.toMap());
+
+                ResumenEvento resumen = new ResumenEvento(nuevoEvento.getNombre(),nombreOrganizador,fechaEvento.getTimeInMillis(),key_evento);
+                Map resumenMap = resumen.toMap();
+                //Agrega un resumen en mis Eventos
+                childUpdates.put(Constants.URL_MIS_EVENTOS+celular+"/"+key_evento,resumenMap);
+
+                //Agrega al administrador como participante
+                ParticipanteEvento nuevoParticipante = new ParticipanteEvento(nombreOrganizador);
+                childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO+key_evento+"/"+celular,nuevoParticipante.toMap());
+
+                for(Contacto invitadoActual : invitados)
+                {
+                    nuevoParticipante = new ParticipanteEvento(invitadoActual.getNombre());
+                    //Agrega cada participante al evento
+                    childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO+key_evento+"/"+invitadoActual.getNumeroTelefonico(),nuevoParticipante.toMap());
+                    //Agrega un resumen en invitación a cada contacto
+                    childUpdates.put(Constants.URL_INVITACIONES_EVENTO+invitadoActual.getNumeroTelefonico()+"/"+key_evento,resumenMap);
+                }
+
+                if(sitiosEncuesta!=null)
+                {
+                    //Crea la encuesta
+                    SondeoLugares sondeo = new SondeoLugares(invitados.size(),sitiosEncuesta);
+                    childUpdates.put(Constants.URL_SONDEOS+key_evento,sondeo.toMap());
+                }
+
+                dbReference.updateChildren(childUpdates);
+                finish();
             }
 
-            dbReference.updateChildren(childUpdates);
-            finish();
         } else {
             Toast.makeText(this, "Algo salió mal al seleccionar los invitados", Toast.LENGTH_LONG);
         }

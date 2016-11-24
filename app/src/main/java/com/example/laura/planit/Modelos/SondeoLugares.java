@@ -19,17 +19,27 @@ public class SondeoLugares implements Serializable{
     public int votosActuales=0;
     public boolean cerrado=false;
     public Sitio lugarActual=null;
-    public List<OpcionSondeo> opciones=new ArrayList<>();
+    public Map<String,OpcionSondeo> opciones=new HashMap<>();
+    public List<String> votaron;
 
     public SondeoLugares()
     {};
 
     public SondeoLugares(int cantidadVotantes, List<Sitio> opciones_Sitio) {
         this.cantidadVotantes = cantidadVotantes;
+        int i=0;
         for(Sitio sitioActual: opciones_Sitio)
         {
-            opciones.add(new OpcionSondeo(sitioActual));
+            opciones.put("opcion"+i,new OpcionSondeo(sitioActual));
         }
+    }
+
+    public List<String> getVotaron() {
+        return votaron;
+    }
+
+    public void setVotaron(List<String> votaron) {
+        this.votaron = votaron;
     }
 
     public int getCantidadVotantes() {
@@ -64,11 +74,11 @@ public class SondeoLugares implements Serializable{
         this.lugarActual = lugarActual;
     }
 
-    public List<OpcionSondeo> getOpciones() {
+    public Map<String,OpcionSondeo> getOpciones() {
         return opciones;
     }
 
-    public void setOpciones(List<OpcionSondeo> opciones) {
+    public void setOpciones(Map<String,OpcionSondeo> opciones) {
         this.opciones = opciones;
     }
 
@@ -84,10 +94,7 @@ public class SondeoLugares implements Serializable{
             map.put("lugarActual",lugarActual.toMap());
         }
         map.put("lugarActual",lugarActual);
-        for(int i=0; i<opciones.size();i++)
-        {
-            map.put("opcion"+i,opciones.get(i).toMap());
-        }
+        map.put("opciones",opciones);
         return  map;
     }
 }
