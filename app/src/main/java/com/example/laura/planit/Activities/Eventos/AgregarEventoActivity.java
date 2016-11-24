@@ -353,7 +353,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                 sitiosEncuesta = (List<Sitio>) data.getSerializableExtra(Constants.EXTRA_SITIOS_EVENTO);
                 invitados = (List<Contacto>) data.getSerializableExtra(Constants.INVITADOS_EVENTO);
             }
-            nuevoEvento.setCantidad_invitados(invitados.size());
+            nuevoEvento.setCantidad_invitados(invitados.size()+1);
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference dbReference = database.getReferenceFromUrl(Constants.FIREBASE_URL);
             key_evento = dbReference.child(Constants.URL_EVENTOS).push().getKey();
@@ -367,9 +367,13 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
             //Agrega un resumen en mis Eventos
             childUpdates.put(Constants.URL_MIS_EVENTOS+celular+"/"+key_evento,resumenMap);
 
+            //Agrega al administrador como participante
+            ParticipanteEvento nuevoParticipante = new ParticipanteEvento(nombreOrganizador);
+            childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO+key_evento+"/"+celular,nuevoParticipante.toMap());
+
             for(Contacto invitadoActual : invitados)
             {
-                ParticipanteEvento nuevoParticipante = new ParticipanteEvento(invitadoActual.getNombre());
+                nuevoParticipante = new ParticipanteEvento(invitadoActual.getNombre());
                 //Agrega cada participante al evento
                 childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO+key_evento+"/"+invitadoActual.getNumeroTelefonico(),nuevoParticipante.toMap());
                 //Agrega un resumen en invitación a cada contacto
