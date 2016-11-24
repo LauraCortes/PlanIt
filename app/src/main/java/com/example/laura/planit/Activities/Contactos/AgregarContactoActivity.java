@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,13 +59,14 @@ public class AgregarContactoActivity extends AgregarSuper
         Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.atras_icon);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
-
         leerContactos();
-        btnFAB=(FloatingActionButton)findViewById(R.id.btnAgregarSitios);
-        listView = (ListView) findViewById(android.R.id.list);
+        btnFAB=(FloatingActionButton)findViewById(R.id.btnAgregarContactos);
+        listView = (ListView) findViewById(R.id.lista_contactos_agregar);
         listView.setAdapter(new AgregarContactoAdapter(this, contactos));
         contactosSeleccionados = new HashMap<Integer, Contacto>();
         cambiarIconoFAB();
+
+
     }
 
     public void agregar(View view)

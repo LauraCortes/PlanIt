@@ -40,6 +40,8 @@ public abstract class AgregarSuper extends AppCompatActivity
     protected FloatingActionButton btnFAB;
     protected String titulo;
 
+    protected AgregarContactoAdapter adapter;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -49,6 +51,8 @@ public abstract class AgregarSuper extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        contactos = new ArrayList<>();
+        adapter= new AgregarContactoAdapter(this,contactos);
     }
 
     public void seleccionarItem(int pos)
@@ -107,9 +111,7 @@ public abstract class AgregarSuper extends AppCompatActivity
                             {
                                 String numero =  mCursor.getString(1).trim();
                                 numero=numero.replaceAll(" ","");
-                                if(true)
-                                    //TODO validar si el contacto ya está en la lista
-                                    //!PlanIt.darInstancia().existeContacto(numero) && !contactoExistente(numero))
+                                if(!contactoExistente(numero))
                                 {
                                     contact = new Contacto(mCursor.getString(0), numero);
                                     contactos.add(contact);
@@ -117,6 +119,7 @@ public abstract class AgregarSuper extends AppCompatActivity
                             }
                             while (mCursor.moveToNext());
                             mCursor.close();
+                            adapter.notifyDataSetChanged();
                         }
                     }
                     contact = null;
@@ -139,6 +142,7 @@ public abstract class AgregarSuper extends AppCompatActivity
         {
             if(actual.getNumeroTelefonico().trim().equalsIgnoreCase(numero))
             {
+                System.out.println("Contacto existente "+actual.getNombre()+actual.getNumeroTelefonico());
                 return true;
             }
         }
@@ -163,7 +167,6 @@ public abstract class AgregarSuper extends AppCompatActivity
 
     protected void leerContactos()
     {
-        contactos = new ArrayList<Contacto>();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
@@ -192,10 +195,13 @@ public abstract class AgregarSuper extends AppCompatActivity
                         {
                             contact = new Contacto(mCursor.getString(0), numero);
                             contactos.add(contact);
+                            System.out.println("Agregado "+contact.getNombre()+" - "+contact.getNumeroTelefonico());
                         }
                     }
                     while (mCursor.moveToNext());
+                    adapter.notifyDataSetChanged();
                     mCursor.close();
+
 
                 }
             }

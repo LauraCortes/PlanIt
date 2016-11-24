@@ -159,7 +159,7 @@ public class InvitacionesTabFragment extends TabFragment
                         if(invitacionActual>invitacionesIniciales)
                         {
                             ResumenEvento evento = dataSnapshot.getValue(ResumenEvento.class);
-                            Intent resultIntent = new Intent(getContext(), DetallesEventoActivity.class);
+                            Intent resultIntent = new Intent(getActivity(), DetallesEventoActivity.class);
                             resultIntent.putExtra(Constants.EXTRA_ID_EVENTO, evento.getId_evento());
 // The stack builder object will contain an artificial back stack for the
 // started Activity.
@@ -176,10 +176,8 @@ public class InvitacionesTabFragment extends TabFragment
                                             PendingIntent.FLAG_UPDATE_CURRENT
                                     );
 
-                            Drawable icon = ContextCompat.getDrawable(getContext(),R.drawable.llegada_evento);
-                            icon.setBounds(0,0,25,25);
                             Notification notificacion = new NotificationCompat.Builder(getContext())
-                                    .setSmallIcon(R.drawable.llegada_evento)
+                                    .setSmallIcon(R.drawable.logo_planit)
                                     .setContentTitle(evento.getNombre())
                                     .setContentText(evento.getOrganizador()+" te ha invitado")
                                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
