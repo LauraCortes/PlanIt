@@ -16,7 +16,7 @@ import com.example.laura.planit.Activities.Contactos.AgregarContactoAdapter;
 import com.example.laura.planit.Fragments.AgregarSuper;
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.Constants;
+import com.example.laura.planit.Activities.Main.Constants;
 
 
 import java.io.Serializable;

@@ -75,7 +75,7 @@ public class Sitio implements Serializable
     @Exclude
     public String toString()
     {
-        return nombre+" : "+direccion;
+        return nombre+": "+direccion;
     }
 
     public Map<String, Object> toMap() {

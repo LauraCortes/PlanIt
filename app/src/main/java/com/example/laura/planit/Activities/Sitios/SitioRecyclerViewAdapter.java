@@ -12,7 +12,7 @@ import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.Constants;
+import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Services.ObtenerDireccionesIntentService;
 
 import java.util.List;

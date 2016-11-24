@@ -20,7 +20,7 @@ import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.Constants;
+import com.example.laura.planit.Activities.Main.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.example.laura.planit.Modelos.Usuario;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

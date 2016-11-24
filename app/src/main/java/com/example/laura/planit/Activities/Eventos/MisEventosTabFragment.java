@@ -13,13 +13,10 @@ import android.view.ViewGroup;
 
 import com.example.laura.planit.Activities.Main.LoginActivity;
 import com.example.laura.planit.Activities.Main.MainActivity;
-import com.example.laura.planit.Activities.Sitios.SitioRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.TabFragment;
-import com.example.laura.planit.Modelos.Evento;
 import com.example.laura.planit.Modelos.ResumenEvento;
-import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
-import com.example.laura.planit.Services.Constants;
+import com.example.laura.planit.Activities.Main.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

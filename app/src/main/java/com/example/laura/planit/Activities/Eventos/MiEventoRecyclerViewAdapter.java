@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Activities.Sitios.AgregarSitioActivity;
 import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
 import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
@@ -64,12 +65,9 @@ public class MiEventoRecyclerViewAdapter extends ElementRecyclerViewAdapter {
                         }
                         else
                         {
-                            //TODO
-                            //Actividad para ver detalles del evento
-//                            Intent i = new Intent(context, AgregarSitioActivity.class);
-//                            i.putExtra("editar",true);
-//                            i.putExtra("sitio", sitio);
-//                            context.startActivity(i);
+                            Intent i = new Intent(context, DetallesEventoActivity.class);
+                            i.putExtra(Constants.EXTRA_ID_EVENTO,evento.getId_evento());
+                            context.startActivity(i);
                         }
                     }
                 }

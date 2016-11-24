@@ -1,10 +1,12 @@
 package com.example.laura.planit.Activities.Eventos;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.ElementoRowViewHolder;
 import com.example.laura.planit.Fragments.TabFragment;
@@ -59,12 +61,9 @@ public class InvitacionRecyclerViewAdapter extends ElementRecyclerViewAdapter {
                         }
                         else
                         {
-                            //TODO
-                            //Actividad para ver detalles del evento
-//                            Intent i = new Intent(context, AgregarSitioActivity.class);
-//                            i.putExtra("editar",true);
-//                            i.putExtra("sitio", sitio);
-//                            context.startActivity(i);
+                            Intent i = new Intent(context, DetallesEventoActivity.class);
+                            i.putExtra(Constants.EXTRA_ID_EVENTO,evento.getId_evento());
+                            context.startActivity(i);
                         }
                     }
                 }

@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
 
+import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.google.firebase.database.DataSnapshot;

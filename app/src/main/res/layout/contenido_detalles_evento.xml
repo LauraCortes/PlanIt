@@ -12,6 +12,7 @@
         fontPath="@string/fuenteNegrita"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
         android:layout_weight="2"
         android:gravity="center"
         android:text="Titulo"
@@ -22,117 +23,115 @@
         android:id="@+id/detalles_descripcion_evento"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
         android:layout_weight="3"
         android:gravity="center_vertical"
         android:paddingTop="15dp"
         android:text="Descripcion"
         android:textSize="20sp" />
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3.5"
-        android:orientation="vertical">
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorDivider" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/colorDivider" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="Realización:" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/imagenlugar24p" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="Realización:" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginLeft="@dimen/card_margin"
-            android:layout_weight="1.3"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/imagenlugar24p" />
-
-            <TextView
-                android:id="@+id/lugarEvento"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:lines="2"
-                android:text="Lugar - evento" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1.3"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/fecha_evento" />
-
-            <TextView
-                android:id="@+id/detalles_fecha_evento"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="fecha" />
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/card_margin"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/clock24p" />
-
-            <TextView
-                android:id="@+id/detalles_hora_evento"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="hora" />
-
-        </LinearLayout>
-
-        <View
+            android:id="@+id/detalles_lugar_evento"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/colorDivider" />
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:lines="2"
+            android:text="Lugar - evento" />
+
+        <include layout="@layout/vacio" />
+
+        <Button
+            android:id="@+id/btn_votar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="votar" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/fecha_evento" />
+
+        <TextView
+            android:id="@+id/detalles_fecha_evento"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="fecha" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/clock24p" />
+
+        <TextView
+            android:id="@+id/detalles_hora_evento"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="hora" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorDivider" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/card_margin">
 
         <ImageView
             android:layout_width="15dp"
@@ -162,7 +161,7 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/btn_ver_invitados"
+            android:id="@+id/btn_detalles_ver_invitados"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -181,7 +180,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/card_margin">
 
         <ImageView
             android:layout_width="15dp"
@@ -202,19 +202,19 @@
             android:id="@+id/lbl_detalles_reg_no_def"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
             android:text="(No definido)" />
 
-        <include layout="@layout/vacio"/>
+        <include layout="@layout/vacio" />
 
         <Button
             android:id="@+id/btn_detalles_compartido"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_gravity="center_vertical"
-            android:text="comparten"/>
+            android:gravity="center"
+            android:text="comparten" />
 
     </LinearLayout>
 
@@ -223,8 +223,9 @@
         android:id="@+id/detalles_detalles_regreso"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="3"
         android:orientation="vertical"
-        android:layout_weight="3">
+        android:paddingLeft="@dimen/card_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -235,36 +236,36 @@
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/taxi24p" />
 
             <TextView
                 android:id="@+id/lbl_detalles_medio_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Taxi|uber..."
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:text="Taxi|uber..." />
 
-            <include layout="@layout/vacio"/>
+            <include layout="@layout/vacio" />
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/clock24p" />
 
             <TextView
                 android:id="@+id/lbl_detalles_hora_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="10pm"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:text="10pm" />
 
-            <include layout="@layout/vacio"/>
+            <include layout="@layout/vacio" />
 
         </LinearLayout>
 
@@ -277,25 +278,25 @@
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/imagenlugar24p" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Destino"
                 android:layout_marginRight="10dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:text="Destino" />
 
             <TextView
-                android:id="@+id/lblDestinoRegreso"
+                android:id="@+id/lbl_detalles_destino_regreso"
                 android:layout_width="wrap_content"
-                android:lines="3"
+                android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="Dirección......"
-                android:layout_height="match_parent" />
+                android:lines="3"
+                android:text="Dirección......" />
 
         </LinearLayout>
 
@@ -308,24 +309,24 @@
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/hourglass" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Tiempo aprox. de regreso (min)"
                 android:layout_marginRight="10dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:text="Tiempo aprox. de regreso (min)" />
 
             <TextView
                 android:id="@+id/lbl_detalles_tiempo_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="35"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:text="35" />
         </LinearLayout>
 
         <LinearLayout
@@ -337,44 +338,43 @@
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/admin" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Con "
                 android:layout_marginRight="5dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:text="Con " />
 
             <TextView
                 android:id="@+id/lbl_detalles_duenio_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Dueño del regreso"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:text="Dueño del regreso" />
 
-            <include layout="@layout/vacio"/>
+            <include layout="@layout/vacio" />
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/phone" />
 
             <TextView
                 android:id="@+id/lbl_detalles_celular_duenio_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="3138238039"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:text="3138238039" />
 
-            <include layout="@layout/vacio"/>
-
+            <include layout="@layout/vacio" />
 
         </LinearLayout>
 
@@ -390,8 +390,8 @@
             android:id="@+id/btn_detalles_crear_regreso"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_gravity="center_vertical"
+            android:gravity="center"
             android:padding="5dp"
             android:text="Crear transporte" />
 
@@ -404,19 +404,28 @@
             android:id="@+id/btn_detalles_seleccionar_regreso"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="5dp"
             android:layout_gravity="center_vertical"
             android:gravity="center"
+            android:padding="5dp"
             android:text="Seleccionar transporte" />
-
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorDivider" />
+
     <Button
-        android:id="btn_detalles_regresar"
+        android:id="@+id/btn_detalles_aceptar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="aceptar"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:onClick="regresar"
+        android:background="@color/colorAccent"
+        android:text="aceptar" />
 
 </LinearLayout>
+
