@@ -14,7 +14,7 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="Titulo"
+        android:text="Cargando..."
         android:textColor="@color/colorPrimaryText"
         android:textSize="25sp" />
 
@@ -26,7 +26,6 @@
         android:layout_weight="3"
         android:gravity="center_vertical"
         android:paddingTop="15dp"
-        android:text="Descripcion"
         android:textSize="20sp" />
 
     <View
@@ -47,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/card_margin"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <ImageView
@@ -64,7 +63,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:lines="2"
-            android:text="Lugar - evento" />
+            />
 
         <include layout="@layout/vacio" />
 
@@ -76,12 +75,14 @@
             android:layout_gravity="center_vertical"
             android:text="votar" />
 
+        <include layout="@layout/vacio"/>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <ImageView
@@ -94,12 +95,14 @@
 
         <TextView
             android:id="@+id/detalles_fecha_evento"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="fecha" />
+             />
+
+        <include layout="@layout/vacio"/>
 
         <ImageView
             android:layout_width="15dp"
@@ -111,11 +114,13 @@
 
         <TextView
             android:id="@+id/detalles_hora_evento"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="hora" />
+             />
+
+        <include layout="@layout/vacio"/>
 
     </LinearLayout>
 
@@ -153,19 +158,19 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="cuantos" />
+            android:text="..." />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <include layout="@layout/vacio"/>
 
         <Button
             android:id="@+id/btn_detalles_ver_invitados"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:visibility="gone"
             android:text="VER" />
+
+        <include layout="@layout/vacio"/>
 
     </LinearLayout>
 
@@ -211,10 +216,12 @@
         <Button
             android:id="@+id/btn_detalles_compartido"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center"
             android:text="comparten" />
+
+        <include layout="@layout/vacio"/>
 
     </LinearLayout>
 
@@ -385,19 +392,20 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
+        <include layout="@layout/vacio"/>
+        <include layout="@layout/vacio"/>
+
         <Button
             android:id="@+id/btn_detalles_crear_regreso"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center"
-            android:padding="5dp"
-            android:text="Crear transporte" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Crear regreso" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <include layout="@layout/vacio"/>
 
         <Button
             android:id="@+id/btn_detalles_seleccionar_regreso"
@@ -405,17 +413,26 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center"
-            android:padding="5dp"
-            android:text="Seleccionar transporte" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Unirme a regreso" />
+
+        <include layout="@layout/vacio"/>
+        <include layout="@layout/vacio"/>
 
     </LinearLayout>
 
-    <View
+   <include layout="@layout/separador_vertical"/>
+
+    <Button
+        android:id="@+id/btn_detalles_camino"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/colorDivider" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:onClick="regresar"
+        android:text="Voy camino al evento" />
+
+    <include layout="@layout/separador_vertical"/>
 
     <Button
         android:id="@+id/btn_detalles_aceptar"

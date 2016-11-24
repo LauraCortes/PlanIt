@@ -2,11 +2,6 @@
     <string name="app_name">PlanIt</string>
     <string name="fuenteNormal">fontDarwinRegular.ttf</string>
     <string name="fuenteNegrita">fonts/DarwinBold.ttf</string>
-    <string name="fuenteLight">fonts/DarwinLight.ttf</string>
-    <string name="err_llenar_campo">Debe llenar este campo</string>
-    <string name="timerVal">00:00:00</string>
-    <string name="pauseButtonLabel">Pause</string>
-    <string name="startButtonLabel">Start</string>
     <string name="properties">preferences_planit</string>
     <string name="usuario">celular</string>
     <string name="logueado">logueado</string>

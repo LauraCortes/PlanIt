@@ -48,7 +48,7 @@ public class DetallesEventoActivity extends AppCompatActivity
     private TextView lblRegresoNoDefinido,lblRegresoLugar, lblRegresoHora, lblRegresoTiempo,
             lblRegresoMedio, lblDuenioRegreso, lblCelularDuenio;
     private LinearLayout layoutDetallesRegreso;
-    private Button btnAceptar, btnVerInvitados, btnSeleccionarRegreso, btnCrearRegreso, bnComparten, btnVotar;
+    private Button btnAceptar, btnCamino, btnVerInvitados, btnSeleccionarRegreso, btnCrearRegreso, bnComparten, btnVotar;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -102,6 +102,7 @@ public class DetallesEventoActivity extends AppCompatActivity
         btnCrearRegreso=(Button)findViewById(R.id.btn_detalles_crear_regreso);
         bnComparten=(Button)findViewById(R.id.btn_detalles_compartido);
         btnVotar =(Button)findViewById(R.id.btn_votar);
+        btnCamino=(Button)findViewById(R.id.btn_detalles_camino);
 
         Intent intent = getIntent();
         id_evento = intent.getExtras().getString(Constants.EXTRA_ID_EVENTO);
@@ -179,6 +180,13 @@ public class DetallesEventoActivity extends AppCompatActivity
         else
         {
             btnVotar.setVisibility(View.VISIBLE);
+        }
+        if(evento.getCantidad_invitados()>2)
+        {
+            btnVerInvitados.setVisibility(View.VISIBLE);
+        }
+        else {
+            btnVerInvitados.setVisibility(View.GONE);
         }
     }
 

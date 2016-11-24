@@ -15,14 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.Main.LoginActivity"
-            android:theme="@style/AppTheme.SplashTheme">
+            android:theme="@style/AppTheme.SplashTheme"
+            android:configChanges="keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Activities.Main.RegistroActivity"
-            android:theme="@style/AppTheme.SplashTheme"/>
+            android:theme="@style/AppTheme.SplashTheme"
+            android:configChanges="keyboardHidden|orientation"/>
         <activity android:name=".Activities.Main.MainActivity"
             android:theme="@style/AppTheme.SplashTheme"
             android:icon="@drawable/logo_planit"/>
