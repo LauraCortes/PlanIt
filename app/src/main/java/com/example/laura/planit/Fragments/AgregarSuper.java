@@ -142,7 +142,6 @@ public abstract class AgregarSuper extends AppCompatActivity
         {
             if(actual.getNumeroTelefonico().trim().equalsIgnoreCase(numero))
             {
-                System.out.println("Contacto existente "+actual.getNombre()+actual.getNumeroTelefonico());
                 return true;
             }
         }
@@ -195,7 +194,6 @@ public abstract class AgregarSuper extends AppCompatActivity
                         {
                             contact = new Contacto(mCursor.getString(0), numero);
                             contactos.add(contact);
-                            System.out.println("Agregado "+contact.getNombre()+" - "+contact.getNumeroTelefonico());
                         }
                     }
                     while (mCursor.moveToNext());
