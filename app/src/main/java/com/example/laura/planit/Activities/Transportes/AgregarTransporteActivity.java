@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -29,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -46,6 +48,9 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
 
+    private List<Sitio> sitios;
+    private Sitio sitio;
+    private String celular;
     int pos;
 
     @Override
@@ -109,7 +114,33 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
         txtFechaRegreso.setText(dateFormatter.format(System.currentTimeMillis()));
 
         getSupportActionBar().setTitle("Regreso del evento");
+        SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+        if (properties.getBoolean(getString(R.string.logueado), false)) {
+            celular = properties.getString(getString(R.string.usuario), "desconocido");
+        }
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_LUGARES_FAVORITOS + celular);
+        databaseReference.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        GenericTypeIndicator<HashMap<String, Sitio>> t = new GenericTypeIndicator<HashMap<String, Sitio>>() {
+                        };
+                        HashMap<String, Sitio> map = dataSnapshot.getValue(t);
+                        if (map != null) {
+                            ArrayList<Sitio> nuevos = new ArrayList(map.values());
+                            sitios = nuevos;
+                        } else {
+                            sitios = new ArrayList<Sitio>();
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
         txtSitioRegreso.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -117,8 +148,6 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                         builder.setTitle("Sitio de regreso");
-                        //TODO traer sitios
-                        List<Sitio> sitios = new ArrayList<Sitio>();
                         final CharSequence[] opciones = new CharSequence[sitios.size() + 1];
                         opciones[0] = "Otro";
                         for (int i = 0; i < opciones.length - 1; i++) {
@@ -128,6 +157,7 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                         builder.setItems(opciones, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                sitio = sitios.get(which);
                                 if (which == 0) {
                                     txtSitioRegreso.setText("");
                                 } else {
@@ -208,6 +238,9 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
         String lugar=txtSitioRegreso.getText().toString().trim();
         String cupos= txtCupos.getText().toString().trim();
         boolean continuar=true;
+        if (sitio== null) {
+            Toast.makeText(contexto, "Debe seleccionar un sitio", Toast.LENGTH_SHORT).show();
+        }
         if(radioCarro.isChecked())
         {
             nombre="Carro propio";
@@ -247,8 +280,7 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                     if (properties.getBoolean(getString(R.string.logueado), false))
                     {
                         final String celular = properties.getString(getString(R.string.usuario), "desconocido");
-                        //TODO Sitio!!!
-                        final Regreso regreso = new Regreso(celular,horaRegreso,nombre, Integer.valueOf(cupos),null, Integer.valueOf(tiempo));
+                        final Regreso regreso = new Regreso(celular,horaRegreso,nombre, Integer.valueOf(cupos),sitio, Integer.valueOf(tiempo));
                         final FirebaseDatabase database = FirebaseDatabase.getInstance();
                         //TODO ID_EVENTO
                         final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(regreso.darRutaElemento(""));
@@ -292,3 +324,4 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
         }
     }
 }
+

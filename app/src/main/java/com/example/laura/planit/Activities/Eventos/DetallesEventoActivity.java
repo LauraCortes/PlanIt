@@ -15,8 +15,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Activities.Main.MainActivity;
+import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
 import com.example.laura.planit.Modelos.Evento;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
@@ -100,6 +102,12 @@ public class DetallesEventoActivity extends AppCompatActivity
         btnVerInvitados=(Button)findViewById(R.id.btn_detalles_ver_invitados);
         btnSeleccionarRegreso=(Button)findViewById(R.id.btn_detalles_seleccionar_regreso);
         btnCrearRegreso=(Button)findViewById(R.id.btn_detalles_crear_regreso);
+        btnCrearRegreso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lanzarActivityAgregarRegreso(v);
+            }
+        });
         bnComparten=(Button)findViewById(R.id.btn_detalles_compartido);
         btnVotar =(Button)findViewById(R.id.btn_votar);
         btnCamino=(Button)findViewById(R.id.btn_detalles_camino);
@@ -199,4 +207,9 @@ public class DetallesEventoActivity extends AppCompatActivity
         onBackPressed();
     }
 
+    protected void lanzarActivityAgregarRegreso(View view)
+    {
+        Intent intent = new Intent(contexto, AgregarTransporteActivity.class);
+        startActivity(intent);
+    }
 }

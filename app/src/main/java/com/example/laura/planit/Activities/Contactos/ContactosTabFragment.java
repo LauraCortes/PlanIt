@@ -17,8 +17,10 @@ import android.view.ViewGroup;
 
 import com.example.laura.planit.Activities.Main.LoginActivity;
 import com.example.laura.planit.Activities.Main.MainActivity;
+import com.example.laura.planit.Activities.Sitios.SitioRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.Contacto;
+import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Activities.Main.Constants;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ContactosTabFragment extends TabFragment
 {
@@ -39,7 +42,23 @@ public class ContactosTabFragment extends TabFragment
         AGREGAR_ELEMENTOS=654;
         msjToastAgregar="Contactos agregados";
     }
+    @Override
+    public void eliminarElementosVista(View view)
+    {
 
+        for (Contacto actual:(List<Contacto>)elementosSeleccionados)
+        {
+            FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL).child(actual.darRutaElemento(celular)).removeValue();
+            elementosSeleccionados.remove(actual);
+            if(elementos.size()==1)
+            {
+                ((ContactRecyclerAdapter)adapter).swapData(new ArrayList());
+                adapter.notifyItemRemoved(0);
+            }
+            System.out.println("Contacto eliminado "+actual);
+        }
+        cambiarIconoFAB();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -54,7 +73,6 @@ public class ContactosTabFragment extends TabFragment
         }
         elementosSeleccionados = new ArrayList();
         super.onCreate(savedInstanceState);
-        //TODO traer los contactos de la db
         elementos= new ArrayList<>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
