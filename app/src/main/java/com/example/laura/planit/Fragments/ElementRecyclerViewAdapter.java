@@ -22,6 +22,10 @@ public abstract class ElementRecyclerViewAdapter extends RecyclerView.Adapter<El
     public final  static int[] COLORES = {Color.parseColor("#26532B"), Color.parseColor("#6A0136"),
             Color.parseColor("#D72638"), Color.parseColor("#95C623"), Color.parseColor("#080708")};
 
+    public void swapData(List nuevosElementos)
+    {
+        elementos=nuevosElementos;
+    }
 
     public ElementRecyclerViewAdapter(Context context, List elementos, TabFragment tabFragment)
     {

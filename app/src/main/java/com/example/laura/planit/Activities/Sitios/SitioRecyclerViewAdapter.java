@@ -29,11 +29,6 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
         super(context,sitios,tabFragment);
     }
 
-    public void swapData(List sitios)
-    {
-        elementos=sitios;
-    }
-
 
 
     @Override

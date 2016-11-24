@@ -1,6 +1,8 @@
 package com.example.laura.planit.Activities.Eventos;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,11 +11,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.laura.planit.Activities.Main.LoginActivity;
+import com.example.laura.planit.Activities.Main.MainActivity;
+import com.example.laura.planit.Activities.Sitios.SitioRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.Evento;
+import com.example.laura.planit.Modelos.ResumenEvento;
+import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
+import com.example.laura.planit.Services.Constants;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -31,13 +46,20 @@ public class MisEventosTabFragment extends TabFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        SharedPreferences properties = getContext().getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+        if (properties.getBoolean(getString(R.string.logueado), false)) {
+            celular = properties.getString(getString(R.string.usuario), "desconocido");
+        } else {
+            MainActivity.mostrarMensaje(getContext(), "Inicia sesión", "Tu sesión caducó, por favor vuelve a iniciar sesión");
+            getActivity().finish();
+            Intent i = new Intent(getContext(), LoginActivity.class);
+            startActivity(i);
+        }
+
         elementosSeleccionados = new ArrayList();
         super.onCreate(savedInstanceState);
-        elementos= new ArrayList(); //TODO traer de la DB
-                // PlanIt.darInstancia().darEventos();
-
-
-        adapter=new EventoRecyclerViewAdapter(getActivity(), (List<Evento>)elementos,this);
+        elementos= new ArrayList();
+        adapter=new MiEventoRecyclerViewAdapter(getActivity(), (List<ResumenEvento>)elementos,this);
 
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.tab_eventos, container, false);
@@ -51,8 +73,37 @@ public class MisEventosTabFragment extends TabFragment
                 accionFAB(v);
             }
         });
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_MIS_EVENTOS + celular);
+        databaseReference.keepSynced(true);
+        databaseReference.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        GenericTypeIndicator<HashMap<String,ResumenEvento>> t = new GenericTypeIndicator<HashMap<String, ResumenEvento>>(){};
+                        HashMap<String, ResumenEvento> map =dataSnapshot.getValue(t);
+                        if(map!=null)
+                        {
+                            System.out.println("Llegó info de los eventos");
+                            ArrayList<ResumenEvento> nuevos = new ArrayList(map.values());
+                            elementos=nuevos;
+                            ((MiEventoRecyclerViewAdapter)adapter).swapData(nuevos);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+
         return view;
     }
+
     @Override
     protected void lanzarActivityAgregarElemento(View view)
     {
