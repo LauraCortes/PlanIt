@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -51,7 +52,8 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
     private List<Sitio> sitios;
     private Sitio sitio;
     private String celular;
-    int pos;
+    private String id_evento;
+    private String motivo;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -62,7 +64,8 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         contexto=this;
-        pos=(int)getIntent().getExtras().get("pos");
+        id_evento=(String)getIntent().getExtras().get("id_evento");
+        motivo= (String)getIntent().getExtras().get("motivo");
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
         timeFormatter = new SimpleDateFormat("hh:mm a");
         setContentView(R.layout.activity_agregar_transporte);
@@ -113,7 +116,6 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
         txtTiempoRegreso=(EditText)findViewById(R.id.txtTiempoRegreso);
         txtFechaRegreso.setText(dateFormatter.format(System.currentTimeMillis()));
 
-        getSupportActionBar().setTitle("Regreso del evento");
         SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
         if (properties.getBoolean(getString(R.string.logueado), false)) {
             celular = properties.getString(getString(R.string.usuario), "desconocido");
@@ -128,7 +130,7 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                         };
                         HashMap<String, Sitio> map = dataSnapshot.getValue(t);
                         if (map != null) {
-                            ArrayList<Sitio> nuevos = new ArrayList(map.values());
+                            List<Sitio> nuevos = new ArrayList(map.values());
                             sitios = nuevos;
                         } else {
                             sitios = new ArrayList<Sitio>();
@@ -171,6 +173,35 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                     }
                 }
         );
+        if(motivo.equals("editar"))
+        {
+            Regreso regreso =(Regreso) getIntent().getExtras().get("regreso");
+            if(regreso.getMedioRegreso().equals("Carro propio"))
+            {
+                radioCarro.setChecked(true);
+            }
+            else if(regreso.getMedioRegreso().equals("Otro medio trans. público"))
+            {
+                radioBus.setChecked(true);
+            }
+            else if(regreso.getMedioRegreso().equals("Uber"))
+            {
+                radioUber.setChecked(true);
+            }
+            else if(regreso.getMedioRegreso().equals("Taxi"))
+            {
+                radioTaxi.setChecked(true);
+            }
+            txtSitioRegreso.setText(regreso.getDestino().toString());
+            sitio=regreso.getDestino();
+            SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
+            txtHoraRegreso.setText(timeFormatter.format(regreso.getHoraRegreso()));
+            txtCupos.setText(String.valueOf(regreso.getCupos()));
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+            txtFechaRegreso.setText(dateFormatter.format(regreso.getHoraRegreso()));
+            txtTiempoRegreso.setText(String.valueOf(regreso.getTiempoEstimado()));
+
+        }
     }
 
 
@@ -282,20 +313,13 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                         final String celular = properties.getString(getString(R.string.usuario), "desconocido");
                         final Regreso regreso = new Regreso(celular,horaRegreso,nombre, Integer.valueOf(cupos),sitio, Integer.valueOf(tiempo));
                         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        //TODO ID_EVENTO
-                        final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(regreso.darRutaElemento(""));
+                        final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(regreso.darRutaElemento(id_evento));
                         databaseReference.addListenerForSingleValueEvent(
                                 new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot)
                                     {
-                                        if (dataSnapshot.exists()) {
-                                            MainActivity.mostrarMensaje(contexto, "Retorno existente", "Ya existe" +
-                                                    " un retorno con este numero");
-                                        } else
-                                        {
                                             databaseReference.setValue(regreso);
-                                        }
                                     }
 
                                     @Override

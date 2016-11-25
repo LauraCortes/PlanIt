@@ -3,7 +3,9 @@ package com.example.laura.planit.Modelos;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Laura on 22/11/2016.
@@ -17,7 +19,7 @@ public class Regreso implements Serializable {
     private int cupos;
     private Sitio destino;
     private int tiempoEstimado;
-    private String[] compartido;
+    private List<String> compartido;
 
     public Regreso() {
 
@@ -31,7 +33,7 @@ public class Regreso implements Serializable {
         this.cupos=cupos;
         this.destino=destino;
         this.tiempoEstimado=tiempoEstimado;
-        compartido=new String[cupos];
+        compartido=new ArrayList<String>();
 
     }
 
@@ -83,19 +85,21 @@ public class Regreso implements Serializable {
         this.tiempoEstimado = tiempoEstimado;
     }
 
-    public String[] getCompartido() {
+    public List<String> getCompartido() {
         return compartido;
     }
 
-    public void setCompartido(String[] compartido) {
+    public void setCompartido(List<String> compartido) {
         this.compartido = compartido;
     }
 
     @Exclude
     public void agregarCompartido(String numero)
     {
-        cupos --;
-        compartido[cupos]=numero;
+        if(cupos>0) {
+            cupos--;
+            compartido.add(numero);
+        }
     }
 
     @Exclude

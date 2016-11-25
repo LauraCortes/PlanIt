@@ -20,7 +20,9 @@ import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
 import com.example.laura.planit.Modelos.Evento;
+import com.example.laura.planit.Modelos.Regreso;
 import com.example.laura.planit.Modelos.Sitio;
+import com.example.laura.planit.Modelos.Usuario;
 import com.example.laura.planit.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,7 +42,7 @@ public class DetallesEventoActivity extends AppCompatActivity
     private Evento evento;
     private String id_evento;
     private String celular;
-
+    private Regreso regreso;
     Context contexto;
 
     //Atributos de la interfaz
@@ -48,7 +50,7 @@ public class DetallesEventoActivity extends AppCompatActivity
 
     //Atributos de regreso;
     private TextView lblRegresoNoDefinido,lblRegresoLugar, lblRegresoHora, lblRegresoTiempo,
-            lblRegresoMedio, lblDuenioRegreso, lblCelularDuenio;
+            lblRegresoMedio, lblDuenioRegreso, lblCelularDuenio, lblCupos;
     private LinearLayout layoutDetallesRegreso;
     private Button btnAceptar, btnCamino, btnVerInvitados, btnSeleccionarRegreso, btnCrearRegreso, bnComparten, btnVotar;
 
@@ -97,7 +99,7 @@ public class DetallesEventoActivity extends AppCompatActivity
         lblRegresoMedio= (TextView)findViewById(R.id.lbl_detalles_medio_regreso);
         lblDuenioRegreso= (TextView)findViewById(R.id.lbl_detalles_duenio_regreso);
         lblCelularDuenio= (TextView)findViewById(R.id.lbl_detalles_celular_duenio_regreso);
-
+        lblCupos= (TextView)findViewById(R.id.lbl_cupos);
         btnAceptar=(Button)findViewById(R.id.btn_detalles_aceptar);
         btnVerInvitados=(Button)findViewById(R.id.btn_detalles_ver_invitados);
         btnSeleccionarRegreso=(Button)findViewById(R.id.btn_detalles_seleccionar_regreso);
@@ -109,6 +111,19 @@ public class DetallesEventoActivity extends AppCompatActivity
             }
         });
         bnComparten=(Button)findViewById(R.id.btn_detalles_compartido);
+        bnComparten.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(regreso!=null) {
+                    String mensaje="";
+                    if(regreso.getCompartido()!=null) {
+                        for (int i = 0; i < regreso.getCompartido().size(); i++) {
+                            mensaje += "/n" + regreso.getCompartido().get(i);
+                        }
+                    }
+                    MainActivity.mostrarMensaje(contexto, "Participantes", mensaje);
+            }
+        }});
         btnVotar =(Button)findViewById(R.id.btn_votar);
         btnCamino=(Button)findViewById(R.id.btn_detalles_camino);
 
@@ -137,6 +152,24 @@ public class DetallesEventoActivity extends AppCompatActivity
             }
 
         }
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child("regresos/"+id_evento+"/"+celular);
+        databaseReference.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        regreso = dataSnapshot.getValue(Regreso.class);
+
+                        if(regreso!=null)
+                            editarRegreso(regreso);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
 
@@ -204,9 +237,54 @@ public class DetallesEventoActivity extends AppCompatActivity
         onBackPressed();
     }
 
+    public void editarRegreso(final Regreso regreso)
+    {
+        btnCrearRegreso.setText("Editar regreso");
+        btnCrearRegreso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(contexto, AgregarTransporteActivity.class);
+                intent.putExtra("id_evento",id_evento);
+                intent.putExtra("motivo","editar");
+                intent.putExtra("regreso",regreso);
+                startActivity(intent);
+            }
+        });
+        lblRegresoNoDefinido.setText("");
+        btnSeleccionarRegreso.setVisibility(View.GONE);
+        lblRegresoLugar.setText(regreso.getDestino().getDireccion());
+        lblRegresoMedio.setText(regreso.getMedioRegreso());
+        lblCelularDuenio.setText(regreso.getNumeroDueño());
+        lblRegresoTiempo.setText(String.valueOf(regreso.getTiempoEstimado()));
+        lblCupos.setText(String.valueOf(regreso.getCupos()));
+        SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
+        lblRegresoHora.setText(timeFormatter.format(regreso.getHoraRegreso()));
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child("usuarios/"+regreso.getNumeroDueño());
+        databaseReference.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        Usuario usuario = dataSnapshot.getValue(Usuario.class);
+
+                        if(usuario!=null)
+                            lblDuenioRegreso.setText(usuario.getNombre());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+    }
+
     protected void lanzarActivityAgregarRegreso(View view)
     {
         Intent intent = new Intent(contexto, AgregarTransporteActivity.class);
+        intent.putExtra("id_evento",id_evento);
+        intent.putExtra("motivo","agregar");
         startActivity(intent);
     }
 }

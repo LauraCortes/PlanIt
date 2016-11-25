@@ -45,18 +45,18 @@ public class ContactosTabFragment extends TabFragment
     @Override
     public void eliminarElementosVista(View view)
     {
-
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL);
         for (Contacto actual:(List<Contacto>)elementosSeleccionados)
         {
-            FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL).child(actual.darRutaElemento(celular)).removeValue();
-            elementosSeleccionados.remove(actual);
+            ref.child(actual.darRutaElemento(celular)).removeValue();
             if(elementos.size()==1)
             {
-                ((ContactRecyclerAdapter)adapter).swapData(new ArrayList());
+                ((SitioRecyclerViewAdapter)adapter).swapData(new ArrayList());
                 adapter.notifyItemRemoved(0);
             }
             System.out.println("Contacto eliminado "+actual);
         }
+        elementosSeleccionados.clear();
         cambiarIconoFAB();
     }
     @Override
