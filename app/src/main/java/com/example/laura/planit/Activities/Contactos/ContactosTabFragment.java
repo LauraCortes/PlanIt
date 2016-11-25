@@ -52,7 +52,7 @@ public class ContactosTabFragment extends TabFragment
             if(elementos.size()==1)
             {
                 ((SitioRecyclerViewAdapter)adapter).swapData(new ArrayList());
-                adapter.notifyItemRemoved(0);
+                adapter.notifyDataSetChanged();
             }
             System.out.println("Contacto eliminado "+actual);
         }
