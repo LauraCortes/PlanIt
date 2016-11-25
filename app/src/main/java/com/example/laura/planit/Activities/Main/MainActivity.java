@@ -8,12 +8,13 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Vibrator;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -27,9 +28,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
-import com.example.laura.planit.Activities.Contactos.ContactosTabFragment;
-import com.example.laura.planit.Activities.Sitios.SitiosTabFragment;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Fragments.TabsFragmenPageAdapter;
 import com.example.laura.planit.R;
@@ -41,6 +39,14 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
 {
 
     private boolean activityVisible;
+    private long tiempoPrimerShake;
+    private int cantidadShakes=0;
+    private int id_Notificacion_llegada=420;
+    private Context contexto;
+    Vibrator vibrador;
+
+    private SensorManager sensorMgr;
+    private DetectorAgitacion detectorShake;
 
 
     @Override
@@ -72,17 +78,22 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Crea el detector de agitación
-        SensorManager sensorMgr = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        contexto=this;
+
+        //Crea el detectorShake de agitación
+        sensorMgr = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         if(sensorMgr!=null)
         {
-            DetectorAgitacion detector = new DetectorAgitacion(this);
-            sensorMgr.registerListener(detector,sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+            detectorShake = new DetectorAgitacion(this);
+            sensorMgr.registerListener(detectorShake,sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
         }
         else
         {
             System.out.println("No se pudo inicializar el sensor para detección de agitación");
         }
+
+        //Crea el vibrador
+        vibrador= (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 
 
         //Crear el toolbar
@@ -183,36 +194,102 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
     }
 
     @Override
-    public void onShake() {
-
-        if(activityVisible)
+    public void onShake()
+    {
+        NotificationManager mNotifyMgr=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if(cantidadShakes==0)
         {
-            Toast.makeText(this,"Shake detected", Toast.LENGTH_SHORT).show();
+            tiempoPrimerShake = System.currentTimeMillis();
+            cantidadShakes++;
+            if(activityVisible)
+            {
+                new mostrarShake().execute();
+                Uri tono  = Uri.parse("android.resource://"+ this.getPackageName() + "/" + R.raw.notificacion_llegada);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), tono);
+                r.play();
+                vibrador.vibrate(500);
+            }
+            else
+            {
+                Drawable icon = ContextCompat.getDrawable(this,R.drawable.llegada_evento);
+                icon.setBounds(0,0,25,25);
+                Notification notificacion = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.logo_planit)
+                        .setContentTitle("Nombre del evento")
+                        .setContentText("Cuéntale a tus amigos que ya llegaste")
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setAutoCancel(false)
+                        .addAction(R.drawable.check,"Ya llegué",null)
+                        .addAction(R.drawable.close,"Posponer",null)
+                        .setPriority(Notification.PRIORITY_MAX)
+                        .build();
+
+                //Tono de notificación
+                notificacion.sound=Uri.parse("android.resource://"+ this.getPackageName() + "/" + R.raw.notificacion_llegada);
+                //Vibración
+                long[] vibrate = { 0, 100, 200, 100 };
+                notificacion.vibrate=vibrate;
+                // Builds the notification and issues it.
+                mNotifyMgr.notify(id_Notificacion_llegada, notificacion);
+            }
         }
         else
         {
-            Drawable icon = ContextCompat.getDrawable(this,R.drawable.llegada_evento);
-            icon.setBounds(0,0,25,25);
-            Notification notificacion = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.logo_planit)
-                    .setContentTitle("Nombre del evento")
-                    .setContentText("Cuéntale a tus amigos que ya llegaste")
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setAutoCancel(false)
-                    .addAction(R.drawable.check,"Ya llegué",null)
-                    .addAction(R.drawable.close,"Posponer",null)
-                    .setPriority(Notification.PRIORITY_MAX)
-                    .build();
+            long actual = System.currentTimeMillis();
+            long transcurrido = actual-tiempoPrimerShake;
+            if(transcurrido/1000<8)
+            {
+                Uri tono  = Uri.parse("android.resource://"+ this.getPackageName() + "/" + R.raw.notificacion_confirmacion_llegada);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), tono);
+                r.play();
+                vibrador.vibrate(1000);
+                Toast.makeText(contexto,"Le avisamos a tus amigos que llegaste",Toast.LENGTH_SHORT).show();
+                cantidadShakes=0;
+                mNotifyMgr.cancel(id_Notificacion_llegada);
+                //Desactivar listener de shake
+                sensorMgr.unregisterListener(detectorShake);
+                //Avisar que ya llegó al evento
+            }
+            else
+            {
+                cantidadShakes=0;
+                onShake();
+            }
+        }
 
-            NotificationManager mNotifyMgr=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            //Tono de notificación
-            notificacion.sound=Uri.parse("android.resource://"+ this.getPackageName() + "/" + R.raw.notificacion_llegada);
-            //Vibración
-            long[] vibrate = { 0, 100, 200, 100 };
-            notificacion.vibrate=vibrate;
-            int id_Notificacion_llegada=420;
-            // Builds the notification and issues it.
-            mNotifyMgr.notify(id_Notificacion_llegada, notificacion);
+
+    }
+
+
+
+    private class mostrarShake extends AsyncTask
+    {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            try
+            {
+                Thread.sleep(3000);
+                return null;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            findViewById(R.id.frame_shake_detected).setVisibility(View.GONE);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            findViewById(R.id.frame_shake_detected).setVisibility(View.VISIBLE);
         }
     }
 }
+
+
+

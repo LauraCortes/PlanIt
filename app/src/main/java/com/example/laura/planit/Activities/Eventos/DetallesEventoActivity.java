@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoActivity;
 import com.example.laura.planit.Activities.Main.Constants;
@@ -484,6 +485,10 @@ public class DetallesEventoActivity extends AppCompatActivity
                 if(databaseError!=null)
                 {
                     databaseError.toException().printStackTrace();
+                }
+                else
+                {
+                    Toast.makeText(contexto,"Voto registrado",Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -6,33 +6,47 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Main.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_principal"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:elevation="4dp"
-            app:titleTextColor="@color/mdtp_white"
-            android:titleTextColor="@color/mdtp_white"/>
+            android:orientation="vertical"
+            android:layout_height="match_parent">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextColor="@color/mdtp_white"
-            android:layout_height="wrap_content" />
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </android.support.design.widget.AppBarLayout>
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar_principal"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:elevation="4dp"
+                    app:titleTextColor="@color/mdtp_white"
+                    android:titleTextColor="@color/mdtp_white"/>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v4.view.ViewPager>
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    app:tabSelectedTextColor="@color/colorAccent"
+                    app:tabTextColor="@color/mdtp_white"
+                    android:layout_height="wrap_content" />
 
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v4.view.ViewPager>
+
+        </LinearLayout>
+
+        <include layout="@layout/contenido_pantalla_shake"/>
+
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
