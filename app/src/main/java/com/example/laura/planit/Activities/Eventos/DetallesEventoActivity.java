@@ -30,7 +30,9 @@ import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
 import com.example.laura.planit.Modelos.Evento;
 import com.example.laura.planit.Modelos.OpcionSondeo;
+import com.example.laura.planit.Modelos.ParticipanteEvento;
 import com.example.laura.planit.Modelos.Regreso;
+import com.example.laura.planit.Modelos.ResumenEvento;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.Modelos.SondeoLugares;
 import com.example.laura.planit.Modelos.Usuario;
@@ -39,6 +41,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
@@ -46,6 +49,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -64,6 +68,8 @@ public class DetallesEventoActivity extends AppCompatActivity
 
     private List<OpcionSondeo> opcionesVotacion=new ArrayList<>();
     private OpcionSondeo votada;
+
+    private Collection<ParticipanteEvento> participantesEvento;
 
     //Atributos de la interfaz
     private TextView lblNombre, lblDescripcion, lblInvitados, lblHora, lblFecha, lblLugar;
@@ -190,6 +196,7 @@ public class DetallesEventoActivity extends AppCompatActivity
         {
             leerEventoDB();
             prepararVotacion();
+            prepararParticipantes();
         }
         else
         {
@@ -516,4 +523,133 @@ public class DetallesEventoActivity extends AppCompatActivity
         intent.putExtra("motivo","agregar");
         startActivity(intent);
     }
+
+
+    private void  prepararParticipantes()
+    {
+        DatabaseReference refParticipantes = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL)
+                .child(Constants.URL_PARTICIPANTES_EVENTO).child(id_evento);
+        refParticipantes.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        GenericTypeIndicator<HashMap<String,ParticipanteEvento>> t = new GenericTypeIndicator<HashMap<String, ParticipanteEvento>>(){};
+                        participantesEvento = dataSnapshot.getValue(t).values();
+                        int total = participantesEvento.size();
+                        int no_salido=0;
+                        int camino_evento=0;
+                        int en_evento=0;
+                        int camino_casa=0;
+                        int casa=0;
+                        for(ParticipanteEvento participante : participantesEvento)
+                        {
+                            if(participante.llego_casa)
+                            {
+                                casa++;
+                            }
+                            else if(participante.camino_casa)
+                            {
+                                camino_casa++;
+                            }
+                            else if(participante.llego_evento)
+                            {
+                                en_evento++;
+                            }
+                            else if (participante.camino_evento)
+                            {
+                                camino_evento++;
+                            }
+                            else
+                            {
+                                no_salido++;
+                            }
+                        }
+
+                        String detallesNotificacion="";
+                        if(casa>0)
+                        {
+                            detallesNotificacion+=(casa+" de "+total+" participantes ya llegaron a casa\n");
+                        }
+                        else if (camino_casa>0)
+                        {
+                            detallesNotificacion+=(camino_casa+" de "+total+" participantes van camino a casa");
+                        }
+                        else if (en_evento>0)
+                        {
+                            detallesNotificacion+=(en_evento+" de "+total+" ya están en el evento");
+                        }
+                        else if (camino_evento>0)
+                        {
+                            detallesNotificacion+=(camino_evento+" de "+total+" participantes van camino al evento");
+                        }
+                        else if (no_salido>0)
+                        {
+                            detallesNotificacion+=(no_salido+" de "+total+" participantes aún no van camino al evento");
+                        }
+
+                        //TODO muestra la notificación
+                        Intent intentoDetalles = new Intent(contexto, DetallesEventoActivity.class);
+                        intentoDetalles.putExtra(Constants.EXTRA_VER_INVITADOS,true);
+                        intentoDetalles.putExtra(Constants.EXTRA_ID_EVENTO, id_evento);
+// The stack builder object will contain an artificial back stack for the
+// started Activity.
+// This ensures that navigating backward from the Activity leads out of
+// your application to the Home screen.
+                        TaskStackBuilder stackBuilder = TaskStackBuilder.create(contexto);
+// Adds the back stack for the Intent (but not the Intent itself)
+                        stackBuilder.addParentStack(MainActivity.class);
+// Adds the Intent that starts the Activity to the top of the stack
+                        stackBuilder.addNextIntent(intentoDetalles);
+                        PendingIntent intentoCompleto =
+                                stackBuilder.getPendingIntent(
+                                        0,
+                                        PendingIntent.FLAG_UPDATE_CURRENT
+                                );
+
+                        Notification notificacion = new NotificationCompat.Builder(contexto)
+                                .setSmallIcon(R.drawable.logo_planit)
+                                .setContentTitle(evento.getNombre())
+                                .setContentText("Participantes")
+                                .setStyle(new NotificationCompat.BigTextStyle()
+                                        .bigText(detallesNotificacion))
+                                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                                .setAutoCancel(true)
+                                .setPriority(Notification.PRIORITY_MAX)
+                                .setContentIntent(intentoCompleto)
+                                .build();
+
+                        NotificationManager mNotifyMgr=(NotificationManager)contexto.getSystemService(NOTIFICATION_SERVICE);
+                        //Tono de notificación
+                        notificacion.sound= Uri.parse("android.resource://"+ contexto.getPackageName() + "/" + R.raw.notificacion_participantes);
+                        //Vibración
+                        long[] vibrate = { 0, 100, 50, 100,50,100 };
+                        notificacion.vibrate=vibrate;
+                        // Builds the notification and issues it.
+                        int NOTIFICACION_PARTICIPANTES = id_evento.hashCode();
+                        mNotifyMgr.notify(NOTIFICACION_PARTICIPANTES, notificacion);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+    }
+
+
+    public void mostrarDialogoParticipantesEvento()
+    {
+        String[] arrayParticipantes = new String[participantesEvento.size()];
+        int i=0;
+        for(ParticipanteEvento partActual:participantesEvento)
+        {
+            arrayParticipantes[i]=partActual.toString();
+            i++;
+        }
+
+    }
+
 }

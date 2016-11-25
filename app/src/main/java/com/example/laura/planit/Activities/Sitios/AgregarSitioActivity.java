@@ -27,6 +27,7 @@ import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Activities.Main.Constants;
+import com.example.laura.planit.Services.ObtenerDireccionesIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -104,26 +105,24 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
 
 
         Intent intent = getIntent();
-        editar = intent.getBooleanExtra("editar",false);
-        if (editar) {
-            Sitio sitio = (Sitio) intent.getSerializableExtra("sitio");
-            if (sitio != null)
-            {
-                sitioEditar=sitio;
-                txtNombre.setText(sitio.getNombre());
-                txtDireccion.setText(sitio.getCoordenadas());
-                txtDireccion.setEnabled(false);
-                mLastLocation = new Location("");
-                mLastLocation.setLatitude(sitio.getLatitud());
-                mLastLocation.setLongitude(sitio.getLongitud());
-                ((Button)findViewById(R.id.btn_agregar_sitio)).setText("Guardar");
-                getSupportActionBar().setTitle("Edición de sitio");
-            } else {
-                finish();
+        if(intent!=null) {
+            editar = intent.getBooleanExtra("editar", false);
+            if (editar) {
+                Sitio sitio = (Sitio) intent.getSerializableExtra("sitio");
+                if (sitio != null) {
+                    sitioEditar = sitio;
+                    txtNombre.setText(sitio.getNombre());
+                    txtDireccion.setText(sitio.getCoordenadas());
+                    txtDireccion.setEnabled(false);
+                    mLastLocation = new Location("");
+                    mLastLocation.setLatitude(sitio.getLatitud());
+                    mLastLocation.setLongitude(sitio.getLongitud());
+                    ((Button) findViewById(R.id.btn_agregar_sitio)).setText("Guardar");
+                    getSupportActionBar().setTitle("Edición de sitio");
+                } else {
+                    finish();
+                }
             }
-
-        } else {
-
         }
 
         final NestedScrollView scroll = (NestedScrollView) findViewById(R.id.scroll_view);
@@ -228,6 +227,11 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                                     } else
                                     {
                                         databaseReference.setValue(nuevoSitio.toMap());
+                                        System.out.println("Service lanzado para obtener direccion");
+                                        //Lanzar servicio para obtener direccion
+                                        Intent intent = new Intent(contexto, ObtenerDireccionesIntentService.class);
+                                        intent.putExtra(Constants.SITIO, nuevoSitio);
+                                        contexto.startService(intent);
                                     }
                                 }
 
