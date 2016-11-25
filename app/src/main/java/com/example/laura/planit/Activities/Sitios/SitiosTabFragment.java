@@ -52,10 +52,10 @@ public class SitiosTabFragment extends TabFragment
     @Override
     public void eliminarElementosVista(View view)
     {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL);
         for (Sitio actual:(List<Sitio>)elementosSeleccionados)
         {
-            ref.child(actual.darRutaElemento(celular)).removeValue();
+            FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL).child(actual.darRutaElemento(celular)).removeValue();
+            elementosSeleccionados.remove(actual);
             if(elementos.size()==1)
             {
                 ((SitioRecyclerViewAdapter)adapter).swapData(new ArrayList());
@@ -63,7 +63,6 @@ public class SitiosTabFragment extends TabFragment
             }
             System.out.println("Sitio eliminado "+actual);
         }
-        elementosSeleccionados.clear();
         cambiarIconoFAB();
     }
 

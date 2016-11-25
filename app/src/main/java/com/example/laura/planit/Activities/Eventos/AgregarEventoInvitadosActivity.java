@@ -34,7 +34,10 @@ public class AgregarEventoInvitadosActivity extends AgregarSuper
     protected void onCreate(Bundle savedInstanceState) {
         titulo="Selecciona tus invitados";
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_invitar_contactos);
+        //TODO no funciona el cargue de contactos
 
         //ToolBar
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar_agregar_invitados));
@@ -43,7 +46,6 @@ public class AgregarEventoInvitadosActivity extends AgregarSuper
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.atras_icon);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
-
         leerContactos();
         btnFAB=(FloatingActionButton)findViewById(R.id.buttonInvitarEvento);
         listView = (ListView) findViewById(R.id.lista_contactos_evento);

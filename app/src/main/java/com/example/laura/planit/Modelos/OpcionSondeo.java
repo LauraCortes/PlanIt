@@ -47,10 +47,4 @@ public class OpcionSondeo implements Serializable
         map.put("lugar",lugar.toMap());
         return map;
     }
-
-    @Exclude
-    public String toString()
-    {
-        return "("+votosFavor+")-"+lugar.toString();
-    }
 }

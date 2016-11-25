@@ -52,14 +52,8 @@ public class Sitio implements Serializable
         this.nombre = nombre;
     }
 
-    public String getDireccion()
-    {
-        if(direccion!=null && !direccion.trim().isEmpty())
-            return direccion;
-        else
-        {
-            return getCoordenadas();
-        }
+    public String getDireccion() {
+        return direccion;
     }
 
     public void setDireccion(String direccion) {
@@ -81,7 +75,7 @@ public class Sitio implements Serializable
     @Exclude
     public String toString()
     {
-        return nombre+": "+getDireccion();
+        return nombre+": "+direccion;
     }
 
     public Map<String, Object> toMap() {
