@@ -68,8 +68,10 @@ public class DetallesEventoActivity extends AppCompatActivity
 
     private List<OpcionSondeo> opcionesVotacion=new ArrayList<>();
     private OpcionSondeo votada;
+    private boolean visible=false;
 
     private Collection<ParticipanteEvento> participantesEvento;
+    private boolean lanzarPopUpParticipantes=false;
 
     //Atributos de la interfaz
     private TextView lblNombre, lblDescripcion, lblInvitados, lblHora, lblFecha, lblLugar;
@@ -155,6 +157,7 @@ public class DetallesEventoActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         id_evento = intent.getExtras().getString(Constants.EXTRA_ID_EVENTO);
+        lanzarPopUpParticipantes = intent.getBooleanExtra(Constants.EXTRA_VER_INVITADOS,false);
         if(id_evento==null)
         {
             finish();
@@ -203,7 +206,28 @@ public class DetallesEventoActivity extends AppCompatActivity
             MainActivity.mostrarMensaje(contexto,"Error","No se pudo tener acceso a sus datos." +
                     " Intente cerrar sesión e ingresar nuevamente");
         }
+        if(lanzarPopUpParticipantes)
+        {
+            mostrarDialogoParticipantesEvento();
+        }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        visible=true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        visible=false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        visible=false;
     }
 
     private void leerEventoDB()
@@ -377,7 +401,7 @@ public class DetallesEventoActivity extends AppCompatActivity
                         votada = opcionesVotacion.get(which);
                         ejecutarVoto();
                         System.out.println("Votada -> "+votada.getLugar().toString());
-                        //btnVotar.setVisibility(View.GONE);
+                        btnVotar.setVisibility(View.GONE);
                         //Debería sobrar pues se actualiza con el otro listener
                     }
                 });
@@ -406,10 +430,8 @@ public class DetallesEventoActivity extends AppCompatActivity
 
                     for(OpcionSondeo opcionDB : sondeo.getOpciones().values())
                     {
-                        System.out.println("**--Actual->"+opcionDB.lugar.toString());
                         if(opcionDB.lugar.toString().equals(votada.getLugar().toString()))
                         {
-                            System.out.println("------------------------ENCONTRÓ UNA OPCIÓN IGUAL");
                             opcionDB.votosFavor++;
                             boolean ganadora=true;
                             for(OpcionSondeo otraOpcion : sondeo.getOpciones().values())
@@ -573,62 +595,63 @@ public class DetallesEventoActivity extends AppCompatActivity
                         }
                         else if (camino_casa>0)
                         {
-                            detallesNotificacion+=(camino_casa+" de "+total+" participantes van camino a casa");
+                            detallesNotificacion+=(camino_casa+" de "+total+" participantes van camino a casa\n");
                         }
                         else if (en_evento>0)
                         {
-                            detallesNotificacion+=(en_evento+" de "+total+" ya están en el evento");
+                            detallesNotificacion+=(en_evento+" de "+total+" participantes ya están en el evento\n");
                         }
                         else if (camino_evento>0)
                         {
-                            detallesNotificacion+=(camino_evento+" de "+total+" participantes van camino al evento");
+                            detallesNotificacion+=(camino_evento+" de "+total+" participantes van camino al evento\n");
                         }
                         else if (no_salido>0)
                         {
-                            detallesNotificacion+=(no_salido+" de "+total+" participantes aún no van camino al evento");
+                            detallesNotificacion+=(no_salido+" de "+total+" participantes aún no van camino al evento\n");
                         }
 
-                        //TODO muestra la notificación
-                        Intent intentoDetalles = new Intent(contexto, DetallesEventoActivity.class);
-                        intentoDetalles.putExtra(Constants.EXTRA_VER_INVITADOS,true);
-                        intentoDetalles.putExtra(Constants.EXTRA_ID_EVENTO, id_evento);
+                        if(no_salido!=total && !visible)
+                        {
+                            Intent intentoDetalles = new Intent(contexto, DetallesEventoActivity.class);
+                            intentoDetalles.putExtra(Constants.EXTRA_VER_INVITADOS,true);
+                            intentoDetalles.putExtra(Constants.EXTRA_ID_EVENTO, id_evento);
 // The stack builder object will contain an artificial back stack for the
 // started Activity.
 // This ensures that navigating backward from the Activity leads out of
 // your application to the Home screen.
-                        TaskStackBuilder stackBuilder = TaskStackBuilder.create(contexto);
+                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(contexto);
 // Adds the back stack for the Intent (but not the Intent itself)
-                        stackBuilder.addParentStack(MainActivity.class);
+                            stackBuilder.addParentStack(MainActivity.class);
 // Adds the Intent that starts the Activity to the top of the stack
-                        stackBuilder.addNextIntent(intentoDetalles);
-                        PendingIntent intentoCompleto =
-                                stackBuilder.getPendingIntent(
-                                        0,
-                                        PendingIntent.FLAG_UPDATE_CURRENT
-                                );
+                            stackBuilder.addNextIntent(intentoDetalles);
+                            PendingIntent intentoCompleto =
+                                    stackBuilder.getPendingIntent(
+                                            0,
+                                            PendingIntent.FLAG_UPDATE_CURRENT
+                                    );
 
-                        Notification notificacion = new NotificationCompat.Builder(contexto)
-                                .setSmallIcon(R.drawable.logo_planit)
-                                .setContentTitle(evento.getNombre())
-                                .setContentText("Participantes")
-                                .setStyle(new NotificationCompat.BigTextStyle()
-                                        .bigText(detallesNotificacion))
-                                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                                .setAutoCancel(true)
-                                .setPriority(Notification.PRIORITY_MAX)
-                                .setContentIntent(intentoCompleto)
-                                .build();
+                            Notification notificacion = new NotificationCompat.Builder(contexto)
+                                    .setSmallIcon(R.drawable.logo_planit)
+                                    .setContentTitle(evento.getNombre())
+                                    .setContentText("Participantes")
+                                    .setStyle(new NotificationCompat.BigTextStyle()
+                                            .bigText(detallesNotificacion))
+                                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                                    .setAutoCancel(true)
+                                    .setPriority(Notification.PRIORITY_MAX)
+                                    .setContentIntent(intentoCompleto)
+                                    .build();
 
-                        NotificationManager mNotifyMgr=(NotificationManager)contexto.getSystemService(NOTIFICATION_SERVICE);
-                        //Tono de notificación
-                        notificacion.sound= Uri.parse("android.resource://"+ contexto.getPackageName() + "/" + R.raw.notificacion_participantes);
-                        //Vibración
-                        long[] vibrate = { 0, 100, 50, 100,50,100 };
-                        notificacion.vibrate=vibrate;
-                        // Builds the notification and issues it.
-                        int NOTIFICACION_PARTICIPANTES = id_evento.hashCode();
-                        mNotifyMgr.notify(NOTIFICACION_PARTICIPANTES, notificacion);
-
+                            NotificationManager mNotifyMgr=(NotificationManager)contexto.getSystemService(NOTIFICATION_SERVICE);
+                            //Tono de notificación
+                            notificacion.sound= Uri.parse("android.resource://"+ contexto.getPackageName() + "/" + R.raw.notificacion_participantes);
+                            //Vibración
+                            long[] vibrate = { 0, 100, 50, 100,50,100 };
+                            notificacion.vibrate=vibrate;
+                            // Builds the notification and issues it.
+                            int NOTIFICACION_PARTICIPANTES = id_evento.hashCode();
+                            mNotifyMgr.notify(NOTIFICACION_PARTICIPANTES, notificacion);
+                        }
                     }
 
                     @Override
@@ -642,14 +665,28 @@ public class DetallesEventoActivity extends AppCompatActivity
 
     public void mostrarDialogoParticipantesEvento()
     {
-        String[] arrayParticipantes = new String[participantesEvento.size()];
-        int i=0;
-        for(ParticipanteEvento partActual:participantesEvento)
+        if(participantesEvento!=null)
         {
-            arrayParticipantes[i]=partActual.toString();
-            i++;
-        }
+            String[] arrayParticipantes = new String[participantesEvento.size()];
+            int i=0;
+            for(ParticipanteEvento partActual:participantesEvento)
+            {
+                arrayParticipantes[i]=partActual.toString();
+                i++;
+            }
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+            builder.setTitle(evento.getNombre()+" - Participantes");
+            builder.setCancelable(true);
+            builder.setPositiveButton("ACEPTAR",null);
+            builder.setItems(arrayParticipantes,null);
+            builder.show();
+        }
+    }
+
+    public void verParticipantes(View v)
+    {
+        mostrarDialogoParticipantesEvento();
     }
 
 }

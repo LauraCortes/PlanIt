@@ -139,7 +139,7 @@ public class ParticipanteEvento implements Serializable
         }
         else if(camino_evento)
         {
-            result+="Camino al evento ("+tiempo_llegada+" minutos, "+distancia+" km";
+            result+="Camino al evento ("+tiempo_llegada+" minutos, "+distancia+" km )";
         }
         else
         {
