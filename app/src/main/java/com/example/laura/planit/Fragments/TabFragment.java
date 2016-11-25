@@ -120,7 +120,6 @@ public abstract class TabFragment extends Fragment
         if(!isItemSelected(o))
         {
             agregarItemEliminar(o);
-            System.out.println("Objeto añadido: "+o);
             return true;
         }
         else

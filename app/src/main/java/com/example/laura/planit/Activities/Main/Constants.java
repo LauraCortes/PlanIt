@@ -22,11 +22,13 @@ public final class Constants
     public final static String URL_MIS_EVENTOS="mis_eventos/";
     public final static String URL_INVITACIONES_EVENTO="invitaciones/";
     public final static String URL_SONDEOS="sondeos/";
-
+    public final static String URL_REGRESOS ="regresos/";
     //Extras entre contextos
     public final static String EXTRA_ID_EVENTO="id_evento";
     public final static String EXTRA_SITIOS_EVENTO="extras sitio evento";
 
     //Otros
     public final static String DESCONOCIDO="desconocido";
+
+
 }
