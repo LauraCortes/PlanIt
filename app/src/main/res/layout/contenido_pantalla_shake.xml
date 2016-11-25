@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:id="@+id/frame_shake_detected"
-    android:background="@color/colorPrimary"
+    android:background="#F2F3AE"
     android:visibility="gone"
     android:weightSum="10"
     android:layout_height="match_parent">
@@ -26,7 +26,7 @@
         android:layout_weight="2"
         android:text="Agítalo!"
         android:gravity="center"
-        android:textColor="@color/mdtp_white"
+        android:textColor="@color/colorPrimary"
         android:textSize="30dp"/>
 
     <ImageView
@@ -36,6 +36,7 @@
         android:layout_gravity="center"
         android:scaleType="centerInside"
         android:adjustViewBounds="true"
+        android:tint="@color/mdtp_transparent_black"
         android:src="@drawable/shake"/>
 
     <View
@@ -49,12 +50,7 @@
         android:layout_weight="2"
         android:text="Agita nuevamente el teléfono para contarle a tus amigos que ya llegaste al evento"
         android:gravity="center"
-        android:textColor="@color/mdtp_white"
-        android:textSize="30dp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="25dp"/>
 
 </LinearLayout>

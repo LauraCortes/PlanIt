@@ -2,6 +2,7 @@ package com.example.laura.planit.Activities.Main;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +10,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -32,6 +32,8 @@ import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Fragments.TabsFragmenPageAdapter;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Sensores.DetectorAgitacion;
+import com.example.laura.planit.Services.NotificarLlegadaEventoIntentService;
+import com.example.laura.planit.Services.ObtenerDireccionesIntentService;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -41,12 +43,15 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
     private boolean activityVisible;
     private long tiempoPrimerShake;
     private int cantidadShakes=0;
-    private int id_Notificacion_llegada=420;
+    public final static int ID_NOTIFICACION_LLEGADA =420;
     private Context contexto;
+
     Vibrator vibrador;
 
     private SensorManager sensorMgr;
     private DetectorAgitacion detectorShake;
+
+    private String celular;
 
 
     @Override
@@ -94,6 +99,17 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
 
         //Crea el vibrador
         vibrador= (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+
+        //Obtiene el número del celular
+        SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+        if (properties.getBoolean(getString(R.string.logueado), false))
+        {
+            celular = properties.getString(getString(R.string.usuario), "desconocido");
+        }
+        else
+        {
+            finish();
+        }
 
 
         //Crear el toolbar
@@ -196,31 +212,35 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
     @Override
     public void onShake()
     {
-        NotificationManager mNotifyMgr=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Intent intentNotificarLLegada = new Intent(contexto, NotificarLlegadaEventoIntentService.class);
+        intentNotificarLLegada.putExtra(Constants.EXTRA_CELULAR, celular);
+
         if(cantidadShakes==0)
         {
             tiempoPrimerShake = System.currentTimeMillis();
             cantidadShakes++;
             if(activityVisible)
             {
-                new mostrarShake().execute();
                 Uri tono  = Uri.parse("android.resource://"+ this.getPackageName() + "/" + R.raw.notificacion_llegada);
                 Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), tono);
                 r.play();
                 vibrador.vibrate(500);
+                new mostrarShake().execute();
             }
             else
             {
+                PendingIntent pendingIntent = PendingIntent.getService(contexto, 0, intentNotificarLLegada, 0);
+
+                NotificationManager mNotifyMgr=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 Drawable icon = ContextCompat.getDrawable(this,R.drawable.llegada_evento);
                 icon.setBounds(0,0,25,25);
                 Notification notificacion = new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.logo_planit)
-                        .setContentTitle("Nombre del evento")
+                        .setContentTitle("Llegada a evento")
                         .setContentText("Cuéntale a tus amigos que ya llegaste")
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                         .setAutoCancel(false)
-                        .addAction(R.drawable.check,"Ya llegué",null)
-                        .addAction(R.drawable.close,"Posponer",null)
+                        .addAction(R.drawable.check,"Ya llegué",pendingIntent)
                         .setPriority(Notification.PRIORITY_MAX)
                         .build();
 
@@ -230,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
                 long[] vibrate = { 0, 100, 200, 100 };
                 notificacion.vibrate=vibrate;
                 // Builds the notification and issues it.
-                mNotifyMgr.notify(id_Notificacion_llegada, notificacion);
+                mNotifyMgr.notify(ID_NOTIFICACION_LLEGADA, notificacion);
             }
         }
         else
@@ -239,16 +259,12 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
             long transcurrido = actual-tiempoPrimerShake;
             if(transcurrido/1000<8)
             {
-                Uri tono  = Uri.parse("android.resource://"+ this.getPackageName() + "/" + R.raw.notificacion_confirmacion_llegada);
-                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), tono);
-                r.play();
-                vibrador.vibrate(1000);
-                Toast.makeText(contexto,"Le avisamos a tus amigos que llegaste",Toast.LENGTH_SHORT).show();
                 cantidadShakes=0;
-                mNotifyMgr.cancel(id_Notificacion_llegada);
                 //Desactivar listener de shake
-                sensorMgr.unregisterListener(detectorShake);
-                //Avisar que ya llegó al evento
+                //sensorMgr.unregisterListener(detectorShake);
+                //Enviar el intent
+                contexto.startService(intentNotificarLLegada);
+
             }
             else
             {
@@ -257,6 +273,14 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
             }
         }
 
+
+    }
+
+    /**
+     * Solo manda la notificación si existe un evento cercano
+     */
+    private void notificarEventoMasCercano()
+    {
 
     }
 

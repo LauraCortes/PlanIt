@@ -27,8 +27,10 @@ public final class Constants
     //Extras entre contextos
     public final static String EXTRA_ID_EVENTO="id_evento";
     public final static String EXTRA_SITIOS_EVENTO="extras sitio evento";
+    public static String EXTRA_CELULAR="celular";
 
     //Otros
     public final static String DESCONOCIDO="desconocido";
+
 
 }

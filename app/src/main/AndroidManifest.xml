@@ -40,6 +40,9 @@
         <service
             android:name=".Services.ObtenerDireccionesIntentService"
             android:exported="false"/>
+        <service android:name=".Services.NotificarLlegadaEventoIntentService"
+            android:exported="true"
+            android:enabled="true"></service>
         <service
             android:name=".Services.MensajesService"
             android:enabled="true"
