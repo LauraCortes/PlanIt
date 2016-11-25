@@ -119,4 +119,33 @@ public class ParticipanteEvento implements Serializable
         result.put("nombre",nombre);
         return result;
     }
+
+    @Exclude
+    public String toString()
+    {
+        String result="";
+        result+=nombre+" - ";
+        if(llego_casa)
+        {
+            result+="En casa";
+        }
+        else if (camino_casa)
+        {
+            result+="Camino a casa";
+        }
+        else if(llego_evento)
+        {
+            result+="Ya llegué al evento";
+        }
+        else if(camino_evento)
+        {
+            result+="Camino al evento ("+tiempo_llegada+" minutos, "+distancia+" km";
+        }
+        else
+        {
+            result+="Aún no voy en camino";
+        }
+
+        return result;
+    }
 }

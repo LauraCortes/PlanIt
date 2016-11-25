@@ -104,7 +104,7 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
 
 
         Intent intent = getIntent();
-        editar = intent.getExtras().getBoolean("editar");
+        editar = intent.getBooleanExtra("editar",false);
         if (editar) {
             Sitio sitio = (Sitio) intent.getSerializableExtra("sitio");
             if (sitio != null)
