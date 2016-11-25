@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.laura.planit.Activities.Main.LoginActivity;
 import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Activities.Sitios.SitioRecyclerViewAdapter;
+import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.Modelos.Sitio;
@@ -51,7 +52,7 @@ public class ContactosTabFragment extends TabFragment
             ref.child(actual.darRutaElemento(celular)).removeValue();
             if(elementos.size()==1)
             {
-                ((SitioRecyclerViewAdapter)adapter).swapData(new ArrayList());
+                ((ElementRecyclerViewAdapter)adapter).swapData(new ArrayList());
                 adapter.notifyDataSetChanged();
             }
             System.out.println("Contacto eliminado "+actual);

@@ -3,6 +3,7 @@ package com.example.laura.planit.Fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.example.laura.planit.Activities.Contactos.AgregarContactoAdapter;
+import com.example.laura.planit.Activities.Main.Constants;
+import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Modelos.Contacto;
 import com.example.laura.planit.R;
 
@@ -39,6 +42,9 @@ public abstract class AgregarSuper extends AppCompatActivity
     protected ListView listView;
     protected FloatingActionButton btnFAB;
     protected String titulo;
+    protected String celular;
+
+    protected AgregarContactoAdapter adapter;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -49,6 +55,13 @@ public abstract class AgregarSuper extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        contactos = new ArrayList<>();
+        adapter= new AgregarContactoAdapter(this,contactos);
+        SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
+        if(properties.getBoolean(getString(R.string.logueado),false))
+        {
+            celular=properties.getString(getString(R.string.usuario), Constants.DESCONOCIDO);
+        }
     }
 
     public void seleccionarItem(int pos)
@@ -88,40 +101,7 @@ public abstract class AgregarSuper extends AppCompatActivity
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    Cursor mCursor = getContentResolver().query(
-                            ContactsContract.Data.CONTENT_URI,
-                            new String[] { ContactsContract.Data._ID, ContactsContract.Data.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER,
-                                    ContactsContract.CommonDataKinds.Phone.TYPE },
-                            ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "' AND "
-                                    + ContactsContract.CommonDataKinds.Phone.NUMBER + " IS NOT NULL", null,
-                            ContactsContract.Data.DISPLAY_NAME + " ASC");
-                    startManagingCursor(mCursor);
-                    Contacto contact;
-                    if(mCursor!=null) {
-                        if (mCursor.getCount() > 0) {
-                            mCursor.moveToFirst();
-                            do
-                            {
-                                String numero =  mCursor.getString(1).trim();
-                                numero=numero.replaceAll(" ","");
-                                if(true)
-                                    //TODO validar si el contacto ya está en la lista
-                                    //!PlanIt.darInstancia().existeContacto(numero) && !contactoExistente(numero))
-                                {
-                                    contact = new Contacto(mCursor.getString(0), numero);
-                                    contactos.add(contact);
-                                }
-                            }
-                            while (mCursor.moveToNext());
-                            mCursor.close();
-                        }
-                    }
-                    contact = null;
-                    listView.setAdapter(new AgregarContactoAdapter(this,contactos));
-
+                    leerContactos();
                 } else {
                     showSnackBar();
                     //finish();
@@ -148,7 +128,7 @@ public abstract class AgregarSuper extends AppCompatActivity
     public abstract void agregar(View view);
 
     protected void showSnackBar() {
-        Snackbar.make(findViewById(R.id.relativeLayout),"Activar envío sms",Snackbar.LENGTH_LONG)
+        Snackbar.make(findViewById(R.id.relativeLayout),"No fue posible leer los contactos",Snackbar.LENGTH_LONG)
                 .setAction("Settings", new View.OnClickListener() {
                     @Override public void onClick(View view){
                         openSettings();
@@ -163,9 +143,9 @@ public abstract class AgregarSuper extends AppCompatActivity
 
     protected void leerContactos()
     {
-        contactos = new ArrayList<Contacto>();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED)
+        {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
                 showSnackBar();
             } else {
@@ -187,20 +167,22 @@ public abstract class AgregarSuper extends AppCompatActivity
                     do {
                         String numero =  mCursor.getString(1).trim();
                         numero=numero.replaceAll(" ","");
-
-                        if(!contactoExistente(numero))
+                        numero=numero.replaceAll("\\(","");
+                        numero=numero.replaceAll("\\)","");
+                        numero=numero.replaceAll("-","");
+                        numero=numero.replaceAll("\\+57","");
+                        if(!contactoExistente(numero)  && !numero.equals(celular) && numero.length()==10)
                         {
                             contact = new Contacto(mCursor.getString(0), numero);
                             contactos.add(contact);
                         }
                     }
                     while (mCursor.moveToNext());
+                    adapter.notifyDataSetChanged();
                     mCursor.close();
-
                 }
             }
             contact = null;
         }
     }
 }
-

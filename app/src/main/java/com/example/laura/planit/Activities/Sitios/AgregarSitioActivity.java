@@ -199,12 +199,11 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                 txtDireccion.setError(null);
                 //public Sitio(int latitud, int longitud, String nombre, String direccion) {
                 final Sitio nuevoSitio = new Sitio();
-                nuevoSitio.setDireccion(direccion);
+                nuevoSitio.setDireccion(null);
                 nuevoSitio.setNombre(nombre);
                 LatLng posicionActual = defaultMarker.getPosition();
                 nuevoSitio.setLatitud(posicionActual.latitude);
                 nuevoSitio.setLongitud(posicionActual.longitude);
-                nuevoSitio.setDireccion("");
 
                 SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
                 if (properties.getBoolean(getString(R.string.logueado), false))
@@ -228,7 +227,7 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                                                 " un sitio con este nombre");
                                     } else
                                     {
-                                        databaseReference.setValue(nuevoSitio);
+                                        databaseReference.setValue(nuevoSitio.toMap());
                                     }
                                 }
 

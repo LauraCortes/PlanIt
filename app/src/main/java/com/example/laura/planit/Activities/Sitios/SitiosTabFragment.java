@@ -49,6 +49,7 @@ public class SitiosTabFragment extends TabFragment
         startActivityForResult(i,AGREGAR_ELEMENTOS);
     }
 
+
     @Override
     public void eliminarElementosVista(View view)
     {
@@ -59,9 +60,8 @@ public class SitiosTabFragment extends TabFragment
             if(elementos.size()==1)
             {
                 ((SitioRecyclerViewAdapter)adapter).swapData(new ArrayList());
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemRemoved(0);
             }
-            System.out.println("Sitio eliminado "+actual);
         }
         elementosSeleccionados.clear();
         cambiarIconoFAB();

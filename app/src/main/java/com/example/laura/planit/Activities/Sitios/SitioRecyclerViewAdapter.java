@@ -45,7 +45,7 @@ public class SitioRecyclerViewAdapter extends ElementRecyclerViewAdapter
         final Sitio sitio = (Sitio) this.elementos.get(position);
         rowViewHolder.nombreTextView.setText(sitio.getNombre());
         rowViewHolder.coordenadasTextView.setText(sitio.getCoordenadas());
-        String direccion = (sitio.getDireccion());
+        String direccion = (sitio.direccion);
         LinearLayout layoutDireccion = (LinearLayout)rowViewHolder.vista.findViewById(R.id.layout_direccion_sitios);
         LinearLayout layoutGPS = (LinearLayout)rowViewHolder.vista.findViewById(R.id.layout_gps_sitios);
         if(direccion!= null && !direccion.trim().isEmpty())
