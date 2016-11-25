@@ -401,8 +401,12 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
                 if(sitiosEncuesta!=null)
                 {
+
+                    System.out.println("++++++++++Cuantos sitios llegaron "+sitiosEncuesta.size());
                     //Crea la encuesta
-                    SondeoLugares sondeo = new SondeoLugares(invitados.size(),sitiosEncuesta);
+                    SondeoLugares sondeo = new SondeoLugares(invitados.size()+1,sitiosEncuesta);
+
+                    System.out.println("++++++++++Cuantos sitios en MAPA "+sondeo.getOpciones().size());
                     childUpdates.put(Constants.URL_SONDEOS+key_evento,sondeo.toMap());
                 }
 

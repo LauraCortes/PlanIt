@@ -20,7 +20,7 @@ public class SondeoLugares implements Serializable{
     public boolean cerrado=false;
     public Sitio lugarActual=null;
     public Map<String,OpcionSondeo> opciones=new HashMap<>();
-    public List<String> votaron;
+    public Map<String, String> votaron=new HashMap<>();
 
     public SondeoLugares()
     {};
@@ -31,14 +31,15 @@ public class SondeoLugares implements Serializable{
         for(Sitio sitioActual: opciones_Sitio)
         {
             opciones.put("opcion"+i,new OpcionSondeo(sitioActual));
+            i++;
         }
     }
 
-    public List<String> getVotaron() {
+    public Map<String, String> getVotaron() {
         return votaron;
     }
 
-    public void setVotaron(List<String> votaron) {
+    public void setVotaron(Map<String, String> votaron) {
         this.votaron = votaron;
     }
 

@@ -1,11 +1,17 @@
 package com.example.laura.planit.Activities.Eventos;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -142,34 +148,79 @@ public class DetallesEventoActivity extends AppCompatActivity
             if (properties.getBoolean(getString(R.string.logueado), false))
             {
                 celular = properties.getString(getString(R.string.usuario), Constants.DESCONOCIDO);
-                if(!celular.equals(Constants.DESCONOCIDO))
-                {
-                    leerEventoDB();
-                    prepararVotacion();
-                }
-                else
-                {
-                    MainActivity.mostrarMensaje(contexto,"Error","No se pudo tener acceso a sus datos." +
-                            " Intente cerrar sesión e ingresar nuevamente");
-                }
             }
 
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(!celular.equals(Constants.DESCONOCIDO))
+        {
+            leerEventoDB();
+            prepararVotacion();
+        }
+        else
+        {
+            MainActivity.mostrarMensaje(contexto,"Error","No se pudo tener acceso a sus datos." +
+                    " Intente cerrar sesión e ingresar nuevamente");
+        }
+    }
 
     private void leerEventoDB()
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_EVENTOS + id_evento);
-        databaseReference.addListenerForSingleValueEvent(
+        databaseReference.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot)
                     {
                         if(dataSnapshot.exists())
                         {
-                            evento = dataSnapshot.getValue(Evento.class);
+                            Evento eventoRecibido = dataSnapshot.getValue(Evento.class);
+                            if((evento!=null && ( (evento.lugar==null && eventoRecibido.lugar!=null) || (evento.lugar!=null && !evento.lugar.toString().equals(eventoRecibido.lugar.toString())))))
+                            {
+                                //TODO Notificación cambio lugar
+                                Intent resultIntent = new Intent(contexto, DetallesEventoActivity.class);
+                                resultIntent.putExtra(Constants.EXTRA_ID_EVENTO, id_evento);
+// The stack builder object will contain an artificial back stack for the
+// started Activity.
+// This ensures that navigating backward from the Activity leads out of
+// your application to the Home screen.
+                                TaskStackBuilder stackBuilder = TaskStackBuilder.create(contexto);
+// Adds the back stack for the Intent (but not the Intent itself)
+                                stackBuilder.addParentStack(MainActivity.class);
+// Adds the Intent that starts the Activity to the top of the stack
+                                stackBuilder.addNextIntent(resultIntent);
+                                PendingIntent resultPendingIntent =
+                                        stackBuilder.getPendingIntent(
+                                                0,
+                                                PendingIntent.FLAG_UPDATE_CURRENT
+                                        );
+
+                                Notification notificacion = new NotificationCompat.Builder(contexto)
+                                        .setSmallIcon(R.drawable.logo_planit)
+                                        .setContentTitle(evento.getNombre())
+                                        .setContentText("El lugar del evento ha cambiado")
+                                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                                        .setAutoCancel(true)
+                                        .setPriority(Notification.PRIORITY_MAX)
+                                        .setContentIntent(resultPendingIntent)
+                                        .build();
+
+                                NotificationManager mNotifyMgr=(NotificationManager)contexto.getSystemService(NOTIFICATION_SERVICE);
+                                //Tono de notificación
+                                notificacion.sound= Uri.parse("android.resource://"+ contexto.getPackageName() + "/" + R.raw.notificacion_invitacion);
+                                //Vibración
+                                long[] vibrate = { 0, 200, 50, 200,100,200 };
+                                notificacion.vibrate=vibrate;
+                                // Builds the notification and issues it.
+                                int id_not_sitio=193;
+                                mNotifyMgr.notify(id_not_sitio, notificacion);
+                            }
+                            evento = eventoRecibido;
                             bind();
                         }
                     }
@@ -244,12 +295,8 @@ public class DetallesEventoActivity extends AppCompatActivity
                     SondeoLugares sondeo = dataSnapshot.getValue(SondeoLugares.class);
                     if(sondeo!=null)
                     {
-
-                        /**
-                        GenericTypeIndicator<Map<String,OpcionSondeo>> opciones = new GenericTypeIndicator<Map<String,OpcionSondeo>>(){};
-                        Collection<OpcionSondeo> opcionesCollection = dataSnapshot.child("opciones").getValue(opciones).values();
-                         */
                         Collection<OpcionSondeo> opcionesCollection = sondeo.getOpciones().values();
+                        opcionesVotacion=new ArrayList<OpcionSondeo>();
                         int i=0;
                         for(OpcionSondeo opcion : opcionesCollection)
                         {
@@ -257,9 +304,7 @@ public class DetallesEventoActivity extends AppCompatActivity
                             i++;
                         }
 
-                        boolean opcionesNulas = opcionesVotacion==null;
-                        System.out.println(opcionesNulas+" *******+ OPCIONES DE VOTACIÓN LLEGARON "+opcionesVotacion.size());
-                        if(sondeo.isCerrado() ||  (sondeo.getVotaron()!=null && sondeo.getVotaron().contains(celular)))
+                        if(sondeo.isCerrado() ||  (sondeo.getVotaron()!=null && sondeo.getVotaron().containsValue(celular)))
                         {
                             btnVotar.setVisibility(View.GONE);
                         }
@@ -303,6 +348,7 @@ public class DetallesEventoActivity extends AppCompatActivity
                     {
                         votada = opcionesVotacion.get(which);
                         ejecutarVoto();
+                        System.out.println("Votada -> "+votada.getLugar().toString());
                         //btnVotar.setVisibility(View.GONE);
                         //Debería sobrar pues se actualiza con el otro listener
                     }
@@ -324,10 +370,20 @@ public class DetallesEventoActivity extends AppCompatActivity
                 else
                 {
                     sondeo.votosActuales++;
+                    System.out.println("******cuántas opciones en ejecutar voto"+    sondeo.getOpciones().size());
+                    Collection<OpcionSondeo> preOpciones = sondeo.getOpciones().values();
+                    for(OpcionSondeo opcionDB : preOpciones)
+                    {
+                        System.out.println(opcionDB.getLugar().toString());
+                    }
+                    System.out.println("----------FIN CICLO PRE");
+
                     for(OpcionSondeo opcionDB : sondeo.getOpciones().values())
                     {
-                        if(opcionDB.lugar==votada.getLugar())
+                        System.out.println("**--Actual->"+opcionDB.lugar.toString());
+                        if(opcionDB.lugar.toString().equals(votada.getLugar().toString()))
                         {
+                            System.out.println("------------------------ENCONTRÓ UNA OPCIÓN IGUAL");
                             opcionDB.votosFavor++;
                             boolean ganadora=true;
                             for(OpcionSondeo otraOpcion : sondeo.getOpciones().values())
@@ -366,8 +422,7 @@ public class DetallesEventoActivity extends AppCompatActivity
                                 }
                                 refEvento.child("lugar").setValue(mayorVotacion.lugar);
                             }
-
-                            sondeo.votaron.add(celular);
+                            sondeo.votaron.put(celular,celular);
                             break;
                         }
                     }

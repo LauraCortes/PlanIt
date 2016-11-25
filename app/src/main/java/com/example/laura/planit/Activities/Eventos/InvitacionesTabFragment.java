@@ -64,7 +64,8 @@ public class InvitacionesTabFragment extends TabFragment
         SharedPreferences properties = getContext().getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
         if (properties.getBoolean(getString(R.string.logueado), false)) {
             celular = properties.getString(getString(R.string.usuario), "desconocido");
-        } else {
+        } else
+        {
             MainActivity.mostrarMensaje(getContext(), "Inicia sesión", "Tu sesión caducó, por favor vuelve a iniciar sesión");
             getActivity().finish();
             Intent i = new Intent(getContext(), LoginActivity.class);
@@ -90,6 +91,12 @@ public class InvitacionesTabFragment extends TabFragment
             }
         });
 
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_INVITACIONES_EVENTO + celular);
         databaseReference.keepSynced(true);
@@ -159,6 +166,7 @@ public class InvitacionesTabFragment extends TabFragment
                         if(invitacionActual>invitacionesIniciales)
                         {
                             ResumenEvento evento = dataSnapshot.getValue(ResumenEvento.class);
+                            System.out.println((getActivity()==null)+"****************atividad");
                             Intent resultIntent = new Intent(getActivity(), DetallesEventoActivity.class);
                             resultIntent.putExtra(Constants.EXTRA_ID_EVENTO, evento.getId_evento());
 // The stack builder object will contain an artificial back stack for the
@@ -218,9 +226,6 @@ public class InvitacionesTabFragment extends TabFragment
                     }
                 }
         );
-
-
-        return view;
     }
 
     @Override
