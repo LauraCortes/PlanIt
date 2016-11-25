@@ -25,6 +25,7 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/scroll_view"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -67,14 +68,34 @@
                 android:textColor="@color/mdtp_transparent_black"
                 android:layout_marginBottom="5dp"/>
 
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                android:name="com.google.android.gms.maps.MapFragment"
-                android:id="@+id/map"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                app:uiZoomControls="true"
-                app:uiZoomGestures="true"
-                app:uiCompass="true" />
+                android:layout_height="400dp">
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:name="com.google.android.gms.maps.MapFragment"
+                    android:id="@+id/mapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    app:uiZoomControls="true"
+                    app:uiZoomGestures="true"
+                    app:uiCompass="true"
+                    />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imagetrans"
+                    android:layout_alignTop="@+id/mapFragment"
+                    android:layout_alignBottom="@+id/mapfragment"
+                    android:layout_alignEnd="@+id/mapfragment"
+                    android:layout_alignRight="@+id/mapfragment"
+                    android:layout_alignLeft="@+id/mapfragment"
+                    android:layout_alignStart="@+id/mapfragment"
+                    android:background="#05FF00FF"/>
+
+
+            </FrameLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -105,6 +126,8 @@
                 android:background="@color/colorAccent" />
 
         </LinearLayout>
+
+
 
     </android.support.v4.widget.NestedScrollView>
 

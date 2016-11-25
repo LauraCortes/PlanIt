@@ -12,12 +12,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.laura.planit.Activities.Main.MainActivity;
@@ -41,8 +44,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
-import static com.example.laura.planit.R.id.map;
 
 /**
  * Created by Laura on 12/09/2016.
@@ -124,14 +125,46 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
         } else {
 
         }
+
+        final NestedScrollView scroll = (NestedScrollView) findViewById(R.id.scroll_view);
+        ImageView transparent = (ImageView)findViewById(R.id.imagetrans);
+
+        transparent.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        scroll.requestDisallowInterceptTouchEvent(true);
+                        // Disable touch on transparent view
+                        return false;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        scroll.requestDisallowInterceptTouchEvent(false);
+                        return true;
+
+                    case MotionEvent.ACTION_MOVE:
+                        scroll.requestDisallowInterceptTouchEvent(true);
+                        return false;
+
+                    default:
+                        return true;
+                }
+            }
+        });
+
+
         intent = null;
     }
 
     protected void onStart() {
         //Mapa
         MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(map);
+                .findFragmentById(R.id.mapFragment);
         mapFragment.getMapAsync(this);
+
 
         //Api para consulta de la ubicación actual
         if (mGoogleApiClient == null) {
@@ -287,44 +320,34 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
 
 
     /**
-
      //Convertir coordenadas a direcciones
-
-    @Override
-    public boolean handleMessage(Message msg) {
-        txtDireccion.setText(msg.getData().getString(Constants.RESULT_DATA_KEY));
-        return true;
-    }
-
-    class AddressResultReceiver extends ResultReceiver
-    {
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        public String direccion="(No disponible)";
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            // Display the address string
-            // or an error message sent from the intent service.
-            direccion = resultData.getString(Constants.RESULT_DATA_KEY);
-            txtDireccion.setText(direccion);
-
-
-        }
-    }
-
-    private AddressResultReceiver mResultReceiver;
-
-    protected void startIntentServiceGeocodificacion() {
-        Intent intent = new Intent(this, FetchAddressIntentService.class);
-        intent.putExtra(Constants.RECEIVER, mResultReceiver);
-        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
-        startService(intent);
-    }
-    */
+     @Override
+     public boolean handleMessage(Message msg) {
+     txtDireccion.setText(msg.getData().getString(Constants.RESULT_DATA_KEY));
+     return true;
+     }
+     class AddressResultReceiver extends ResultReceiver
+     {
+     public AddressResultReceiver(Handler handler) {
+     super(handler);
+     }
+     public String direccion="(No disponible)";
+     @Override
+     protected void onReceiveResult(int resultCode, Bundle resultData) {
+     // Display the address string
+     // or an error message sent from the intent service.
+     direccion = resultData.getString(Constants.RESULT_DATA_KEY);
+     txtDireccion.setText(direccion);
+     }
+     }
+     private AddressResultReceiver mResultReceiver;
+     protected void startIntentServiceGeocodificacion() {
+     Intent intent = new Intent(this, FetchAddressIntentService.class);
+     intent.putExtra(Constants.RECEIVER, mResultReceiver);
+     intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
+     startService(intent);
+     }
+     */
 
 
     @Override
@@ -344,7 +367,7 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
     }
 }
 
-        //TODO EDITAR SITIOS
+//TODO EDITAR SITIOS
 
             /*if(editar)
             {
@@ -374,4 +397,3 @@ public class AgregarSitioActivity extends AppCompatActivity implements OnMapRead
                 System.out.println("Sitio agregado");
             }
             finish();*/
-
