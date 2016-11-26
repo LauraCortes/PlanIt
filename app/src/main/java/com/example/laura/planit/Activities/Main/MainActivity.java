@@ -1,6 +1,7 @@
 package com.example.laura.planit.Activities.Main;
 
 import android.Manifest;
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -40,17 +41,25 @@ import android.widget.Toast;
 import com.example.laura.planit.Activities.Eventos.DetallesEventoActivity;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Fragments.TabsFragmenPageAdapter;
+import com.example.laura.planit.Modelos.ResumenEvento;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Sensores.DetectorAgitacion;
+import com.example.laura.planit.Services.ActualizarTiempoDistanciaEventoIntentService;
 import com.example.laura.planit.Services.NotificarLlegadaEventoIntentService;
 import com.example.laura.planit.Services.ObtenerDireccionesIntentService;
-import com.example.laura.planit.Services.TrackingUbicacionService;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -70,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
     private String celular;
 
     private LocationManager locationManager = null;
-    private LocationListener locationListener = null;
+
+    private ResumenEvento eventoMasCercano=null;
 
 
     @Override
@@ -300,6 +310,10 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
             if (location != null) {
                 db.child(Constants.URL_USUARIOS).child(celular).child("latitud_actual").setValue(location.getLatitude());
                 db.child(Constants.URL_USUARIOS).child(celular).child("longitud_actual").setValue(location.getLongitude());
+                Intent actualizar = new Intent(contexto,ActualizarTiempoDistanciaEventoIntentService.class);
+                actualizar.putExtra(Constants.EXTRA_UBICACION,location);
+                actualizar.putExtra(Constants.EXTRA_CELULAR,celular);
+                contexto.startService(actualizar);
             }
 
         }
@@ -349,6 +363,8 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
             findViewById(R.id.frame_shake_detected).setVisibility(View.VISIBLE);
         }
     }
+
+
 }
 
 
