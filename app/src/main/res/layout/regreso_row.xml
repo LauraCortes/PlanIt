@@ -28,7 +28,7 @@
                 android:src="@drawable/taxi24p" />
 
             <TextView
-                android:id="@+id/lbl_detalles_medio_regreso"
+                android:id="@+id/lbl_medio_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -45,7 +45,7 @@
                 android:src="@drawable/amigos_favoritos_tab" />
 
             <TextView
-                android:id="@+id/lbl_cupos"
+                android:id="@+id/lbl_cupos_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -69,7 +69,7 @@
                 android:src="@drawable/clock24p" />
 
             <TextView
-                android:id="@+id/lbl_detalles_hora_regreso"
+                android:id="@+id/lbl_hora_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -101,7 +101,7 @@
                 android:text="Destino" />
 
             <TextView
-                android:id="@+id/lbl_detalles_destino_regreso"
+                android:id="@+id/lbl_destino_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -132,7 +132,7 @@
                 android:text="Tiempo aprox. de regreso (min)" />
 
             <TextView
-                android:id="@+id/lbl_detalles_tiempo_regreso"
+                android:id="@+id/lbl_tiempo_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -161,7 +161,7 @@
                 android:text="Con " />
 
             <TextView
-                android:id="@+id/lbl_detalles_duenio_regreso"
+                android:id="@+id/lbl_duenio_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -178,7 +178,7 @@
                 android:src="@drawable/phone" />
 
             <TextView
-                android:id="@+id/lbl_detalles_celular_duenio_regreso"
+                android:id="@+id/lbl_celular_duenio_regreso"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -198,7 +198,7 @@
         <include layout="@layout/vacio"/>
 
         <Button
-            android:id="@+id/btn_detalles_crear_regreso"
+            android:id="@+id/btn_unir_regreso"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"

@@ -159,10 +159,12 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                         builder.setItems(opciones, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                sitio = sitios.get(which);
+
                                 if (which == 0) {
+                                    sitio=sitios.get(0);
                                     txtSitioRegreso.setText("");
                                 } else {
+                                    sitio = sitios.get(which-1);
                                     txtSitioRegreso.setText(opciones[which]);
                                 }
                             }
@@ -311,7 +313,7 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                     if (properties.getBoolean(getString(R.string.logueado), false))
                     {
                         final String celular = properties.getString(getString(R.string.usuario), "desconocido");
-                        final Regreso regreso = new Regreso(celular,horaRegreso,nombre, Integer.valueOf(cupos),sitio, Integer.valueOf(tiempo));
+                        final Regreso regreso = new Regreso(celular,horaRegreso,nombre, Integer.valueOf(cupos),sitio, Integer.valueOf(tiempo),id_evento);
                         final FirebaseDatabase database = FirebaseDatabase.getInstance();
                         final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(regreso.darRutaElemento(id_evento));
                         databaseReference.addListenerForSingleValueEvent(

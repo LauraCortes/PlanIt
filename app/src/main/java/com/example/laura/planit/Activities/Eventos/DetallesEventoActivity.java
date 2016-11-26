@@ -37,6 +37,7 @@ import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.Modelos.SondeoLugares;
 import com.example.laura.planit.Modelos.Usuario;
 import com.example.laura.planit.R;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -119,7 +120,6 @@ public class DetallesEventoActivity extends AppCompatActivity
         lblLugar= (TextView)findViewById(R.id.detalles_lugar_evento);
 
         layoutDetallesRegreso = (LinearLayout)findViewById(R.id.detalles_detalles_regreso);
-
         lblRegresoNoDefinido= (TextView)findViewById(R.id.lbl_detalles_reg_no_def);
         lblRegresoLugar= (TextView)findViewById(R.id.lbl_detalles_destino_regreso);
         lblRegresoHora=(TextView)findViewById(R.id.lbl_detalles_hora_regreso);
@@ -131,6 +131,15 @@ public class DetallesEventoActivity extends AppCompatActivity
         btnAceptar=(Button)findViewById(R.id.btn_detalles_aceptar);
         btnVerInvitados=(Button)findViewById(R.id.btn_detalles_ver_invitados);
         btnSeleccionarRegreso=(Button)findViewById(R.id.btn_detalles_seleccionar_regreso);
+        btnSeleccionarRegreso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(contexto, RegresosActivity.class);
+                intent.putExtra("id_evento",id_evento);
+                startActivity(intent);
+            }
+        });
+
         btnCrearRegreso=(Button)findViewById(R.id.btn_detalles_crear_regreso);
         btnCrearRegreso.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,13 +152,27 @@ public class DetallesEventoActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 if(regreso!=null) {
-                    String mensaje="";
+                    AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                    builder.setTitle("Pasajeros");
+                    builder.setCancelable(true);
+                    builder.setNegativeButton("Cancelar", null);
+                    final String[] mensaje= new String[regreso.getCompartido().size()];
                     if(regreso.getCompartido()!=null) {
+
                         for (int i = 0; i < regreso.getCompartido().size(); i++) {
-                            mensaje += "/n" + regreso.getCompartido().get(i);
+                            mensaje[i]=regreso.getCompartido().get(i)+"\n";
                         }
+                        System.out.println(regreso.getCompartido());
                     }
-                    MainActivity.mostrarMensaje(contexto, "Participantes", mensaje);
+                    builder.setItems(mensaje, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
+                            intent.setData(Uri.parse("tel:"+mensaje[which]));
+                            startActivity(intent);
+                        }
+                    });
+                    builder.show();
             }
         }});
         btnVotar =(Button)findViewById(R.id.btn_votar);
@@ -190,7 +213,52 @@ public class DetallesEventoActivity extends AppCompatActivity
 
                     }
                 });
+        DatabaseReference databaseReference2 = database.getReferenceFromUrl(Constants.FIREBASE_URL).child("regresos/"+id_evento);
+        databaseReference2.addChildEventListener(
+                new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Regreso actual = dataSnapshot.getValue(Regreso.class);
+                        List<String> agregados=actual.getCompartido();
+                        if(agregados!=null){
+                            for(int i = 0;i<agregados.size();i++)
+                            {
+                                if(agregados.get(i).equals(celular))
+                                {
+                                    System.out.println(actual.getCupos());
+                                    unirRegreso(actual);
+                                    regreso=actual;
+                                }
+                            }
+                        }
+                    }
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s)
+                    {
+                        Regreso actual = dataSnapshot.getValue(Regreso.class);
+                        List<String> agregados=actual.getCompartido();
+                        if(agregados!=null){
+                            for(int i = 0;i<agregados.size();i++)
+                            {
+                                if(agregados.get(i).equals(celular))
+                                {
+
+                                 unirRegreso(actual);
+                                    regreso=actual;
+                    }}}}
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    }
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
+
 
     @Override
     protected void onStart() {
@@ -495,6 +563,38 @@ public class DetallesEventoActivity extends AppCompatActivity
         onBackPressed();
     }
 
+    public void unirRegreso(final Regreso regreso)
+    {
+                    btnCrearRegreso.setVisibility(View.GONE);
+                    lblRegresoNoDefinido.setText("");
+                    lblRegresoLugar.setText(regreso.getDestino().getDireccion());
+                    lblRegresoMedio.setText(regreso.getMedioRegreso());
+                    lblCelularDuenio.setText(regreso.getNumeroDueño());
+                    lblRegresoTiempo.setText(String.valueOf(regreso.getTiempoEstimado()));
+                    lblCupos.setText(String.valueOf(regreso.getCupos()));
+                    SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
+                    lblRegresoHora.setText(timeFormatter.format(regreso.getHoraRegreso()));
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child("usuarios/"+regreso.getNumeroDueño());
+                    databaseReference.addListenerForSingleValueEvent(
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot)
+                                {
+                                    Usuario usuario = dataSnapshot.getValue(Usuario.class);
+
+                                    if(usuario!=null)
+                                        lblDuenioRegreso.setText(usuario.getNombre());
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            }
+                    );
+    }
+
     public void editarRegreso(final Regreso regreso)
     {
         btnCrearRegreso.setText("Editar regreso");
@@ -512,30 +612,12 @@ public class DetallesEventoActivity extends AppCompatActivity
         btnSeleccionarRegreso.setVisibility(View.GONE);
         lblRegresoLugar.setText(regreso.getDestino().getDireccion());
         lblRegresoMedio.setText(regreso.getMedioRegreso());
-        lblCelularDuenio.setText(regreso.getNumeroDueño());
+        lblCelularDuenio.setVisibility(View.GONE);
         lblRegresoTiempo.setText(String.valueOf(regreso.getTiempoEstimado()));
         lblCupos.setText(String.valueOf(regreso.getCupos()));
         SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
         lblRegresoHora.setText(timeFormatter.format(regreso.getHoraRegreso()));
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child("usuarios/"+regreso.getNumeroDueño());
-        databaseReference.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot)
-                    {
-                        Usuario usuario = dataSnapshot.getValue(Usuario.class);
-
-                        if(usuario!=null)
-                            lblDuenioRegreso.setText(usuario.getNombre());
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                }
-        );
+        lblDuenioRegreso.setVisibility(View.GONE);
     }
 
     protected void lanzarActivityAgregarRegreso(View view)
