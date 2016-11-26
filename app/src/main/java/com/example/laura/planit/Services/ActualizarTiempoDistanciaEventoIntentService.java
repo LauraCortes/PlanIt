@@ -174,13 +174,14 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
                         if(dataSnapshot.exists())
                         {
                             System.out.println("El lugar del evento está definido");
+                            long now = System.currentTimeMillis();
 
                             Sitio lugarEvento=dataSnapshot.getValue(Sitio.class);
                             String direccion = "https://maps.googleapis.com/maps/api/distancematrix/json?";
                             String origen ="origins="+ubicacion.getLatitude()+","+ubicacion.getLongitude();
                             String destino = "&destinations="+lugarEvento.getLatitud()+","+lugarEvento.getLongitud();
                             String key="&key=AIzaSyDmNOb3rqTWW0KqApkCunFvMwqdBbKZ5Dw";
-                            String opciones="&language=es&traffic_model=pessimistic";
+                            String opciones="&language=es&traffic_model=pessimistic&departure_time="+now;
 
                             peticion = direccion+origen+destino+key+opciones;
                             new Request().execute();
@@ -214,6 +215,7 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
             java.net.URL url = null;
             try
             {
+                System.out.println("Peticion:\n"+peticion);
                 url = new URL(peticion);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
