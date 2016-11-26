@@ -2,15 +2,20 @@ package com.example.laura.planit.Services;
 
 import android.app.DownloadManager;
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Vibrator;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import com.example.laura.planit.Activities.Main.Constants;
@@ -52,6 +57,8 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
     private JSONObject respuesta;
     private  String peticion;
     private String celular;
+
+    private boolean notificacionLanzada=false;
 
     public ActualizarTiempoDistanciaEventoIntentService()
     {
@@ -243,6 +250,7 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
                     JSONObject detalles = elements.getJSONArray("elements").getJSONObject(0);
                     String distancia =detalles.getJSONObject("distance").getString("text");
                     String duracion = detalles.getJSONObject("duration").getString("text");
+                    int distanciaMetros = detalles.getJSONObject("distance").getInt("value");
                     System.out.println("RESULTADO->"+destino+"-"+origen+": "+distancia+", "+duracion);
 
                     HashMap<String,Object> hijos = new HashMap<>();
@@ -251,6 +259,34 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
 
                     FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL
                             +Constants.URL_PARTICIPANTES_EVENTO+eventoMasCercano.getId_evento()).child(celular).updateChildren(hijos);
+
+                    if(distanciaMetros<=100 && !notificacionLanzada)
+                    {
+                        notificacionLanzada=true;
+                        Intent intentNotificarLLegada = new Intent(contexto, NotificarLlegadaEventoIntentService.class);
+                        intentNotificarLLegada.putExtra(Constants.EXTRA_CELULAR, celular);
+                        PendingIntent pendingIntent = PendingIntent.getService(contexto, 0, intentNotificarLLegada, 0);
+                        NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                        Drawable icon = ContextCompat.getDrawable(contexto, R.drawable.llegada_evento);
+                        icon.setBounds(0, 0, 25, 25);
+                        Notification notificacion = new NotificationCompat.Builder(contexto)
+                                .setSmallIcon(R.drawable.logo_planit)
+                                .setContentTitle("Llegada a evento")
+                                .setContentText("Cuéntale a tus amigos que ya llegaste")
+                                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                                .setAutoCancel(false)
+                                .addAction(R.drawable.check, "Ya llegué", pendingIntent)
+                                .setPriority(Notification.PRIORITY_MAX)
+                                .build();
+
+                        //Tono de notificación
+                        notificacion.sound = Uri.parse("android.resource://" + contexto.getPackageName() + "/" + R.raw.notificacion_llegada);
+                        //Vibración
+                        long[] vibrate = {0, 100, 200, 100};
+                        notificacion.vibrate = vibrate;
+                        // Builds the notification and issues it.
+                        mNotifyMgr.notify(MainActivity.ID_NOTIFICACION_LLEGADA, notificacion);
+                    }
                 }
 
 
