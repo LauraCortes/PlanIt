@@ -21,6 +21,7 @@ public class ParticipanteEvento implements Serializable
     public boolean llego_evento=false;
     public int tiempo_llegada=60;
     public String nombre;
+    public String celular;
     //En kilometros
     public int distancia=30;
 
@@ -104,6 +105,14 @@ public class ParticipanteEvento implements Serializable
         this.nombre = nombre;
     }
 
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
     @Exclude
     public Map<String,Object> toMap()
     {
@@ -117,6 +126,7 @@ public class ParticipanteEvento implements Serializable
         result.put("tiempo_llegada",tiempo_llegada);
         result.put("distancia",distancia);
         result.put("nombre",nombre);
+        result.put("celular",celular);
         return result;
     }
 

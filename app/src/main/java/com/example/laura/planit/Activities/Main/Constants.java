@@ -27,10 +27,12 @@ public final class Constants
     //Extras entre contextos
     public final static String EXTRA_ID_EVENTO="id_evento";
     public final static String EXTRA_SITIOS_EVENTO="extras sitio evento";
-    public static String EXTRA_CELULAR="celular";
-
+    public final static String EXTRA_CELULAR="celular";
+    public final static String EXTRA_SMS="Mensaje sms";
+    public final static String EXTRA_CONTACTOS_SMS ="Contactos extra";
     //Otros
     public final static String DESCONOCIDO="desconocido";
 
 
+    public static final String LINK_DESCARGA ="http://bit.ly/planit_app";
 }

@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,6 +33,7 @@ import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.Modelos.SondeoLugares;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Activities.Main.Constants;
+import com.example.laura.planit.Services.MensajesService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +44,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,7 +71,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
     public static int INVITAR_AMIGOS = 1;
     int CREAR_ENCUESTA_LUGARES = 23;
-    int CREAR_LUGAR=12;
+    int CREAR_LUGAR = 12;
 
     Context contexto;
 
@@ -92,6 +96,9 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     private List<Sitio> sitios;
     private List<Sitio> sitiosEncuesta;
     private String[] itemsSeleccionarSitio;
+
+    private List<Contacto> invitados_no_registrados = new ArrayList<>();
+    private int cantidad_invitados_no_registrados = 0;
 
     private Evento nuevoEvento;
 
@@ -204,8 +211,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                         GenericTypeIndicator<HashMap<String, Sitio>> t = new GenericTypeIndicator<HashMap<String, Sitio>>() {
                         };
                         HashMap<String, Sitio> map = dataSnapshot.getValue(t);
-                        if (map != null)
-                        {
+                        if (map != null) {
                             ArrayList<Sitio> nuevos = new ArrayList(map.values());
                             sitios = nuevos;
                             itemsSeleccionarSitio = new String[sitios.size()];
@@ -267,7 +273,7 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intentAgregarSitio = new Intent(contexto, AgregarSitioActivity.class);
-                startActivityForResult (intentAgregarSitio,CREAR_LUGAR);
+                startActivityForResult(intentAgregarSitio, CREAR_LUGAR);
             }
         });
         builder.setItems(itemsSeleccionarSitio,
@@ -357,58 +363,56 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == RESULT_OK)
-        {
-            if(requestCode==CREAR_LUGAR)
-            {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CREAR_LUGAR) {
                 //TODO
-               //Lanzar popUp o seleccionar sitio
-            }
-            else
-            {
+                //Lanzar popUp o seleccionar sitio
+            } else {
                 if (requestCode == INVITAR_AMIGOS) {
                     invitados = (List<Contacto>) data.getExtras().get("Invitados");
                 } else if (requestCode == CREAR_ENCUESTA_LUGARES) {
                     sitiosEncuesta = (List<Sitio>) data.getSerializableExtra(Constants.EXTRA_SITIOS_EVENTO);
                     invitados = (List<Contacto>) data.getSerializableExtra(Constants.INVITADOS_EVENTO);
                 }
-                nuevoEvento.setCantidad_invitados(invitados.size()+1);
+                nuevoEvento.setCantidad_invitados(invitados.size() + 1);
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference dbReference = database.getReferenceFromUrl(Constants.FIREBASE_URL);
                 key_evento = dbReference.child(Constants.URL_EVENTOS).push().getKey();
 
                 Map<String, Object> childUpdates = new HashMap<>();
                 //Agrega el evento en la tabla principal
-                childUpdates.put(Constants.URL_EVENTOS+key_evento,nuevoEvento.toMap());
+                childUpdates.put(Constants.URL_EVENTOS + key_evento, nuevoEvento.toMap());
 
-                ResumenEvento resumen = new ResumenEvento(nuevoEvento.getNombre(),nombreOrganizador,fechaEvento.getTimeInMillis(),key_evento);
+                ResumenEvento resumen = new ResumenEvento(nuevoEvento.getNombre(), nombreOrganizador, fechaEvento.getTimeInMillis(), key_evento);
                 Map resumenMap = resumen.toMap();
                 //Agrega un resumen en mis Eventos
-                childUpdates.put(Constants.URL_MIS_EVENTOS+celular+"/"+key_evento,resumenMap);
+                childUpdates.put(Constants.URL_MIS_EVENTOS + celular + "/" + key_evento, resumenMap);
 
                 //Agrega al administrador como participante
                 ParticipanteEvento nuevoParticipante = new ParticipanteEvento(nombreOrganizador);
-                childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO+key_evento+"/"+celular,nuevoParticipante.toMap());
+                nuevoParticipante.setCelular(celular);
+                childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO + key_evento + "/" + celular, nuevoParticipante.toMap());
 
-                for(Contacto invitadoActual : invitados)
-                {
+                for (Contacto invitadoActual : invitados) {
                     nuevoParticipante = new ParticipanteEvento(invitadoActual.getNombre());
+                    nuevoParticipante.setCelular(invitadoActual.getNumeroTelefonico());
                     //Agrega cada participante al evento
-                    childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO+key_evento+"/"+invitadoActual.getNumeroTelefonico(),nuevoParticipante.toMap());
+                    childUpdates.put(Constants.URL_PARTICIPANTES_EVENTO + key_evento + "/" + invitadoActual.getNumeroTelefonico(), nuevoParticipante.toMap());
                     //Agrega un resumen en invitación a cada contacto
-                    childUpdates.put(Constants.URL_INVITACIONES_EVENTO+invitadoActual.getNumeroTelefonico()+"/"+key_evento,resumenMap);
+                    childUpdates.put(Constants.URL_INVITACIONES_EVENTO + invitadoActual.getNumeroTelefonico() + "/" + key_evento, resumenMap);
+
                 }
 
-                if(sitiosEncuesta!=null)
-                {
+                if (sitiosEncuesta != null) {
 
                     //Crea la encuesta
-                    SondeoLugares sondeo = new SondeoLugares(invitados.size()+1,sitiosEncuesta);
-                    childUpdates.put(Constants.URL_SONDEOS+key_evento,sondeo.toMap());
+                    SondeoLugares sondeo = new SondeoLugares(invitados.size() + 1, sitiosEncuesta);
+                    childUpdates.put(Constants.URL_SONDEOS + key_evento, sondeo.toMap());
                 }
 
                 dbReference.updateChildren(childUpdates);
-                finish();
+                verificarRegistrados();
+                btnContinuar.setVisibility(View.GONE);
             }
 
         } else {
@@ -418,5 +422,99 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
 
     }
 
+    public void enviarInvitacionesSMS() {
+        final String msj = nombreOrganizador + " te ha invitado al evento: " + nuevoEvento.getNombre() + ". Descarga planit y mira toda la info. " + Constants.LINK_DESCARGA;
+        if (cantidad_invitados_no_registrados > 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+            builder.setTitle("Invitaciones");
+            builder.setMessage(cantidad_invitados_no_registrados + " amigos no están registrados en PlanIt. Desea invitarlos por medio de mensajes de texto?");
+            builder.setCancelable(false);
+            builder.setOnDismissListener(
+                    new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            finish();
+                        }
+                    }
+            );
+            builder.setOnKeyListener(
+                    new DialogInterface.OnKeyListener() {
+                        @Override
+                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                            finish();
+                            return true;
+                        }
+                    }
+            );
+            builder.setNegativeButton("OMITIR", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            builder.setPositiveButton("ENVIAR SMS", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intentoSMS = new Intent(contexto, MensajesService.class);
+                    intentoSMS.putExtra(Constants.EXTRA_SMS, msj);
+                    intentoSMS.putExtra(Constants.EXTRA_CONTACTOS_SMS, (Serializable) invitados_no_registrados);
+                    contexto.startService(intentoSMS);
+                    finish();
+                }
+            });
+            builder.setItems(itemsSeleccionarSitio,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sitioEvento = sitios.get(which);
+                            if (sitioEvento != null) {
+                                btnSitio.setText("Cambiar");
+                                lblSitio.setText(sitioEvento.toString());
+                            }
+                        }
+                    });
+            builder.show();
+        }
+
+    }
+
+    private void verificarRegistrados()
+    {
+        int i = 0;
+        for (final Contacto invitadoActual : invitados) {
+            i++;
+            DatabaseReference refParticipanteActual = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL + Constants.URL_USUARIOS)
+                    .child(invitadoActual.getNumeroTelefonico()).child("nombre");
+            final int finalI = i;
+            refParticipanteActual.addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            System.out.println(finalI);
+                            if (dataSnapshot.exists()) {
+                                //Ponerle el nombre
+                                FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL + Constants.URL_PARTICIPANTES_EVENTO)
+                                        .child(key_evento).child(invitadoActual.getNumeroTelefonico()).child("nombre").setValue(dataSnapshot.getValue());
+                            } else {
+                                //Invitar sms
+                                invitados_no_registrados.add(invitadoActual);
+                                cantidad_invitados_no_registrados++;
+                                System.out.println("Contacto no registrado->" + invitadoActual.getNombre());
+                            }
+                            if (finalI == invitados.size()) {
+                                enviarInvitacionesSMS();
+                                System.out.println("El dialogo debería estar mostrado");
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    }
+            );
+        }
+    }
 
 }

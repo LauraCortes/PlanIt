@@ -452,7 +452,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:onClick="regresar"
+        android:onClick="marcarLlegada"
         android:text="Voy camino al evento" />
 
     <include layout="@layout/separador_vertical"/>

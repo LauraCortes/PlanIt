@@ -65,6 +65,15 @@ public class DetallesEventoActivity extends AppCompatActivity
     private String celular;
     private Regreso regreso;
 
+    private int procesoCicloActual=0;
+
+    private final static int NO_SALIDO=0;
+    private final static int CAMINO_EVENTO=1;
+    private final static int EN_EVENTO=2;
+    private final static int CAMINO_CASA=3;
+    private final static int EN_CASA=4;
+
+
     Context contexto;
 
     private List<OpcionSondeo> opcionesVotacion=new ArrayList<>();
@@ -571,25 +580,53 @@ public class DetallesEventoActivity extends AppCompatActivity
                         int casa=0;
                         for(ParticipanteEvento participante : participantesEvento)
                         {
+                            System.out.println("******"+participante.toString());
+                            System.out.println("NULL------------>"+participante.getCelular()==null);
                             if(participante.llego_casa)
                             {
                                 casa++;
+                                if(participante.getCelular().equals(celular))
+                                {
+                                    btnCamino.setVisibility(View.GONE);
+                                    procesoCicloActual=EN_CASA;
+                                }
                             }
                             else if(participante.camino_casa)
                             {
                                 camino_casa++;
+                                if(participante.getCelular().equals(celular))
+                                {
+                                    btnCamino.setText("Ya estoy en casa");
+                                    procesoCicloActual=CAMINO_CASA;
+                                }
                             }
                             else if(participante.llego_evento)
                             {
                                 en_evento++;
+                                if(participante.getCelular().equals(celular))
+                                {
+                                    btnCamino.setText("Voy camino a casa");
+                                    procesoCicloActual=EN_EVENTO;
+                                }
                             }
                             else if (participante.camino_evento)
                             {
                                 camino_evento++;
+                                if(participante.getCelular().equals(celular))
+                                {
+                                    btnCamino.setText("Llegué al evento");
+                                    procesoCicloActual=CAMINO_EVENTO;
+                                }
                             }
                             else
                             {
                                 no_salido++;
+                                if(participante.getCelular().equals(celular))
+                                {
+                                    btnCamino.setText("Voy camino al evento");
+                                    procesoCicloActual=NO_SALIDO;
+                                }
+
                             }
                         }
 
@@ -693,5 +730,32 @@ public class DetallesEventoActivity extends AppCompatActivity
     {
         mostrarDialogoParticipantesEvento();
     }
+
+
+
+    public void marcarLlegada(View v)
+    {
+        DatabaseReference refParticipante = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+
+                Constants.URL_PARTICIPANTES_EVENTO+id_evento).child(celular);
+        if(procesoCicloActual==NO_SALIDO)
+        {
+            refParticipante.child("camino_evento").setValue(true);
+        }
+        else if (procesoCicloActual==CAMINO_EVENTO)
+        {
+            refParticipante.child("llego_evento").setValue(true);
+        }
+        else if (procesoCicloActual==EN_EVENTO)
+        {
+            refParticipante.child("camino_casa").setValue(true);
+        }
+        else if (procesoCicloActual==CAMINO_CASA)
+        {
+            refParticipante.child("llego_casa").setValue(true);
+        }
+
+    }
+
+
 
 }

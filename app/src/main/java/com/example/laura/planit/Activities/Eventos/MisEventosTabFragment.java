@@ -1,22 +1,31 @@
 package com.example.laura.planit.Activities.Eventos;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.laura.planit.Activities.Main.LoginActivity;
 import com.example.laura.planit.Activities.Main.MainActivity;
+import com.example.laura.planit.Activities.Sitios.SitioRecyclerViewAdapter;
+import com.example.laura.planit.Fragments.ElementRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Modelos.ResumenEvento;
+import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Activities.Main.Constants;
+import com.example.laura.planit.Services.MensajesService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +81,12 @@ public class MisEventosTabFragment extends TabFragment
             }
         });
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(Constants.URL_MIS_EVENTOS + celular);
         databaseReference.keepSynced(true);
@@ -99,8 +115,6 @@ public class MisEventosTabFragment extends TabFragment
                     }
                 }
         );
-
-        return view;
     }
 
     @Override
@@ -110,6 +124,37 @@ public class MisEventosTabFragment extends TabFragment
         i.putExtra("editar", false);
         i.putExtra("titulo", "Agregar evento");
         startActivity(i);
+    }
+
+    public void eliminarElementosVista(View view)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Eliminar eventos");
+        builder.setMessage("Está seguro que desea eliminar los eventos seleccionados?");
+        builder.setCancelable(false);
+        builder.setNegativeButton("CANCELAR", null);
+        builder.setPositiveButton("ELIMINAR", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_MIS_EVENTOS).child(celular);
+                boolean eliminarTodos = elementos.size()==elementosSeleccionados.size();
+                for (ResumenEvento actual:(List<ResumenEvento>)elementosSeleccionados)
+                {
+                    ref.child(actual.getId_evento()).removeValue();
+                }
+                if(eliminarTodos)
+                {
+                    elementos=new ArrayList();
+                    ((ElementRecyclerViewAdapter)adapter).swapData(new ArrayList());
+                    adapter.notifyDataSetChanged();
+                }
+                elementosSeleccionados.clear();
+                cambiarIconoFAB();
+            }
+        }
+        );
+        builder.show();
+
     }
 
 

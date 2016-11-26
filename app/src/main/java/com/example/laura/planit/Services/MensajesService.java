@@ -2,90 +2,82 @@ package com.example.laura.planit.Services;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Service;
+import android.app.IntentService;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.widget.Toast;
 
+import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Modelos.Contacto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Usuario on 18/09/2016.
  */
-public class MensajesService extends Service
+public class MensajesService extends IntentService
 {
-    private ArrayList<Contacto> contactos;
+    private List<Contacto> contactos;
     private String msj;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS=1;
-    public MensajesService() {
-    }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
+    public MensajesService()
     {
-        String requerimiento = intent.getExtras().getString("Requerimiento");
-        if(requerimiento!=null)
+        super("");
+    }
+
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     *
+     * @param name Used to name the worker thread, important only for debugging.
+     */
+    public MensajesService(String name) {
+        super(name);
+    }
+
+
+
+
+    @Override
+    protected void onHandleIntent(Intent intent)
+    {
+        contactos = (List<Contacto>)intent.getExtras().get(Constants.EXTRA_CONTACTOS_SMS);
+        msj = intent.getExtras().getString(Constants.EXTRA_SMS);
+        if(contactos!=null && msj!=null)
         {
-            if(requerimiento.equals("EnviarALista"))
-            {
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.SEND_SMS)
-                        != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.SEND_SMS)
+                    != PackageManager.PERMISSION_GRANTED) {
 
-                    if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) getApplicationContext(),
-                            Manifest.permission.SEND_SMS)) {
-                        showSnackBar();
-                    } else {
-                        ActivityCompat.requestPermissions((Activity)getApplicationContext(),
-                                new String[]{Manifest.permission.SEND_SMS},
-                                MY_PERMISSIONS_REQUEST_SEND_SMS);
+                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) getApplicationContext(),
+                        Manifest.permission.SEND_SMS)) {
+                    showSnackBar();
+                } else {
+                    ActivityCompat.requestPermissions((Activity)getApplicationContext(),
+                            new String[]{Manifest.permission.SEND_SMS},
+                            MY_PERMISSIONS_REQUEST_SEND_SMS);
 
-                    }
                 }
-                else
-                {
-                    contactos = (ArrayList<Contacto>)intent.getExtras().get("Contactos");
-                    msj = intent.getExtras().getString("Msj");
-                    SmsManager smsManager = SmsManager.getDefault();
-                    for(Contacto contacto:contactos)
-                    {
-                        ArrayList<String> parts = smsManager.divideMessage(msj);
-                        smsManager.sendMultipartTextMessage(contacto.getNumeroTelefonico(), null, parts, null, null);
-                    }
-                    Toast.makeText(this,contactos.size()+" elementos fueron invitados mediante SMS",Toast.LENGTH_LONG).show();
-                }
-
             }
-
-
+            else
+            {
+                SmsManager smsManager = SmsManager.getDefault();
+                for(Contacto contacto:contactos)
+                {
+                    ArrayList<String> parts = smsManager.divideMessage(msj);
+                    smsManager.sendMultipartTextMessage(contacto.getNumeroTelefonico(), null, parts, null, null);
+                }
+                Toast.makeText(this,"Se enviaron "+contactos.size()+" SMS",Toast.LENGTH_LONG).show();
+            }
         }
-        onDestroy();
-        return super.onStartCommand(intent, flags, startId);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 
     private void showSnackBar() {
         openSettings();
