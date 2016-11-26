@@ -252,7 +252,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="Taxi|uber..." />
+                android:text="" />
 
             <include layout="@layout/vacio"/>
 
@@ -293,7 +293,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="10pm" />
+                android:text="" />
 
             <include layout="@layout/vacio" />
 
@@ -326,7 +326,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:lines="3"
-                android:text="Dirección......" />
+                android:text="" />
 
         </LinearLayout>
 
@@ -356,7 +356,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="35" />
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
@@ -385,7 +385,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="Dueño del regreso" />
+                android:text="" />
 
             <include layout="@layout/vacio" />
 
@@ -402,7 +402,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="3138238039" />
+                android:text="" />
 
             <include layout="@layout/vacio" />
 

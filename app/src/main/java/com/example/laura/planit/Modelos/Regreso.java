@@ -21,11 +21,14 @@ public class Regreso implements Serializable {
     private int tiempoEstimado;
     private List<String> compartido;
 
+    @Exclude
+    public String id_evento;
+
     public Regreso() {
 
     }
 
-    public Regreso(String numeroDueño, Date horaRegreso, String medioRegreso, int cupos, Sitio destino, int tiempoEstimado)
+    public Regreso(String numeroDueño, Date horaRegreso, String medioRegreso, int cupos, Sitio destino, int tiempoEstimado, String id_evento)
     {
         this.numeroDueño=numeroDueño;
         this.horaRegreso=horaRegreso;
@@ -34,7 +37,7 @@ public class Regreso implements Serializable {
         this.destino=destino;
         this.tiempoEstimado=tiempoEstimado;
         compartido=new ArrayList<String>();
-
+        this.id_evento=id_evento;
     }
 
     public String getNumeroDueño() {
@@ -98,7 +101,14 @@ public class Regreso implements Serializable {
     {
         if(cupos>0) {
             cupos--;
-            compartido.add(numero);
+            if(compartido!=null) {
+                compartido.add(numero);
+            }
+            else
+            {
+                compartido=new ArrayList<String>();
+                compartido.add(numero);
+            }
         }
     }
 
