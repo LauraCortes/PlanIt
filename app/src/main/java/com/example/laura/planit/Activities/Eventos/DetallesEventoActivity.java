@@ -831,22 +831,22 @@ public class DetallesEventoActivity extends AppCompatActivity
                 Constants.URL_PARTICIPANTES_EVENTO+id_evento).child(celular);
         if(procesoCicloActual==NO_SALIDO)
         {
-            refParticipante.child(Movimiento.CAMINO_EVENTO).setValue(true);
+            refParticipante.child("camino_evento").setValue(true);
             movimientoUsuario.setDescripcion(Movimiento.CAMINO_EVENTO);
         }
         else if (procesoCicloActual==CAMINO_EVENTO)
         {
-            refParticipante.child(Movimiento.LLEGO_EVENTO).setValue(true);
+            refParticipante.child("llego_evento").setValue(true);
             movimientoUsuario.setDescripcion(Movimiento.LLEGO_EVENTO);
         }
         else if (procesoCicloActual==EN_EVENTO)
         {
-            refParticipante.child(Movimiento.CAMINO_CASA).setValue(true);
+            refParticipante.child("camino_casa").setValue(true);
             movimientoUsuario.setDescripcion(Movimiento.CAMINO_CASA);
         }
         else if (procesoCicloActual==CAMINO_CASA)
         {
-            refParticipante.child(Movimiento.LLEGO_CASA).setValue(true);
+            refParticipante.child("llego_casa").setValue(true);
             movimientoUsuario.setDescripcion(Movimiento.LLEGO_CASA);
         }
 

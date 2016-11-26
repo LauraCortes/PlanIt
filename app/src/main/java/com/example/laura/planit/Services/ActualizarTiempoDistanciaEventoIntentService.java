@@ -50,7 +50,9 @@ import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 public class ActualizarTiempoDistanciaEventoIntentService extends IntentService {
 
-    private ResumenEvento eventoMasCercano;
+    private ResumenEvento eventoMasCercano=null;
+    private ResumenEvento eventoProximoCercano=null;
+    private long deltaPositivoCercano=3600000;
     Vibrator vibrador;
     Context contexto;
     private Location ubicacion;
@@ -59,6 +61,7 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
     private String celular;
 
     private boolean notificacionLanzada=false;
+    private boolean notificacionProximoEvento =false;
 
     public ActualizarTiempoDistanciaEventoIntentService()
     {
@@ -108,12 +111,19 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
                                     for(ResumenEvento miEventoActual : map.values())
                                     {
                                         long deltaActual = Math.abs(miEventoActual.fecha-fechaActual);
-                                        System.out.println("Delta tiempo con "+miEventoActual.getNombre()+" -> "+(deltaActual/(1000*60))+"minutos");
                                         if(deltaActual< deltaCercano[0])
                                         {
                                             deltaCercano[0] =deltaActual;
                                             encontrado[0] =miEventoActual;
                                             eventoMasCercano=miEventoActual;
+                                        }
+                                        long deltaPositivo = miEventoActual.fecha-fechaActual;
+                                        System.out.println("* "+deltaActual);
+                                        System.out.println("Delta tiempo con "+miEventoActual.getNombre()+" -> "+(deltaPositivo/(1000*60))+"minutos  vs el menor existente "+deltaPositivoCercano);
+                                        if(deltaPositivo>=0 && deltaPositivo<=deltaPositivoCercano)
+                                        {
+                                            eventoProximoCercano=miEventoActual;
+                                            deltaPositivoCercano=deltaPositivo;
                                         }
                                     }
                                 }
@@ -131,12 +141,19 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
                                                     for(ResumenEvento invitacionActual : map.values())
                                                     {
                                                         long deltaActual = Math.abs(invitacionActual.fecha-fechaActual);
-                                                        System.out.println("Delta tiempo con "+invitacionActual.getNombre()+" -> "+(deltaActual/(1000*60))+"minutos");
                                                         if(deltaActual< deltaCercano[0])
                                                         {
                                                             deltaCercano[0] =deltaActual;
                                                             encontrado[0] =invitacionActual;
                                                             eventoMasCercano=invitacionActual;
+                                                        }
+                                                        long deltaPositivo = invitacionActual.fecha-fechaActual;
+                                                        System.out.println("* "+deltaActual);
+                                                        System.out.println("Delta tiempo con "+invitacionActual.getNombre()+" -> "+(deltaPositivo/(1000*60))+"minutos  vs el menor existente "+deltaPositivoCercano);
+                                                        if(deltaPositivo>=0 && deltaPositivo<=deltaPositivoCercano)
+                                                        {
+                                                            eventoProximoCercano=invitacionActual;
+                                                            deltaPositivoCercano=deltaPositivo;
                                                         }
                                                     }
                                                 }
@@ -146,6 +163,7 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
                                                     System.out.println("El evento mas cercano es "+eventoMasCercano.getNombre());
                                                     actualizarTiempoDistancia();
                                                 }
+                                                mostrarNotificacionProximoEvento();
 
                                             }
 
@@ -169,10 +187,47 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
     }
 
 
+    private void mostrarNotificacionProximoEvento()
+    {
+        System.out.println("Solicitó mostrar la notificación");
+        if(eventoProximoCercano!=null)
+        {
+            System.out.println("El evento "+eventoProximoCercano.getNombre()+" está próximo");
+            if(!notificacionProximoEvento)
+            {
+                notificacionProximoEvento=true;
+                Intent intentNotificarEvento = new Intent(contexto, NotificarCaminoEventoIntentService.class);
+                intentNotificarEvento.putExtra(Constants.EXTRA_CELULAR, celular);
+                intentNotificarEvento.putExtra(Constants.EXTRA_ID_EVENTO,eventoProximoCercano.getId_evento());
+                PendingIntent pendingIntent = PendingIntent.getService(contexto, 0, intentNotificarEvento, 0);
+                NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                Drawable icon = ContextCompat.getDrawable(contexto, R.drawable.llegada_evento);
+                icon.setBounds(0, 0, 25, 25);
+                Notification notificacion = new NotificationCompat.Builder(contexto)
+                        .setSmallIcon(R.drawable.logo_planit)
+                        .setContentTitle("Se acerca "+eventoProximoCercano.getNombre())
+                        .setContentText("Cuéntale a tus amigos que ya vas en camino")
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setAutoCancel(false)
+                        .addAction(R.drawable.check, "Voy en camino", pendingIntent)
+                        .setPriority(Notification.PRIORITY_MAX)
+                        .build();
+
+                //Tono de notificación
+                notificacion.sound = Uri.parse("android.resource://" + contexto.getPackageName() + "/" + R.raw.notificacion_llegada);
+                //Vibración
+                long[] vibrate = {0, 100, 200, 100};
+                notificacion.vibrate = vibrate;
+                // Builds the notification and issues it.
+                mNotifyMgr.notify(MainActivity.ID_NOTIFICACION_LLEGADA, notificacion);
+            }
+        }
+    }
+
+
 
     private void actualizarTiempoDistancia()
     {
-        //TODO
         String referencia =Constants.FIREBASE_URL+Constants.URL_EVENTOS+eventoMasCercano.getId_evento()+"/lugar";
         System.out.println("Ref->"+referencia);
         FirebaseDatabase.getInstance().getReferenceFromUrl(referencia).addListenerForSingleValueEvent(
@@ -256,6 +311,7 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
                     HashMap<String,Object> hijos = new HashMap<>();
                     hijos.put("distancia",distancia);
                     hijos.put("tiempo_llegada",duracion);
+                    hijos.put("distancia_metros",distanciaMetros);
 
                     FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL
                             +Constants.URL_PARTICIPANTES_EVENTO+eventoMasCercano.getId_evento()).child(celular).updateChildren(hijos);

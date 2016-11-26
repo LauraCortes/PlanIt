@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
 
     private LocationManager locationManager = null;
 
-    private ResumenEvento eventoMasCercano=null;
 
 
     @Override

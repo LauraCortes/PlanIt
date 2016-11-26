@@ -130,14 +130,15 @@ public class NotificarLlegadaEventoIntentService extends IntentService {
 
                                                 //Valida que no haya marcado llegada previamente
 
-                                                FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_PARTICIPANTES_EVENTO)
-                                                        .child(eventoMasCercano.getId_evento()).child(celular).child("llego_evento").addListenerForSingleValueEvent(
+                                                DatabaseReference refParticipante= FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_PARTICIPANTES_EVENTO)
+                                                        .child(eventoMasCercano.getId_evento()).child(celular);
+                                                refParticipante.addListenerForSingleValueEvent(
                                                         new ValueEventListener() {
                                                             @Override
                                                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                if(dataSnapshot.exists() && !dataSnapshot.getValue(Boolean.class))
+                                                                if(dataSnapshot.exists() && !dataSnapshot.child("llego_evento").getValue(Boolean.class) && dataSnapshot.child("distancia_metros").getValue(Integer.class)<200)
                                                                 {
-                                                                    //No ha llegado
+                                                                    //No ha llegado y está a menos de 200 metros
 
                                                                     Uri tono  = Uri.parse("android.resource://"+ getApplicationContext().getPackageName() + "/" + R.raw.notificacion_confirmacion_llegada);
                                                                     Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), tono);

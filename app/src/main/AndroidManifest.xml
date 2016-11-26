@@ -43,6 +43,9 @@
             android:exported="false"/>
         <service android:name=".Services.NotificarLlegadaEventoIntentService"
             android:enabled="true"></service>
+        <service android:name=".Services.NotificarCaminoEventoIntentService"
+            android:enabled="true"
+            android:exported="false"/>
         <service android:name=".Services.ActualizarTiempoDistanciaEventoIntentService"
             android:exported="false"/>
         <service
