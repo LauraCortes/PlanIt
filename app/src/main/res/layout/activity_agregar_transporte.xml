@@ -39,16 +39,13 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:paddingEnd="100dp"
-            android:paddingStart="100dp"
+            android:maxWidth="200dp"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:src="@drawable/home_fondo"
             android:scaleType="centerInside"
             android:alpha=".50"
-            android:layout_marginTop="@dimen/card_margin"
             android:layout_gravity="center"
-            app:layout_collapseMode="parallax"
             android:layout_weight="3"/>
 
 
@@ -155,6 +152,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_weight="2"
             android:gravity="center">
 
