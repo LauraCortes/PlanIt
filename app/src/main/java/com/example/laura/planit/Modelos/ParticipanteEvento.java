@@ -19,11 +19,11 @@ public class ParticipanteEvento implements Serializable
     public long hora_llegada_propia=-1;
     public boolean llego_casa=false;
     public boolean llego_evento=false;
-    public int tiempo_llegada=60;
+    public String tiempo_llegada="60 min";
     public String nombre;
     public String celular;
     //En kilometros
-    public int distancia=30;
+    public String distancia="30 km";
 
     public ParticipanteEvento() {
     }
@@ -81,22 +81,6 @@ public class ParticipanteEvento implements Serializable
         this.llego_evento = llego_evento;
     }
 
-    public int getTiempo_llegada() {
-        return tiempo_llegada;
-    }
-
-    public void setTiempo_llegada(int tiempo_llegada) {
-        this.tiempo_llegada = tiempo_llegada;
-    }
-
-    public int getDistancia() {
-        return distancia;
-    }
-
-    public void setDistancia(int distancia) {
-        this.distancia = distancia;
-    }
-
     public String getNombre() {
         return nombre;
     }
@@ -111,6 +95,22 @@ public class ParticipanteEvento implements Serializable
 
     public void setCelular(String celular) {
         this.celular = celular;
+    }
+
+    public String getTiempo_llegada() {
+        return tiempo_llegada;
+    }
+
+    public void setTiempo_llegada(String tiempo_llegada) {
+        this.tiempo_llegada = tiempo_llegada;
+    }
+
+    public String getDistancia() {
+        return distancia;
+    }
+
+    public void setDistancia(String distancia) {
+        this.distancia = distancia;
     }
 
     @Exclude
@@ -149,7 +149,7 @@ public class ParticipanteEvento implements Serializable
         }
         else if(camino_evento)
         {
-            result+="Camino al evento ("+tiempo_llegada+" minutos, "+distancia+" km )";
+            result+="Camino al evento \n * "+tiempo_llegada+" - "+distancia+" ";
         }
         else
         {

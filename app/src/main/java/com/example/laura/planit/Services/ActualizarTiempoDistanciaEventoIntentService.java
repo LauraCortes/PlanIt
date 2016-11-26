@@ -51,6 +51,7 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
     private Location ubicacion;
     private JSONObject respuesta;
     private  String peticion;
+    private String celular;
 
     public ActualizarTiempoDistanciaEventoIntentService()
     {
@@ -79,7 +80,7 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
         {
             //Encuentra el evento más cercano
 
-            final String celular = intent.getStringExtra(Constants.EXTRA_CELULAR);
+            celular = intent.getStringExtra(Constants.EXTRA_CELULAR);
             if(celular!=null)
             {
                 Query misEventosOrdenadosFecha = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_MIS_EVENTOS).
@@ -243,6 +244,13 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
                     String distancia =detalles.getJSONObject("distance").getString("text");
                     String duracion = detalles.getJSONObject("duration").getString("text");
                     System.out.println("RESULTADO->"+destino+"-"+origen+": "+distancia+", "+duracion);
+
+                    HashMap<String,Object> hijos = new HashMap<>();
+                    hijos.put("distancia",distancia);
+                    hijos.put("tiempo_llegada",duracion);
+
+                    FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL
+                            +Constants.URL_PARTICIPANTES_EVENTO+eventoMasCercano.getId_evento()).child(celular).updateChildren(hijos);
                 }
 
 
