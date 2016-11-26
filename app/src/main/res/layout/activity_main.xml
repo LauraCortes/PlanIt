@@ -45,6 +45,15 @@
 
         </LinearLayout>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_microfono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="16dp"
+            android:src="@drawable/microfono"/>
+
         <include layout="@layout/contenido_pantalla_shake"/>
 
     </FrameLayout>
