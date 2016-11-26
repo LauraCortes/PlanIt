@@ -30,6 +30,7 @@ import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
 import com.example.laura.planit.Modelos.Evento;
+import com.example.laura.planit.Modelos.Movimiento;
 import com.example.laura.planit.Modelos.OpcionSondeo;
 import com.example.laura.planit.Modelos.ParticipanteEvento;
 import com.example.laura.planit.Modelos.Regreso;
@@ -820,24 +821,36 @@ public class DetallesEventoActivity extends AppCompatActivity
 
     public void marcarLlegada(View v)
     {
+
+        DatabaseReference refMovimientosUsuario =FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_MOVIMIENTOS).child(celular);
+
+        String keyMovimiento = refMovimientosUsuario.push().getKey();
+        Movimiento movimientoUsuario = new Movimiento(id_evento,evento.getNombre());
+
         DatabaseReference refParticipante = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+
                 Constants.URL_PARTICIPANTES_EVENTO+id_evento).child(celular);
         if(procesoCicloActual==NO_SALIDO)
         {
-            refParticipante.child("camino_evento").setValue(true);
+            refParticipante.child(Movimiento.CAMINO_EVENTO).setValue(true);
+            movimientoUsuario.setDescripcion(Movimiento.CAMINO_EVENTO);
         }
         else if (procesoCicloActual==CAMINO_EVENTO)
         {
-            refParticipante.child("llego_evento").setValue(true);
+            refParticipante.child(Movimiento.LLEGO_EVENTO).setValue(true);
+            movimientoUsuario.setDescripcion(Movimiento.LLEGO_EVENTO);
         }
         else if (procesoCicloActual==EN_EVENTO)
         {
-            refParticipante.child("camino_casa").setValue(true);
+            refParticipante.child(Movimiento.CAMINO_CASA).setValue(true);
+            movimientoUsuario.setDescripcion(Movimiento.CAMINO_CASA);
         }
         else if (procesoCicloActual==CAMINO_CASA)
         {
-            refParticipante.child("llego_casa").setValue(true);
+            refParticipante.child(Movimiento.LLEGO_CASA).setValue(true);
+            movimientoUsuario.setDescripcion(Movimiento.LLEGO_CASA);
         }
+
+        refMovimientosUsuario.child(keyMovimiento).setValue(movimientoUsuario);
 
     }
 

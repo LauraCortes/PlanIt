@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Activities.Main.MainActivity;
+import com.example.laura.planit.Modelos.Movimiento;
 import com.example.laura.planit.Modelos.ResumenEvento;
 import com.example.laura.planit.Modelos.Sitio;
 import com.example.laura.planit.R;
@@ -126,17 +127,46 @@ public class NotificarLlegadaEventoIntentService extends IntentService {
 
                                             if(eventoMasCercano!=null)
                                             {
-                                                Uri tono  = Uri.parse("android.resource://"+ getApplicationContext().getPackageName() + "/" + R.raw.notificacion_confirmacion_llegada);
-                                                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), tono);
-                                                r.play();
-                                                vibrador.vibrate(1000);
-                                                Toast.makeText(contexto,"Le avisamos a tus amigos que llegaste al evento "+eventoMasCercano.getNombre(),Toast.LENGTH_SHORT).show();
-                                                NotificationManager mNotifyMgr=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                                                mNotifyMgr.cancel(MainActivity.ID_NOTIFICACION_LLEGADA);
-                                                //Avisar que ya llegó al evento
 
-                                                FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL
-                                                        +Constants.URL_PARTICIPANTES_EVENTO+eventoMasCercano.getId_evento()).child(celular).child("llego_evento").setValue(true);
+                                                //Valida que no haya marcado llegada previamente
+
+                                                FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_PARTICIPANTES_EVENTO)
+                                                        .child(eventoMasCercano.getId_evento()).child(celular).child("llego_evento").addListenerForSingleValueEvent(
+                                                        new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                if(dataSnapshot.exists() && !dataSnapshot.getValue(Boolean.class))
+                                                                {
+                                                                    //No ha llegado
+
+                                                                    Uri tono  = Uri.parse("android.resource://"+ getApplicationContext().getPackageName() + "/" + R.raw.notificacion_confirmacion_llegada);
+                                                                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), tono);
+                                                                    r.play();
+                                                                    vibrador.vibrate(1000);
+                                                                    Toast.makeText(contexto,"Le avisamos a tus amigos que llegaste al evento "+eventoMasCercano.getNombre(),Toast.LENGTH_SHORT).show();
+                                                                    NotificationManager mNotifyMgr=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                                                    mNotifyMgr.cancel(MainActivity.ID_NOTIFICACION_LLEGADA);
+                                                                    //Avisar que ya llegó al evento
+                                                                    DatabaseReference refMovimientosUsuario =FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_MOVIMIENTOS).child(celular);
+
+                                                                    String keyMovimiento = refMovimientosUsuario.push().getKey();
+                                                                    Movimiento movimientoUsuario = new Movimiento(eventoMasCercano.getId_evento(),eventoMasCercano.getNombre());
+                                                                    movimientoUsuario.setDescripcion(Movimiento.LLEGO_EVENTO);
+                                                                    refMovimientosUsuario.child(keyMovimiento).setValue(movimientoUsuario);
+
+                                                                    FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL
+                                                                            +Constants.URL_PARTICIPANTES_EVENTO+eventoMasCercano.getId_evento()).child(celular).child("llego_evento").setValue(true);
+
+
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
+
+                                                            }
+                                                        }
+                                                );
 
                                             }
 

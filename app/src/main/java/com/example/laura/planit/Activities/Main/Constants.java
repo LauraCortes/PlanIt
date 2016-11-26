@@ -36,4 +36,5 @@ public final class Constants
 
     public static final String LINK_DESCARGA ="http://bit.ly/planit_app";
     public static final String EXTRA_UBICACION = "extra_ubicación" ;
+    public static final String URL_MOVIMIENTOS = "movimientos/";
 }
