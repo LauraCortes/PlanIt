@@ -661,8 +661,7 @@ public class DetallesEventoActivity extends AppCompatActivity
                         int casa=0;
                         for(ParticipanteEvento participante : participantesEvento)
                         {
-                            System.out.println("******"+participante.toString());
-                            System.out.println("NULL------------>"+participante.getCelular()==null);
+                            boolean usadoElemento =false;
                             if(participante.llego_casa)
                             {
                                 casa++;
@@ -670,42 +669,47 @@ public class DetallesEventoActivity extends AppCompatActivity
                                 {
                                     btnCamino.setVisibility(View.GONE);
                                     procesoCicloActual=EN_CASA;
+                                    usadoElemento=true;
                                 }
                             }
                             else if(participante.camino_casa)
                             {
                                 camino_casa++;
-                                if(participante.getCelular().equals(celular))
+                                if(participante.getCelular().equals(celular) && !usadoElemento)
                                 {
                                     btnCamino.setText("Ya estoy en casa");
                                     procesoCicloActual=CAMINO_CASA;
+                                    usadoElemento=true;
                                 }
                             }
                             else if(participante.llego_evento)
                             {
                                 en_evento++;
-                                if(participante.getCelular().equals(celular))
+                                if(participante.getCelular().equals(celular) && !usadoElemento)
                                 {
                                     btnCamino.setText("Voy camino a casa");
                                     procesoCicloActual=EN_EVENTO;
+                                    usadoElemento=true;
                                 }
                             }
                             else if (participante.camino_evento)
                             {
                                 camino_evento++;
-                                if(participante.getCelular().equals(celular))
+                                if(participante.getCelular().equals(celular) && !usadoElemento)
                                 {
                                     btnCamino.setText("Llegué al evento");
                                     procesoCicloActual=CAMINO_EVENTO;
+                                    usadoElemento=true;
                                 }
                             }
                             else
                             {
                                 no_salido++;
-                                if(participante.getCelular().equals(celular))
+                                if(participante.getCelular().equals(celular) && !usadoElemento)
                                 {
                                     btnCamino.setText("Voy camino al evento");
                                     procesoCicloActual=NO_SALIDO;
+                                    usadoElemento=true;
                                 }
 
                             }
