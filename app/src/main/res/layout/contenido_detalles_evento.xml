@@ -60,8 +60,7 @@
 
         <TextView
             android:id="@+id/detalles_lugar_evento"
-            android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:lines="2"

@@ -19,11 +19,11 @@ public class ParticipanteEvento implements Serializable
     public long hora_llegada_propia=-1;
     public boolean llego_casa=false;
     public boolean llego_evento=false;
-    public String tiempo_llegada="60 min";
+    public String tiempo_llegada="(no disponible) min";
     public String nombre;
     public String celular;
     //En kilometros
-    public String distancia="30 km";
+    public String distancia="(no disponible) km";
     public int distancia_metros=300000;
 
     public String regreso="NO";
