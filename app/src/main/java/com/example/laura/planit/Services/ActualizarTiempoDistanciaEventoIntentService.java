@@ -27,6 +27,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -77,7 +78,6 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
         if(ubicacion!=null)
         {
             //Encuentra el evento más cercano
-            System.out.println("Llegó ubicación");
 
             final String celular = intent.getStringExtra(Constants.EXTRA_CELULAR);
             if(celular!=null)
@@ -173,7 +173,6 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists())
                         {
-                            System.out.println("El lugar del evento está definido");
                             long now = System.currentTimeMillis();
 
                             Sitio lugarEvento=dataSnapshot.getValue(Sitio.class);
@@ -215,7 +214,6 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
             java.net.URL url = null;
             try
             {
-                System.out.println("Peticion:\n"+peticion);
                 url = new URL(peticion);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -236,8 +234,18 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
                 jsonString = sb.toString();
 
                 respuesta=new JSONObject(jsonString);
+                if(respuesta!=null)
+                {
+                    String destino = (String) respuesta.getJSONArray("destination_addresses").get(0);
+                    String origen = (String) respuesta.getJSONArray("origin_addresses").get(0);
+                    JSONObject elements = respuesta.getJSONArray("rows").getJSONObject(0);
+                    JSONObject detalles = elements.getJSONArray("elements").getJSONObject(0);
+                    String distancia =detalles.getJSONObject("distance").getString("text");
+                    String duracion = detalles.getJSONObject("duration").getString("text");
+                    System.out.println("RESULTADO->"+destino+"-"+origen+": "+distancia+", "+duracion);
+                }
 
-                System.out.println("JSON: " + jsonString);
+
             }
             catch (Exception e)
             {
