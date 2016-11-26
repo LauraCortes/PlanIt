@@ -475,6 +475,10 @@ public class AgregarEventoActivity extends AppCompatActivity implements DatePick
                     });
             builder.show();
         }
+        else
+        {
+            finish();
+        }
 
     }
 

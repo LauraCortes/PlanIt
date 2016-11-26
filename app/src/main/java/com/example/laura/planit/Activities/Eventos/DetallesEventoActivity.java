@@ -336,7 +336,7 @@ public class DetallesEventoActivity extends AppCompatActivity
                                 stackBuilder.addNextIntent(resultIntent);
                                 PendingIntent resultPendingIntent =
                                         stackBuilder.getPendingIntent(
-                                                0,
+                                                1,
                                                 PendingIntent.FLAG_UPDATE_CURRENT
                                         );
 
@@ -580,7 +580,8 @@ public class DetallesEventoActivity extends AppCompatActivity
     public void unirRegreso(final Regreso regreso)
     {
                     btnCrearRegreso.setVisibility(View.GONE);
-                    lblRegresoNoDefinido.setText("");
+                    //Brahian eliminó la siguiente línea
+                    //lblRegresoNoDefinido.setText("");
                     lblRegresoLugar.setText(regreso.getDestino().getDireccion());
                     lblRegresoMedio.setText(regreso.getMedioRegreso());
                     lblCelularDuenio.setText(regreso.getNumeroDueño());
@@ -607,6 +608,10 @@ public class DetallesEventoActivity extends AppCompatActivity
                                 }
                             }
                     );
+
+                    //Brahian agregó -NO BORRAR
+                    FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_PARTICIPANTES_EVENTO)
+                            .child(id_evento).child(celular).child("regreso").child(regreso.getNumeroDueño());
     }
 
     public void editarRegreso(final Regreso regreso)
@@ -714,6 +719,20 @@ public class DetallesEventoActivity extends AppCompatActivity
                                 }
 
                             }
+                            if(participante.getCelular().equals(celular))
+                            {
+                                boolean activar = participante.getRegreso()!=null && !participante.getRegreso().equals("NO");
+                                activarInfoRegreso(activar);
+                                LinearLayout layoutDuenio = (LinearLayout) findViewById(R.id.layout_dueno);
+                                if(participante.getRegreso()!=null && participante.getRegreso().equals(celular))
+                                {
+                                    layoutDuenio.setVisibility(View.GONE);
+                                }
+                                else
+                                {
+                                    layoutDuenio.setVisibility(View.VISIBLE);
+                                }
+                            }
                         }
 
                         String detallesNotificacion="";
@@ -754,7 +773,7 @@ public class DetallesEventoActivity extends AppCompatActivity
                             stackBuilder.addNextIntent(intentoDetalles);
                             PendingIntent intentoCompleto =
                                     stackBuilder.getPendingIntent(
-                                            0,
+                                            1,
                                             PendingIntent.FLAG_UPDATE_CURRENT
                                     );
 
@@ -788,6 +807,28 @@ public class DetallesEventoActivity extends AppCompatActivity
                     }
                 }
         );
+    }
+
+
+    public void activarInfoRegreso(boolean visible)
+    {
+        Button btnComparten = (Button)findViewById(R.id.btn_detalles_compartido);
+        if(visible)
+        {
+            lblRegresoNoDefinido.setVisibility(View.GONE);
+            btnComparten.setVisibility(View.VISIBLE);
+            layoutDetallesRegreso.setVisibility(View.VISIBLE);
+            btnSeleccionarRegreso.setVisibility(View.GONE);
+            //TODO
+            //Si el regreso no es del man no puede editar
+        }
+        else
+        {
+            lblRegresoNoDefinido.setVisibility(View.VISIBLE);
+            btnComparten.setVisibility(View.GONE);
+            layoutDetallesRegreso.setVisibility(View.GONE);
+            btnSeleccionarRegreso.setVisibility(View.VISIBLE);
+        }
     }
 
 

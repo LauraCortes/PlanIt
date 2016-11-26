@@ -193,34 +193,58 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
         if(eventoProximoCercano!=null)
         {
             System.out.println("El evento "+eventoProximoCercano.getNombre()+" está próximo");
-            if(!notificacionProximoEvento)
-            {
-                notificacionProximoEvento=true;
-                Intent intentNotificarEvento = new Intent(contexto, NotificarCaminoEventoIntentService.class);
-                intentNotificarEvento.putExtra(Constants.EXTRA_CELULAR, celular);
-                intentNotificarEvento.putExtra(Constants.EXTRA_ID_EVENTO,eventoProximoCercano.getId_evento());
-                PendingIntent pendingIntent = PendingIntent.getService(contexto, 0, intentNotificarEvento, 0);
-                NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                Drawable icon = ContextCompat.getDrawable(contexto, R.drawable.llegada_evento);
-                icon.setBounds(0, 0, 25, 25);
-                Notification notificacion = new NotificationCompat.Builder(contexto)
-                        .setSmallIcon(R.drawable.logo_planit)
-                        .setContentTitle("Se acerca "+eventoProximoCercano.getNombre())
-                        .setContentText("Cuéntale a tus amigos que ya vas en camino")
-                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                        .setAutoCancel(false)
-                        .addAction(R.drawable.check, "Voy en camino", pendingIntent)
-                        .setPriority(Notification.PRIORITY_MAX)
-                        .build();
+            FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_PARTICIPANTES_EVENTO)
+                    .child(eventoProximoCercano.getId_evento()).child(celular).child("camino_evento").addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists() && !dataSnapshot.getValue(Boolean.class))
+                            {
+                                //No va en camino-> mostrar notificación
+                                if(!notificacionProximoEvento)
+                                {
 
-                //Tono de notificación
-                notificacion.sound = Uri.parse("android.resource://" + contexto.getPackageName() + "/" + R.raw.notificacion_llegada);
-                //Vibración
-                long[] vibrate = {0, 100, 200, 100};
-                notificacion.vibrate = vibrate;
-                // Builds the notification and issues it.
-                mNotifyMgr.notify(MainActivity.ID_NOTIFICACION_LLEGADA, notificacion);
-            }
+
+                                    notificacionProximoEvento=true;
+                                    Intent intentNotificarEvento = new Intent(contexto, NotificarCaminoEventoIntentService.class);
+                                    intentNotificarEvento.putExtra(Constants.EXTRA_CELULAR, celular);
+                                    intentNotificarEvento.putExtra(Constants.EXTRA_ID_EVENTO,eventoProximoCercano.getId_evento());
+                                    PendingIntent pendingIntent = PendingIntent.getService(contexto, 1, intentNotificarEvento, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                    Drawable icon = ContextCompat.getDrawable(contexto, R.drawable.llegada_evento);
+                                    icon.setBounds(0, 0, 25, 25);
+                                    Notification notificacion = new NotificationCompat.Builder(contexto)
+                                            .setSmallIcon(R.drawable.logo_planit)
+                                            .setContentTitle("Se acerca "+eventoProximoCercano.getNombre())
+                                            .setContentText("Cuéntale a tus amigos que ya vas en camino")
+                                            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                                            .setAutoCancel(false)
+                                            .addAction(R.drawable.check, "Voy en camino", pendingIntent)
+                                            .setPriority(Notification.PRIORITY_MAX)
+                                            .build();
+
+                                    //Tono de notificación
+                                    notificacion.sound = Uri.parse("android.resource://" + contexto.getPackageName() + "/" + R.raw.notificacion_llegada);
+                                    //Vibración
+                                    long[] vibrate = {0, 100, 200, 100};
+                                    notificacion.vibrate = vibrate;
+                                    // Builds the notification and issues it.
+                                    mNotifyMgr.notify(MainActivity.ID_NOTIFICACION_LLEGADA, notificacion);
+                                }
+                            }
+                            else
+                            {
+                                //Va en camino-> No hacer nada
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    }
+            );
+
         }
     }
 
@@ -321,7 +345,7 @@ public class ActualizarTiempoDistanciaEventoIntentService extends IntentService 
                         notificacionLanzada=true;
                         Intent intentNotificarLLegada = new Intent(contexto, NotificarLlegadaEventoIntentService.class);
                         intentNotificarLLegada.putExtra(Constants.EXTRA_CELULAR, celular);
-                        PendingIntent pendingIntent = PendingIntent.getService(contexto, 0, intentNotificarLLegada, 0);
+                        PendingIntent pendingIntent = PendingIntent.getService(contexto, 1, intentNotificarLLegada, PendingIntent.FLAG_UPDATE_CURRENT);
                         NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                         Drawable icon = ContextCompat.getDrawable(contexto, R.drawable.llegada_evento);
                         icon.setBounds(0, 0, 25, 25);

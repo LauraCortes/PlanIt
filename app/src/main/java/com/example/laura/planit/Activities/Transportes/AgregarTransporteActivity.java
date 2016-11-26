@@ -3,10 +3,13 @@ package com.example.laura.planit.Activities.Transportes;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -61,14 +64,34 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         contexto=this;
+        setContentView(R.layout.activity_agregar_transporte);
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_agregar_transporte_activity));
+        getSupportActionBar().setTitle("Agregar Transporte");
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.atras_icon);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+
         id_evento=(String)getIntent().getExtras().get("id_evento");
         motivo= (String)getIntent().getExtras().get("motivo");
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
         timeFormatter = new SimpleDateFormat("hh:mm a");
-        setContentView(R.layout.activity_agregar_transporte);
+
         radioBus=(RadioButton) findViewById(R.id.radioTransportePublico);
         radioBus.setOnClickListener(new View.OnClickListener()
                                     {
@@ -315,6 +338,7 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                         final String celular = properties.getString(getString(R.string.usuario), "desconocido");
                         final Regreso regreso = new Regreso(celular,horaRegreso,nombre, Integer.valueOf(cupos),sitio, Integer.valueOf(tiempo),id_evento);
                         final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
                         final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(regreso.darRutaElemento(id_evento));
                         databaseReference.addListenerForSingleValueEvent(
                                 new ValueEventListener() {
@@ -331,6 +355,15 @@ public class AgregarTransporteActivity extends AppCompatActivity  implements Dat
                                     }
                                 }
                         );
+
+
+                        //Brahian hizo esto - desde aquí
+
+                        FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_PARTICIPANTES_EVENTO)
+                                .child(id_evento).child(celular).child("regreso").setValue(celular);
+
+                        //-Hasta aquí -> NO BORRAR
+
                         finish();
                     } else {
                         MainActivity.mostrarMensaje(this, "Error", "Parece que no has iniciado sesi?n. Intenta cerrar sesi?n e ingresar de nuevo");

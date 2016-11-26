@@ -26,6 +26,8 @@ public class ParticipanteEvento implements Serializable
     public String distancia="30 km";
     public int distancia_metros=300000;
 
+    public String regreso="NO";
+
     public ParticipanteEvento() {
     }
 
@@ -122,6 +124,14 @@ public class ParticipanteEvento implements Serializable
         this.distancia_metros = distancia_metros;
     }
 
+    public String getRegreso() {
+        return regreso;
+    }
+
+    public void setRegreso(String regreso) {
+        this.regreso = regreso;
+    }
+
     @Exclude
     public Map<String,Object> toMap()
     {
@@ -137,6 +147,7 @@ public class ParticipanteEvento implements Serializable
         result.put("nombre",nombre);
         result.put("celular",celular);
         result.put("distancia_metros",distancia_metros);
+        result.put("regreso",regreso);
         return result;
     }
 
