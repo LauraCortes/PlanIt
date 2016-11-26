@@ -269,7 +269,6 @@ public class DetallesEventoActivity extends AppCompatActivity
                 });
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
