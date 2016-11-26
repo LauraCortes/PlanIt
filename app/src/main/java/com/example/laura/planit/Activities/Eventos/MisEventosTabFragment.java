@@ -136,11 +136,12 @@ public class MisEventosTabFragment extends TabFragment
         builder.setPositiveButton("ELIMINAR", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_MIS_EVENTOS).child(celular);
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL);
                 boolean eliminarTodos = elementos.size()==elementosSeleccionados.size();
                 for (ResumenEvento actual:(List<ResumenEvento>)elementosSeleccionados)
                 {
-                    ref.child(actual.getId_evento()).removeValue();
+                    ref.child(Constants.URL_MIS_EVENTOS).child(celular).child(actual.getId_evento()).removeValue();
+                    ref.child(Constants.URL_REGRESOS).child(actual.getId_evento()).removeValue();
                 }
                 if(eliminarTodos)
                 {
