@@ -30,6 +30,7 @@ import com.example.laura.planit.Activities.Main.Constants;
 import com.example.laura.planit.Activities.Main.MainActivity;
 import com.example.laura.planit.Activities.Transportes.AgregarTransporteActivity;
 import com.example.laura.planit.Modelos.Evento;
+import com.example.laura.planit.Modelos.Movimiento;
 import com.example.laura.planit.Modelos.OpcionSondeo;
 import com.example.laura.planit.Modelos.ParticipanteEvento;
 import com.example.laura.planit.Modelos.Regreso;
@@ -335,7 +336,7 @@ public class DetallesEventoActivity extends AppCompatActivity
                                 stackBuilder.addNextIntent(resultIntent);
                                 PendingIntent resultPendingIntent =
                                         stackBuilder.getPendingIntent(
-                                                0,
+                                                1,
                                                 PendingIntent.FLAG_UPDATE_CURRENT
                                         );
 
@@ -579,7 +580,8 @@ public class DetallesEventoActivity extends AppCompatActivity
     public void unirRegreso(final Regreso regreso)
     {
                     btnCrearRegreso.setVisibility(View.GONE);
-                    lblRegresoNoDefinido.setText("");
+                    //Brahian eliminó la siguiente línea
+                    //lblRegresoNoDefinido.setText("");
                     lblRegresoLugar.setText(regreso.getDestino().getDireccion());
                     lblRegresoMedio.setText(regreso.getMedioRegreso());
                     lblCelularDuenio.setText(regreso.getNumeroDueño());
@@ -606,6 +608,10 @@ public class DetallesEventoActivity extends AppCompatActivity
                                 }
                             }
                     );
+
+                    //Brahian agregó -NO BORRAR
+                    FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_PARTICIPANTES_EVENTO)
+                            .child(id_evento).child(celular).child("regreso").child(regreso.getNumeroDueño());
     }
 
     public void editarRegreso(final Regreso regreso)
@@ -661,8 +667,7 @@ public class DetallesEventoActivity extends AppCompatActivity
                         int casa=0;
                         for(ParticipanteEvento participante : participantesEvento)
                         {
-                            System.out.println("******"+participante.toString());
-                            System.out.println("NULL------------>"+participante.getCelular()==null);
+                            boolean usadoElemento =false;
                             if(participante.llego_casa)
                             {
                                 casa++;
@@ -670,44 +675,63 @@ public class DetallesEventoActivity extends AppCompatActivity
                                 {
                                     btnCamino.setVisibility(View.GONE);
                                     procesoCicloActual=EN_CASA;
+                                    usadoElemento=true;
                                 }
                             }
                             else if(participante.camino_casa)
                             {
                                 camino_casa++;
-                                if(participante.getCelular().equals(celular))
+                                if(participante.getCelular().equals(celular) && !usadoElemento)
                                 {
                                     btnCamino.setText("Ya estoy en casa");
                                     procesoCicloActual=CAMINO_CASA;
+                                    usadoElemento=true;
                                 }
                             }
                             else if(participante.llego_evento)
                             {
                                 en_evento++;
-                                if(participante.getCelular().equals(celular))
+                                if(participante.getCelular().equals(celular) && !usadoElemento)
                                 {
                                     btnCamino.setText("Voy camino a casa");
                                     procesoCicloActual=EN_EVENTO;
+                                    usadoElemento=true;
                                 }
                             }
                             else if (participante.camino_evento)
                             {
                                 camino_evento++;
-                                if(participante.getCelular().equals(celular))
+                                if(participante.getCelular().equals(celular) && !usadoElemento)
                                 {
                                     btnCamino.setText("Llegué al evento");
                                     procesoCicloActual=CAMINO_EVENTO;
+                                    usadoElemento=true;
                                 }
                             }
                             else
                             {
                                 no_salido++;
-                                if(participante.getCelular().equals(celular))
+                                if(participante.getCelular().equals(celular) && !usadoElemento)
                                 {
                                     btnCamino.setText("Voy camino al evento");
                                     procesoCicloActual=NO_SALIDO;
+                                    usadoElemento=true;
                                 }
 
+                            }
+                            if(participante.getCelular().equals(celular))
+                            {
+                                boolean activar = participante.getRegreso()!=null && !participante.getRegreso().equals("NO");
+                                activarInfoRegreso(activar);
+                                LinearLayout layoutDuenio = (LinearLayout) findViewById(R.id.layout_dueno);
+                                if(participante.getRegreso()!=null && participante.getRegreso().equals(celular))
+                                {
+                                    layoutDuenio.setVisibility(View.GONE);
+                                }
+                                else
+                                {
+                                    layoutDuenio.setVisibility(View.VISIBLE);
+                                }
                             }
                         }
 
@@ -749,7 +773,7 @@ public class DetallesEventoActivity extends AppCompatActivity
                             stackBuilder.addNextIntent(intentoDetalles);
                             PendingIntent intentoCompleto =
                                     stackBuilder.getPendingIntent(
-                                            0,
+                                            1,
                                             PendingIntent.FLAG_UPDATE_CURRENT
                                     );
 
@@ -786,6 +810,28 @@ public class DetallesEventoActivity extends AppCompatActivity
     }
 
 
+    public void activarInfoRegreso(boolean visible)
+    {
+        Button btnComparten = (Button)findViewById(R.id.btn_detalles_compartido);
+        if(visible)
+        {
+            lblRegresoNoDefinido.setVisibility(View.GONE);
+            btnComparten.setVisibility(View.VISIBLE);
+            layoutDetallesRegreso.setVisibility(View.VISIBLE);
+            btnSeleccionarRegreso.setVisibility(View.GONE);
+            //TODO
+            //Si el regreso no es del man no puede editar
+        }
+        else
+        {
+            lblRegresoNoDefinido.setVisibility(View.VISIBLE);
+            btnComparten.setVisibility(View.GONE);
+            layoutDetallesRegreso.setVisibility(View.GONE);
+            btnSeleccionarRegreso.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     public void mostrarDialogoParticipantesEvento()
     {
         if(participantesEvento!=null)
@@ -816,24 +862,36 @@ public class DetallesEventoActivity extends AppCompatActivity
 
     public void marcarLlegada(View v)
     {
+
+        DatabaseReference refMovimientosUsuario =FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_MOVIMIENTOS).child(celular);
+
+        String keyMovimiento = refMovimientosUsuario.push().getKey();
+        Movimiento movimientoUsuario = new Movimiento(id_evento,evento.getNombre());
+
         DatabaseReference refParticipante = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+
                 Constants.URL_PARTICIPANTES_EVENTO+id_evento).child(celular);
         if(procesoCicloActual==NO_SALIDO)
         {
             refParticipante.child("camino_evento").setValue(true);
+            movimientoUsuario.setDescripcion(Movimiento.CAMINO_EVENTO);
         }
         else if (procesoCicloActual==CAMINO_EVENTO)
         {
             refParticipante.child("llego_evento").setValue(true);
+            movimientoUsuario.setDescripcion(Movimiento.LLEGO_EVENTO);
         }
         else if (procesoCicloActual==EN_EVENTO)
         {
             refParticipante.child("camino_casa").setValue(true);
+            movimientoUsuario.setDescripcion(Movimiento.CAMINO_CASA);
         }
         else if (procesoCicloActual==CAMINO_CASA)
         {
             refParticipante.child("llego_casa").setValue(true);
+            movimientoUsuario.setDescripcion(Movimiento.LLEGO_CASA);
         }
+
+        refMovimientosUsuario.child(keyMovimiento).setValue(movimientoUsuario);
 
     }
 

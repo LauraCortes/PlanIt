@@ -12,6 +12,10 @@ import android.support.v4.app.NotificationCompat;
 public class NotificationService extends IntentService
 {
 
+    public NotificationService()
+    {
+        super("");
+    }
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *

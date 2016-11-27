@@ -19,11 +19,14 @@ public class ParticipanteEvento implements Serializable
     public long hora_llegada_propia=-1;
     public boolean llego_casa=false;
     public boolean llego_evento=false;
-    public int tiempo_llegada=60;
+    public String tiempo_llegada="60 min";
     public String nombre;
     public String celular;
     //En kilometros
-    public int distancia=30;
+    public String distancia="30 km";
+    public int distancia_metros=300000;
+
+    public String regreso="NO";
 
     public ParticipanteEvento() {
     }
@@ -81,22 +84,6 @@ public class ParticipanteEvento implements Serializable
         this.llego_evento = llego_evento;
     }
 
-    public int getTiempo_llegada() {
-        return tiempo_llegada;
-    }
-
-    public void setTiempo_llegada(int tiempo_llegada) {
-        this.tiempo_llegada = tiempo_llegada;
-    }
-
-    public int getDistancia() {
-        return distancia;
-    }
-
-    public void setDistancia(int distancia) {
-        this.distancia = distancia;
-    }
-
     public String getNombre() {
         return nombre;
     }
@@ -113,6 +100,38 @@ public class ParticipanteEvento implements Serializable
         this.celular = celular;
     }
 
+    public String getTiempo_llegada() {
+        return tiempo_llegada;
+    }
+
+    public void setTiempo_llegada(String tiempo_llegada) {
+        this.tiempo_llegada = tiempo_llegada;
+    }
+
+    public String getDistancia() {
+        return distancia;
+    }
+
+    public void setDistancia(String distancia) {
+        this.distancia = distancia;
+    }
+
+    public int getDistancia_metros() {
+        return distancia_metros;
+    }
+
+    public void setDistancia_metros(int distancia_metros) {
+        this.distancia_metros = distancia_metros;
+    }
+
+    public String getRegreso() {
+        return regreso;
+    }
+
+    public void setRegreso(String regreso) {
+        this.regreso = regreso;
+    }
+
     @Exclude
     public Map<String,Object> toMap()
     {
@@ -127,6 +146,8 @@ public class ParticipanteEvento implements Serializable
         result.put("distancia",distancia);
         result.put("nombre",nombre);
         result.put("celular",celular);
+        result.put("distancia_metros",distancia_metros);
+        result.put("regreso",regreso);
         return result;
     }
 
@@ -149,7 +170,7 @@ public class ParticipanteEvento implements Serializable
         }
         else if(camino_evento)
         {
-            result+="Camino al evento ("+tiempo_llegada+" minutos, "+distancia+" km )";
+            result+="Camino al evento \n * "+tiempo_llegada+" - "+distancia+" ";
         }
         else
         {

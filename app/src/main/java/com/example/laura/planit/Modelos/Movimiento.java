@@ -1,36 +1,37 @@
 package com.example.laura.planit.Modelos;
 
 import com.google.firebase.database.Exclude;
-
-import java.io.Serializable;
-import java.util.Date;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
- * Created by Laura on 26/11/2016.
+ * Created by Usuario on 26/11/2016.
  */
+@IgnoreExtraProperties
+public class Movimiento {
 
-public class Movimiento implements Serializable {
-    private Date fecha;
-    private String descripcion;
-    private String id_evento;
-    private String nombre_evento;
+    @Exclude
+    public final static String LLEGO_CASA="Llegó a casa";
+    @Exclude
+    public final static String LLEGO_EVENTO="Llegó al evento";
+    @Exclude
+    public final static String CAMINO_EVENTO="Camino al evento";
+    @Exclude
+    public final static String CAMINO_CASA="Camino a casa";
 
-    public Movimiento(Date fecha, String descripcion, String id_evento, String nombre_evento) {
 
-        this.fecha = fecha;
-        this.descripcion = descripcion;
+
+    public String descripcion;
+    public String id_evento;
+    public String nombre_evento;
+    public long hora_movimiento;
+
+    public Movimiento() {
+    }
+
+    public Movimiento(String id_evento, String nombre_evento) {
         this.id_evento = id_evento;
         this.nombre_evento = nombre_evento;
-    }
-
-    public Movimiento(){}
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+        hora_movimiento=System.currentTimeMillis();
     }
 
     public String getDescripcion() {
@@ -57,9 +58,11 @@ public class Movimiento implements Serializable {
         this.nombre_evento = nombre_evento;
     }
 
-    @Exclude
-    public String darRutaElemento(String celular)
-    {
-        return "/movimiento/"+celular+"/"+fecha.getTime();
+    public long getHora_movimiento() {
+        return hora_movimiento;
+    }
+
+    public void setHora_movimiento(long hora_movimiento) {
+        this.hora_movimiento = hora_movimiento;
     }
 }

@@ -60,7 +60,8 @@
 
         <TextView
             android:id="@+id/detalles_lugar_evento"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="3"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:lines="2"
@@ -70,14 +71,13 @@
 
         <Button
             android:id="@+id/btn_votar"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:onClick="votar"
             android:layout_gravity="center_vertical"
             android:text="votar" />
-
-        <include layout="@layout/vacio"/>
 
     </LinearLayout>
 
@@ -163,13 +163,12 @@
 
         <Button
             android:id="@+id/btn_detalles_ver_invitados"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:onClick="verParticipantes"
             android:text="VER" />
-
-        <include layout="@layout/vacio"/>
 
     </LinearLayout>
 
@@ -204,7 +203,8 @@
 
         <TextView
             android:id="@+id/lbl_detalles_reg_no_def"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
@@ -214,13 +214,13 @@
 
         <Button
             android:id="@+id/btn_detalles_compartido"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center"
+            android:visibility="visible"
             android:text="comparten" />
-
-        <include layout="@layout/vacio"/>
 
     </LinearLayout>
 
@@ -362,6 +362,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:id="@+id/layout_dueno"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -413,14 +414,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="horizontal"
         android:layout_weight="1">
 
-        <include layout="@layout/vacio"/>
-        <include layout="@layout/vacio"/>
 
         <Button
             android:id="@+id/btn_detalles_crear_regreso"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="3"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center"
@@ -432,16 +433,14 @@
 
         <Button
             android:id="@+id/btn_detalles_seleccionar_regreso"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="3"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="Unirme a regreso" />
-
-        <include layout="@layout/vacio"/>
-        <include layout="@layout/vacio"/>
 
     </LinearLayout>
 

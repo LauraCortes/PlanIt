@@ -1,22 +1,32 @@
 package com.example.laura.planit.Activities.Main;
 
+import android.Manifest;
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -28,22 +38,37 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.laura.planit.Activities.Eventos.DetallesEventoActivity;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Fragments.TabsFragmenPageAdapter;
+import com.example.laura.planit.Modelos.ResumenEvento;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Sensores.DetectorAgitacion;
+import com.example.laura.planit.Services.ActualizarTiempoDistanciaEventoIntentService;
 import com.example.laura.planit.Services.NotificarLlegadaEventoIntentService;
 import com.example.laura.planit.Services.ObtenerDireccionesIntentService;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements DetectorAgitacion.OnShakeListener
-{
+public class MainActivity extends AppCompatActivity implements DetectorAgitacion.OnShakeListener {
 
     private boolean activityVisible;
     private long tiempoPrimerShake;
-    private int cantidadShakes=0;
-    public final static int ID_NOTIFICACION_LLEGADA =420;
+    private int cantidadShakes = 0;
+    public final static int ID_NOTIFICACION_LLEGADA = 420;
     private Context contexto;
 
     Vibrator vibrador;
@@ -52,6 +77,9 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
     private DetectorAgitacion detectorShake;
 
     private String celular;
+
+    private LocationManager locationManager = null;
+
 
 
     @Override
@@ -76,38 +104,46 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        contexto=this;
+        contexto = this;
 
         //Crea el detectorShake de agitación
-        sensorMgr = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        if(sensorMgr!=null)
-        {
+        sensorMgr = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (sensorMgr != null) {
             detectorShake = new DetectorAgitacion(this);
-            sensorMgr.registerListener(detectorShake,sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-        }
-        else
-        {
+            sensorMgr.registerListener(detectorShake, sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+        } else {
             System.out.println("No se pudo inicializar el sensor para detección de agitación");
         }
 
         //Crea el vibrador
-        vibrador= (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrador = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 
         //Obtiene el número del celular
         SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
-        if (properties.getBoolean(getString(R.string.logueado), false))
-        {
+        if (properties.getBoolean(getString(R.string.logueado), false)) {
             celular = properties.getString(getString(R.string.usuario), "desconocido");
-        }
-        else
-        {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (locationManager != null) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                } else {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 120000, 50, new MyLocationListener());
+                }
+
+            }
+        } else {
             finish();
         }
 
@@ -131,8 +167,7 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
         final TabsFragmenPageAdapter adapter = new TabsFragmenPageAdapter(getSupportFragmentManager(), tabs.getTabCount());
         viewPagerTabs.setAdapter(adapter);
         viewPagerTabs.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
-        {
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPagerTabs.setCurrentItem(tab.getPosition());
@@ -168,107 +203,91 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
     }
 
     @Override
-    public void onBackPressed()
-    {
-        boolean ejecutado =false;
-        for(android.support.v4.app.Fragment fragment : getSupportFragmentManager().getFragments())
-        {
-            TabFragment actual = (TabFragment)fragment;
-            if(actual!= null && actual.isVisible() && actual.hayItemsSeleccionados())
-            {
+    public void onBackPressed() {
+        boolean ejecutado = false;
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            TabFragment actual = (TabFragment) fragment;
+            if (actual != null && actual.isVisible() && actual.hayItemsSeleccionados()) {
                 actual.deseleccionar();
-                ejecutado=true;
+                ejecutado = true;
                 break;
             }
         }
-        if(!ejecutado)
-        {
+        if (!ejecutado) {
             super.onBackPressed();
         }
     }
 
-    public void cerrarSesion()
-    {
+    public void cerrarSesion() {
         SharedPreferences properties = this.getSharedPreferences(getString(R.string.properties), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = properties.edit();
-        editor.putBoolean(getString(R.string.logueado),false);
-        editor.putString(getString(R.string.usuario),"");
+        editor.putBoolean(getString(R.string.logueado), false);
+        editor.putString(getString(R.string.usuario), "");
         editor.commit();
         finish();
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }
 
-    public static void mostrarMensaje(Context contexto, String titutlo, String mensaje)
-    {
+    public static void mostrarMensaje(Context contexto, String titutlo, String mensaje) {
         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
         builder.setTitle(titutlo);
         builder.setMessage(mensaje);
         builder.setCancelable(false);
-        builder.setPositiveButton("OK",null);
+        builder.setPositiveButton("OK", null);
         builder.show();
     }
 
     @Override
-    public void onShake()
-    {
+    public void onShake() {
         Intent intentNotificarLLegada = new Intent(contexto, NotificarLlegadaEventoIntentService.class);
         intentNotificarLLegada.putExtra(Constants.EXTRA_CELULAR, celular);
 
-        if(cantidadShakes==0)
-        {
+        if (cantidadShakes == 0) {
             tiempoPrimerShake = System.currentTimeMillis();
             cantidadShakes++;
-            if(activityVisible)
-            {
-                Uri tono  = Uri.parse("android.resource://"+ this.getPackageName() + "/" + R.raw.notificacion_llegada);
+            if (activityVisible) {
+                Uri tono = Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.notificacion_llegada);
                 Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), tono);
                 r.play();
                 vibrador.vibrate(500);
                 new mostrarShake().execute();
-            }
-            else
-            {
+            } else {
                 PendingIntent pendingIntent = PendingIntent.getService(contexto, 0, intentNotificarLLegada, 0);
 
-                NotificationManager mNotifyMgr=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                Drawable icon = ContextCompat.getDrawable(this,R.drawable.llegada_evento);
-                icon.setBounds(0,0,25,25);
+                NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                Drawable icon = ContextCompat.getDrawable(this, R.drawable.llegada_evento);
+                icon.setBounds(0, 0, 25, 25);
                 Notification notificacion = new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.logo_planit)
                         .setContentTitle("Llegada a evento")
                         .setContentText("Cuéntale a tus amigos que ya llegaste")
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                         .setAutoCancel(false)
-                        .addAction(R.drawable.check,"Ya llegué",pendingIntent)
+                        .addAction(R.drawable.check, "Ya llegué", pendingIntent)
                         .setPriority(Notification.PRIORITY_MAX)
                         .build();
 
                 //Tono de notificación
-                notificacion.sound=Uri.parse("android.resource://"+ this.getPackageName() + "/" + R.raw.notificacion_llegada);
+                notificacion.sound = Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.notificacion_llegada);
                 //Vibración
-                long[] vibrate = { 0, 100, 200, 100 };
-                notificacion.vibrate=vibrate;
+                long[] vibrate = {0, 100, 200, 100};
+                notificacion.vibrate = vibrate;
                 // Builds the notification and issues it.
                 mNotifyMgr.notify(ID_NOTIFICACION_LLEGADA, notificacion);
             }
-        }
-        else
-        {
+        } else {
             long actual = System.currentTimeMillis();
-            long transcurrido = actual-tiempoPrimerShake;
-            if(transcurrido/1000<8)
-            {
-                cantidadShakes=0;
+            long transcurrido = actual - tiempoPrimerShake;
+            if (transcurrido / 1000 < 8) {
+                cantidadShakes = 0;
                 //Desactivar listener de shake
                 //sensorMgr.unregisterListener(detectorShake);
                 //Enviar el intent
                 contexto.startService(intentNotificarLLegada);
 
-            }
-            else
-            {
-                cantidadShakes=0;
+            } else {
+                cantidadShakes = 0;
                 onShake();
             }
         }
@@ -276,23 +295,53 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
 
     }
 
-    /**
-     * Solo manda la notificación si existe un evento cercano
-     */
-    private void notificarEventoMasCercano()
-    {
 
+
+    private class MyLocationListener implements LocationListener {
+
+        public MyLocationListener()
+        {
+
+        }
+        @Override
+        public void onLocationChanged(Location location) {
+            DatabaseReference db = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL);
+            if (location != null) {
+                db.child(Constants.URL_USUARIOS).child(celular).child("latitud_actual").setValue(location.getLatitude());
+                db.child(Constants.URL_USUARIOS).child(celular).child("longitud_actual").setValue(location.getLongitude());
+                Intent actualizar = new Intent(contexto,ActualizarTiempoDistanciaEventoIntentService.class);
+                actualizar.putExtra(Constants.EXTRA_UBICACION,location);
+                actualizar.putExtra(Constants.EXTRA_CELULAR,celular);
+                contexto.startService(actualizar);
+            }
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
     }
 
 
 
-    private class mostrarShake extends AsyncTask
-    {
+
+
+    private class mostrarShake extends AsyncTask {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            try
-            {
+            try {
                 Thread.sleep(3000);
                 return null;
             } catch (InterruptedException e) {
@@ -313,6 +362,8 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
             findViewById(R.id.frame_shake_detected).setVisibility(View.VISIBLE);
         }
     }
+
+
 }
 
 
