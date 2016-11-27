@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.speech.RecognizerIntent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
 
     private LocationManager locationManager = null;
 
-    private Button btnGrabar;
+    private FloatingActionButton btnGrabar;
     private ResumenEvento eventoMasCercano;
     private ArrayList<ParticipanteEvento> participantesEvento;
 
@@ -197,14 +198,14 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
         });
 
         //Boton de grabar
-        btnGrabar=(Button) findViewById(R.id.btn_microfono);
+        btnGrabar=(FloatingActionButton) findViewById(R.id.btn_microfono);
         btnGrabar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(
                         RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "es-US");
 
                 try {
                     startActivityForResult(intent, 1);
@@ -222,6 +223,8 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        System.out.println("Resultado voz");
+
         switch (requestCode) {
             case 1: {
                 if (resultCode == RESULT_OK && null != data) {
@@ -229,12 +232,18 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
                     ArrayList<String> text = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-                    if(text.get(0).equals("en cuanto llegan")||text.get(0).equals("se demoran")||text.get(0).equals("ya vienen")
-                            ||text.get(0).equals("ya llegaron"))
+                    String completo = "";
+                    for(String entrada:text)
                     {
-                        final String celular = getIntent().getStringExtra(Constants.EXTRA_CELULAR);
+                        System.out.println("********VOZ->"+entrada);
+                    }
+
+                    if(text.get(0).equals("en cuanto llegan")||text.get(0).equals("se demoran")||text.get(0).equals("ya vienen")
+                            ||text.get(0).equals("ya llegaron")||text.get(0).contains("llega"))
+                    {
                         if(celular!=null)
                         {
+                            System.out.println("Entró");
                             Query misEventosOrdenadosFecha = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_MIS_EVENTOS).
                                     child(celular).orderByChild("fecha");
                             misEventosOrdenadosFecha.addListenerForSingleValueEvent(
@@ -298,7 +307,8 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
                                                                                 HashMap<String, ParticipanteEvento> map =dataSnapshot.getValue(t);
                                                                                 if(map!=null)
                                                                                 {
-                                                                                  participantesEvento = new ArrayList(map.values());
+                                                                                    participantesEvento = new ArrayList(map.values());
+                                                                                    mostrarDialogoParticipantesEvento();
 
                                                                                 }
                                                                             }
@@ -309,6 +319,10 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
                                                                             }
                                                                         }
                                                                 );
+                                                            }
+                                                            else
+                                                            {
+                                                                Toast.makeText(contexto,"No tienes un evento en un rango de 24 horas",Toast.LENGTH_SHORT).show();
                                                             }
 
                                                         }
@@ -341,6 +355,7 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
     {
         if(participantesEvento!=null)
         {
+            System.out.println("LLegó mostrar dialogo");
             String[] arrayParticipantes = new String[participantesEvento.size()];
             int i=0;
             for(ParticipanteEvento partActual:participantesEvento)
