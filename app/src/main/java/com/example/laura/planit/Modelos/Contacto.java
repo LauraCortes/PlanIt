@@ -3,6 +3,8 @@ package com.example.laura.planit.Modelos;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Laura on 17/09/2016.
@@ -53,6 +55,16 @@ public class Contacto implements Serializable
     public String darRutaElemento(String celular)
     {
         return "/contacto_emergencia/"+celular+"/"+numeroTelefonico;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("favorito", favorito);
+        result.put("numeroTelefonico", numeroTelefonico);
+        result.put("nombre", nombre);
+
+        return result;
     }
 
 }
