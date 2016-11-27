@@ -77,23 +77,14 @@ public class AgregarContactoActivity extends AgregarSuper
             if (properties.getBoolean(getString(R.string.logueado), false)) {
                 final String celular = properties.getString(getString(R.string.usuario), "desconocido");
                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(contacto.darRutaElemento(celular));
-                databaseReference.addListenerForSingleValueEvent(
-                        new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (!dataSnapshot.exists()) {
-                                    databaseReference.setValue(contacto);
-                                }
-                            }
+                Map<String, Object> postValues = contacto.toMap();
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put(contacto.darRutaElemento(celular),postValues);
+                childUpdates.put("/soy_contacto/"+contacto.getNumeroTelefonico()+"/"+celular,postValues);
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                MainActivity.mostrarMensaje(contexto, "Error", databaseError.getMessage());
-                                databaseError.toException().printStackTrace();
-                            }
-                        }
-                );
+                final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL);
+                databaseReference.updateChildren(childUpdates);
+
                 finish();
             } else {
                 MainActivity.mostrarMensaje(this, "Error", "Parece que no has iniciado sesi?n. Intenta cerrar sesi?n e ingresar de nuevo");

@@ -6,6 +6,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +23,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Vibrator;
+import android.speech.RecognizerIntent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -36,11 +38,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.laura.planit.Activities.Eventos.DetallesEventoActivity;
+import com.example.laura.planit.Activities.Eventos.RegresoRecyclerViewAdapter;
 import com.example.laura.planit.Fragments.TabFragment;
 import com.example.laura.planit.Fragments.TabsFragmenPageAdapter;
+import com.example.laura.planit.Modelos.Movimiento;
+import com.example.laura.planit.Modelos.ParticipanteEvento;
+import com.example.laura.planit.Modelos.Regreso;
 import com.example.laura.planit.Modelos.ResumenEvento;
 import com.example.laura.planit.R;
 import com.example.laura.planit.Sensores.DetectorAgitacion;
@@ -59,7 +66,9 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -80,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
 
     private LocationManager locationManager = null;
 
+    private Button btnGrabar;
+    private ResumenEvento eventoMasCercano;
+    private ArrayList<ParticipanteEvento> participantesEvento;
 
 
     @Override
@@ -183,7 +195,169 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
 
             }
         });
+
+        //Boton de grabar
+        btnGrabar=(Button) findViewById(R.id.btn_microfono);
+        btnGrabar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(
+                        RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+
+                try {
+                    startActivityForResult(intent, 1);
+                } catch (ActivityNotFoundException a) {
+                    Toast t = Toast.makeText(getApplicationContext(),
+                            "Opps! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT);
+                    t.show();
+                }
+            }
+        });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case 1: {
+                if (resultCode == RESULT_OK && null != data) {
+
+                    ArrayList<String> text = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+                    if(text.get(0).equals("en cuanto llegan")||text.get(0).equals("se demoran")||text.get(0).equals("ya vienen")
+                            ||text.get(0).equals("ya llegaron"))
+                    {
+                        final String celular = getIntent().getStringExtra(Constants.EXTRA_CELULAR);
+                        if(celular!=null)
+                        {
+                            Query misEventosOrdenadosFecha = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_MIS_EVENTOS).
+                                    child(celular).orderByChild("fecha");
+                            misEventosOrdenadosFecha.addListenerForSingleValueEvent(
+                                    new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot)
+                                        {
+                                            final ResumenEvento[] encontrado = {null};
+                                            final long fechaActual = System.currentTimeMillis();
+                                            final long[] deltaCercano = {86400000}; // 24 horas
+
+                                            GenericTypeIndicator<HashMap<String,ResumenEvento>> t = new GenericTypeIndicator<HashMap<String, ResumenEvento>>(){};
+                                            HashMap<String, ResumenEvento> map =dataSnapshot.getValue(t);
+                                            if(map!=null)
+                                            {
+                                                for(ResumenEvento miEventoActual : map.values())
+                                                {
+                                                    long deltaActual = Math.abs(miEventoActual.fecha-fechaActual);
+                                                    if(deltaActual< deltaCercano[0])
+                                                    {
+                                                        deltaCercano[0] =deltaActual;
+                                                        encontrado[0] =miEventoActual;
+                                                        eventoMasCercano=miEventoActual;
+                                                    }
+                                                }
+                                            }
+
+                                            FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_INVITACIONES_EVENTO).
+                                                    child(celular).orderByChild("fecha").addListenerForSingleValueEvent(
+                                                    new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                            GenericTypeIndicator<HashMap<String,ResumenEvento>> t = new GenericTypeIndicator<HashMap<String, ResumenEvento>>(){};
+                                                            HashMap<String, ResumenEvento> map =dataSnapshot.getValue(t);
+                                                            if(map!=null)
+                                                            {
+                                                                for(ResumenEvento invitacionActual : map.values())
+                                                                {
+                                                                    long deltaActual = Math.abs(invitacionActual.fecha-fechaActual);
+                                                                    if(deltaActual< deltaCercano[0])
+                                                                    {
+                                                                        deltaCercano[0] =deltaActual;
+                                                                        encontrado[0] =invitacionActual;
+                                                                        eventoMasCercano=invitacionActual;
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            if(eventoMasCercano!=null)
+                                                            {
+                                                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                                                final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child("participantes_evento/" + eventoMasCercano.getId_evento());
+                                                                databaseReference.keepSynced(true);
+                                                                databaseReference.addValueEventListener(
+                                                                        new ValueEventListener() {
+                                                                            @Override
+                                                                            public void onDataChange(DataSnapshot dataSnapshot)
+                                                                            {
+                                                                                GenericTypeIndicator<HashMap<String,ParticipanteEvento>> t = new GenericTypeIndicator<HashMap<String, ParticipanteEvento>>(){};
+                                                                                HashMap<String, ParticipanteEvento> map =dataSnapshot.getValue(t);
+                                                                                if(map!=null)
+                                                                                {
+                                                                                  participantesEvento = new ArrayList(map.values());
+
+                                                                                }
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onCancelled(DatabaseError databaseError) {
+
+                                                                            }
+                                                                        }
+                                                                );
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    }
+                                            );
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    }
+                            );
+                        }
+                    }
+                }
+                break;
+            }
+
+        }
+    }
+
+    public void mostrarDialogoParticipantesEvento()
+    {
+        if(participantesEvento!=null)
+        {
+            String[] arrayParticipantes = new String[participantesEvento.size()];
+            int i=0;
+            for(ParticipanteEvento partActual:participantesEvento)
+            {
+                arrayParticipantes[i]=partActual.toString();
+                i++;
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+            builder.setTitle(eventoMasCercano.getNombre()+" - Participantes");
+            builder.setCancelable(true);
+            builder.setPositiveButton("ACEPTAR",null);
+            builder.setItems(arrayParticipantes,null);
+            builder.show();
+        }
+    }
+
 
     @Override
     protected void onResume() {
