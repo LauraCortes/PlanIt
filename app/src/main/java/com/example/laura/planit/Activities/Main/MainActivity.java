@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
 
         tabs.addTab(tabs.newTab().setText("SITIOS").setIcon(R.drawable.sitios_favoritos_tab));
         tabs.addTab(tabs.newTab().setText("AMIGOS").setIcon(R.drawable.amigos_favoritos_tab));
+        tabs.addTab(tabs.newTab().setText("SOY CONTACTO").setIcon(R.drawable.amigos_favoritos_tab));
         tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -231,15 +232,15 @@ public class MainActivity extends AppCompatActivity implements DetectorAgitacion
 
                     ArrayList<String> text = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
+                    String respuesta="cuanto llega demoran vienen llegaron llega";
                     String completo = "";
-                    for(String entrada:text)
+                    boolean encontro=false;
+                    for(int i=0;i<text.size() && !encontro;i++)
                     {
-                        System.out.println("********VOZ->"+entrada);
+                        encontro=respuesta.contains(text.get(i));
                     }
 
-                    if(text.get(0).equals("en cuanto llegan")||text.get(0).equals("se demoran")||text.get(0).equals("ya vienen")
-                            ||text.get(0).equals("ya llegaron")||text.get(0).contains("llega"))
+                    if(encontro)
                     {
                         if(celular!=null)
                         {

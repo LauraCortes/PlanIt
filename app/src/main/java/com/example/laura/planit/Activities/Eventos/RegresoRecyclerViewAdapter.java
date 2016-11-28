@@ -105,6 +105,7 @@ public class RegresoRecyclerViewAdapter extends RecyclerView.Adapter<RegresoRowV
                         regreso.agregarCompartido(celular);
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         final DatabaseReference databaseReference = database.getReferenceFromUrl(Constants.FIREBASE_URL).child(regreso.darRutaElemento(id_evento));
+                        database.getReferenceFromUrl(Constants.FIREBASE_URL+Constants.URL_PARTICIPANTES_EVENTO).child(id_evento).child(celular).child("regreso").setValue(celular);
                         databaseReference.addListenerForSingleValueEvent(
                                 new ValueEventListener() {
                                     @Override
